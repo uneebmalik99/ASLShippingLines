@@ -23,6 +23,10 @@
     "react": "16.13.1",
     "react-native": "0.63.4",
     "react-native-gesture-handler": "^1.10.3",
+<<<<<<< HEAD
+=======
+    "react-native-image-slider-box": "^1.1.8",
+>>>>>>> 31e47b7307a8d8c093a052fe4d445ed652ccb26e
     "react-native-pager-view": "^5.4.4",
     "react-native-paper": "^4.9.2",
     "react-native-pdf": "^6.3.0",

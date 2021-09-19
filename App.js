@@ -30,6 +30,10 @@ import OurServiceOne from './src/screens/OurServiceOne';
 import ContactUsOne from './src/screens/ContactUsOne';
 import WishListScreen from './src/screens/WishListScreen';
 import LocationServiceOne from './src/screens/LocationServiceOne';
+<<<<<<< HEAD
+=======
+import VehcilContainerDetailScreen from './src/screens/VehcilContainerDetailScreen';
+>>>>>>> 31e47b7307a8d8c093a052fe4d445ed652ccb26e
 
 
 const Stack = createStackNavigator();
@@ -189,7 +193,11 @@ options={{
 }} 
  />
 
+<<<<<<< HEAD
 <Stack.Screen name='VehicleList' component={VehicleList}
+=======
+<Stack.Screen name='VehcilContainerDetailScreen' component={VehcilContainerDetailScreen}
+>>>>>>> 31e47b7307a8d8c093a052fe4d445ed652ccb26e
 options={{
   headerShown:false,
   animationEnabled:false,
@@ -206,6 +214,10 @@ options={{
   );
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 31e47b7307a8d8c093a052fe4d445ed652ccb26e
 const Dashboard =() =>{
   return(
   <Stack.Navigator>
@@ -237,6 +249,22 @@ options={{
 }} 
  />
 
+<<<<<<< HEAD
+=======
+<Stack.Screen name='VehcilContainerDetailScreen' component={VehcilContainerDetailScreen}
+options={{
+  headerShown:false,
+  animationEnabled:false,
+  transitionConfig: () => ({
+    transitionSpec: {
+      duration:0,
+      timing: 0,
+    },
+  }),
+}} 
+ />
+
+>>>>>>> 31e47b7307a8d8c093a052fe4d445ed652ccb26e
   </Stack.Navigator>
   );
 }
