@@ -30,10 +30,8 @@ import OurServiceOne from './src/screens/OurServiceOne';
 import ContactUsOne from './src/screens/ContactUsOne';
 import WishListScreen from './src/screens/WishListScreen';
 import LocationServiceOne from './src/screens/LocationServiceOne';
-<<<<<<< HEAD
-=======
 import VehcilContainerDetailScreen from './src/screens/VehcilContainerDetailScreen';
->>>>>>> 31e47b7307a8d8c093a052fe4d445ed652ccb26e
+import ExportDetailsScreen from './src/screens/ExportDetailsScreen';
 
 
 const Stack = createStackNavigator();
@@ -193,11 +191,7 @@ options={{
 }} 
  />
 
-<<<<<<< HEAD
-<Stack.Screen name='VehicleList' component={VehicleList}
-=======
 <Stack.Screen name='VehcilContainerDetailScreen' component={VehcilContainerDetailScreen}
->>>>>>> 31e47b7307a8d8c093a052fe4d445ed652ccb26e
 options={{
   headerShown:false,
   animationEnabled:false,
@@ -214,10 +208,42 @@ options={{
   );
 }
 
-<<<<<<< HEAD
-=======
+const Container =() =>{
+  return(
+  <Stack.Navigator>
 
->>>>>>> 31e47b7307a8d8c093a052fe4d445ed652ccb26e
+
+<Stack.Screen name='ContainerTrackingOne' component={ContainerTrackingOne}
+options={{
+  headerShown:false,
+  animationEnabled:false,
+  transitionConfig: () => ({
+    transitionSpec: {
+      duration:0,
+      timing: 0,
+    },
+  }),
+}} 
+ />
+
+<Stack.Screen name='ExportDetailsScreen' component={ExportDetailsScreen}
+options={{
+  headerShown:false,
+  animationEnabled:false,
+  transitionConfig: () => ({
+    transitionSpec: {
+      duration:0,
+      timing: 0,
+    },
+  }),
+}} 
+ />
+
+  </Stack.Navigator>
+  );
+}
+
+
 const Dashboard =() =>{
   return(
   <Stack.Navigator>
@@ -249,8 +275,6 @@ options={{
 }} 
  />
 
-<<<<<<< HEAD
-=======
 <Stack.Screen name='VehcilContainerDetailScreen' component={VehcilContainerDetailScreen}
 options={{
   headerShown:false,
@@ -264,7 +288,6 @@ options={{
 }} 
  />
 
->>>>>>> 31e47b7307a8d8c093a052fe4d445ed652ccb26e
   </Stack.Navigator>
   );
 }
@@ -298,7 +321,7 @@ style={{ width: 30, height:30, alignSelf: 'center', resizeMode:'contain'}}
     // <MaterialCommunityIcons name="Vehicles" color={color} size={size} />
   
   )}} />
-     <Tab.Screen name="ContainerTrackingOne" component={ContainerTrackingOne} options={{tabBarLabel:'Container',headerShown:false,
+     <Tab.Screen name="Container1" component={Container} options={{tabBarLabel:'Container',headerShown:false,
    tabBarIcon: ({ color, size }) => (
 <Image
     source={ require('./src/Images/ship-2.png')} 
