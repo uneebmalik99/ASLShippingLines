@@ -22,4 +22,5 @@ package-lock.json
 
 
 # CocoaPods
-/ios/Pods/
+
+ios/Pods/
