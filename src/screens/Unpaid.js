@@ -301,7 +301,7 @@ style={{height:40,
 <ListItem noBorder
 style={{height:40,
 }}
-onPress={() =>  { this.setState({drawerview:false});this.props.navigation.navigate('ContainerTrackingOne')}} selected>
+onPress={() =>  { this.setState({drawerview:false});this.props.navigation.navigate('Container1')}} selected>
 <Image source={ require('../Images/ww.jpeg')} 
             style={{ width: 27, height:27, alignSelf: 'center' }} resizeMode='contain'
            />
@@ -312,7 +312,7 @@ onPress={() =>  { this.setState({drawerview:false});this.props.navigation.naviga
 <ListItem noBorder
 style={{height:40,
 }}
-onPress={() => {this.setState({drawerview:false}); this.props.navigation.navigate('AccountSectionMainScreen')}} selected>
+onPress={() => {this.setState({drawerview:false}); this.props.navigation.navigate('Accounts')}} selected>
 <Image source={ require('../Images/acc.jpeg')} 
             style={{ width: 27, height:27, alignSelf: 'center' }} resizeMode='contain'
            />

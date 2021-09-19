@@ -52,6 +52,25 @@ class ContainerTrackingOne extends Component {
     }
 
 
+    Logout =() => {
+
+        AsyncStorage.setItem('ISUSERLOGIN', '0');
+        AppConstance.IS_USER_LOGIN = '0'
+      
+        AsyncStorage.setItem('auth_key', ' ');
+        AppConstance.USER_TOKEN_KEY = ' '
+      
+        AsyncStorage.setItem('user_id', ' ');
+        AppConstance.USER_ID = ' '
+      
+        
+      
+      
+        AsyncStorage.removeItem(AppConstance.USER_INFO_OBJ);
+             this.setState({drawerview : false})
+        this.props.navigation.navigate('AppDrawer1');
+      
+          }
     componentWillUnmount() {
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
     
@@ -469,7 +488,7 @@ style={{height:40,
 <ListItem noBorder
 style={{height:40,
 }}
-onPress={() =>  { this.setState({drawerview:false});this.props.navigation.navigate('ContainerTrackingOne')}} selected>
+onPress={() =>  { this.setState({drawerview:false});this.props.navigation.navigate('Container1')}} selected>
 <Image source={ require('../Images/ww.jpeg')} 
             style={{ width: 27, height:27, alignSelf: 'center' }} resizeMode='contain'
            />
@@ -480,7 +499,7 @@ onPress={() =>  { this.setState({drawerview:false});this.props.navigation.naviga
 <ListItem noBorder
 style={{height:40,
 }}
-onPress={() => {this.setState({drawerview:false}); this.props.navigation.navigate('AccountSectionMainScreen')}} selected>
+onPress={() => {this.setState({drawerview:false}); this.props.navigation.navigate('Accounts')}} selected>
 <Image source={ require('../Images/acc.jpeg')} 
             style={{ width: 27, height:27, alignSelf: 'center' }} resizeMode='contain'
            />
@@ -543,7 +562,7 @@ onPress={() => {this.setState({drawerview:false}); this.props.navigation.navigat
 <ListItem noBorder
     style={{height:40,marginTop:25, marginBottom:20,
     }}
-     onPress={() =>  this._storeData()}>
+     onPress={() =>  this.Logout()}>
 
 <Image source={ require('../Images/l.jpeg')} 
             style={{ width: 27, height:27, alignSelf: 'center' }} resizeMode='contain'

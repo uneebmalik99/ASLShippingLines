@@ -162,7 +162,7 @@ const AccountDetailsScreen = ({route ,navigation}) => {
             <ListItem noBorder
             style={{height:40,
             }}
-            onPress={() =>  {setdrawerview(false); navigation.navigate('ContainerTrackingOne')}} selected>
+            onPress={() =>  {setdrawerview(false); navigation.navigate('Container1')}} selected>
             <Image source={ require('../Images/ww.jpeg')} 
                         style={{ width: 27, height:27, alignSelf: 'center' }} resizeMode='contain'
                        />
@@ -173,7 +173,7 @@ const AccountDetailsScreen = ({route ,navigation}) => {
             <ListItem noBorder
             style={{height:40,
             }}
-            onPress={() => {setdrawerview(false); navigation.navigate('AccountSectionMainScreen')}} selected>
+            onPress={() => {setdrawerview(false); navigation.navigate('Accounts')}} selected>
             <Image source={ require('../Images/acc.jpeg')} 
                         style={{ width: 27, height:27, alignSelf: 'center' }} resizeMode='contain'
                        />

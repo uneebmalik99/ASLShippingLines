@@ -251,7 +251,7 @@ source={require('../Images/year2.png')}
             </TouchableOpacity>
 
             <TouchableOpacity style={{ borderRadius:5,  width: deviceWidth * 0.42, height:80 }}
-                onPress={() => this.switchToImageGrid(item)}
+                // onPress={() => this.switchToImageGrid(item)}
             >
                 {item.photo.length > 0 ? <Image style={{ width: undefined, height: undefined, flex: 1 }}
                     source={{ uri:item.photo }} /> :
@@ -781,7 +781,7 @@ style={{ flexDirection:'row'}}>
             <ListItem noBorder
             style={{height:40,
             }}
-            onPress={() =>  { this.setState({drawerview:false});this.props.navigation.navigate('ContainerTrackingOne')}} selected>
+            onPress={() =>  { this.setState({drawerview:false});this.props.navigation.navigate('Container1')}} selected>
             <Image source={ require('../Images/ww.jpeg')} 
                         style={{ width: 27, height:27, alignSelf: 'center' }} resizeMode='contain'
                        />
@@ -792,7 +792,7 @@ style={{ flexDirection:'row'}}>
             <ListItem noBorder
             style={{height:40,
             }}
-            onPress={() => {this.setState({drawerview:false}); this.props.navigation.navigate('AccountSectionMainScreen')}} selected>
+            onPress={() => {this.setState({drawerview:false}); this.props.navigation.navigate('Accounts')}} selected>
             <Image source={ require('../Images/acc.jpeg')} 
                         style={{ width: 27, height:27, alignSelf: 'center' }} resizeMode='contain'
                        />
