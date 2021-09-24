@@ -204,6 +204,10 @@ options={{
 }} 
  />
 
+
+
+
+
   </Stack.Navigator>
   );
 }

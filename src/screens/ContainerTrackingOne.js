@@ -601,7 +601,7 @@ onPress={() => {this.setState({drawerview:false}); this.props.navigation.navigat
 
         <TouchableOpacity 
                     style={{width:60,height:60 ,alignContent:"flex-start", alignItems:"flex-start"}}
-                                //   onPress={() => this.props.navigation.navigate('LoginScreen')}
+                                  onPress={() => this.props.navigation.navigate('DashboardScreen')}
         >
                     <Image source={ require('../Images/logo_final.png')} 
                     style={{ width: 60, height:60, alignSelf: 'flex-start' }} resizeMode='contain'

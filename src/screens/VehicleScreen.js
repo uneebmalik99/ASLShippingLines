@@ -891,7 +891,7 @@ style={{ flexDirection:'row'}}>
 
         <TouchableOpacity 
                     style={{width:60,height:60 ,alignContent:"flex-start", alignItems:"flex-start"}}
-                                //   onPress={() => this.props.navigation.navigate('LoginScreen')}
+                                  onPress={() => this.props.navigation.navigate('DashboardScreen')}
         >
                     <Image source={ require('../Images/logo_final.png')} 
                     style={{ width: 60, height:60, alignSelf: 'flex-start' }} resizeMode='contain'
@@ -938,7 +938,7 @@ style={{ flexDirection:'row'}}>
 {/* <View style={{ width:deviceWidth, backgroundColor: AppColors.toolbarColor }}>
                 </View> */}
 <TouchableOpacity
-                                            onPress={() => this.props.navigation.navigate('NotificationVehicleDetailscreen')}
+                                            onPress={() => this.props.navigation.navigate('WishListScreen')}
                                             >
                                                 <Image
                                                 style={{ resizeMode:'contain',marginVertical:13, height:25,width:25}}

@@ -937,7 +937,7 @@ style={{ flexDirection:'row'}}>
 {/* <View style={{ width:deviceWidth, backgroundColor: AppColors.toolbarColor }}>
                 </View> */}
 <TouchableOpacity
-                                            onPress={() => this.props.navigation.navigate('NotificationVehicleDetailscreen')}
+                                            onPress={() => this.props.navigation.navigate('WishListScreen')}
                                             >
                                                 <Image
                                                 style={{ resizeMode:'contain',marginVertical:13, height:25,width:25}}

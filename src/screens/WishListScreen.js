@@ -11,6 +11,7 @@ import DialogLoader from '../screens/DialogLoder';
 import { Appbar } from 'react-native-paper';
 import { Content,List, Header, Body, Title,ListItem, Container, Left, Right, Icon,Badge} from "native-base";
 import AsyncStorage from '@react-native-community/async-storage';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 class WishListScreen extends Component {
     constructor(props) {
@@ -343,14 +344,12 @@ onPress={() => {this.setState({drawerview:false}); this.props.navigation.navigat
                         >  
 
 
-        <TouchableOpacity 
-                    style={{width:60,height:60 ,alignContent:"flex-start", alignItems:"flex-start"}}
-                    onPress={() => this.props.navigation.navigate('DashboardScreen')}
-        >
-                    <Image source={ require('../Images/logo_final.png')} 
-                    style={{ width: 60, height:60, alignSelf: 'flex-start' }} resizeMode='contain'
-                />
-                </TouchableOpacity>
+                                        <TouchableOpacity 
+                                            style={{width:60,height:60 , justifyContent:'center'}}
+                                                          onPress={() =>{ this.props.navigation.goBack()}}
+                                >
+                                            <Ionicons name='ios-chevron-back' color='grey' size={30}/> 
+                                        </TouchableOpacity>
 
 
         <TouchableOpacity 
