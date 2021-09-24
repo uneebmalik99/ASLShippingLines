@@ -181,7 +181,7 @@ For sales,auction account towing,loading and shipping,please contact us</Text>
                 fontSize: 16,
                 marginLeft: 4,
               }}>
-1205 12th Floor,Centurion Star Tower,Block A,Opp Deira City Center,Port Saeed,Po Box 172497,Dubai,United Arab Emirates</Text>
+1207 12th Floor,Centurion Star Tower,Block A,Opp Deira City Center,Port Saeed,Po Box 172497,Dubai,United Arab Emirates</Text>
           </View>
 
 
@@ -291,7 +291,7 @@ Sat:                9.00 am - 2.00 pm
                 fontSize: 18,
                 marginLeft: 15,
               }}>
-24seven@amayaworldwide.com            </Text>
+24seven@aslshippingline.com</Text>
           </View>
 
          

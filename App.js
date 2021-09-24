@@ -238,7 +238,18 @@ options={{
   }),
 }} 
  />
-
+<Stack.Screen name='VehcilContainerDetailScreen' component={VehcilContainerDetailScreen}
+options={{
+  headerShown:false,
+  animationEnabled:false,
+  transitionConfig: () => ({
+    transitionSpec: {
+      duration:0,
+      timing: 0,
+    },
+  }),
+}} 
+ />
   </Stack.Navigator>
   );
 }

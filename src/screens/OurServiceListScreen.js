@@ -8,6 +8,7 @@ import AppFonts from '../AppFont/AppFonts';
 import AppMainStylesSheet from "../styles/AppMainStylesSheet";
 import { Appbar } from 'react-native-paper';
 import AsyncStorage from '@react-native-community/async-storage';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
  export default class OurServiceListScreen extends Component {
@@ -81,7 +82,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
     render() {
         return (
-            <View style={AppMainStylesSheet.appMainContainer}>
+            <SafeAreaView style={AppMainStylesSheet.appMainContainer}>
 
 
 
@@ -128,38 +129,7 @@ import AsyncStorage from '@react-native-community/async-storage';
                            </Appbar>
 
 
-           
-           
-            {/* <View
-                style={{backgroundColor:AppColors.Headercolor,
-                height:60,
-                justifyContent:'center',
-                paddingLeft:10,
-                paddingTop:1,
-                paddingBottom:2,
-                paddingRight:10,
-
-            }}
-              >  
-              <Image source={ require('../Images/logo_final.png')} 
-            style={{ width: 60, height:60, alignSelf: 'flex-start' }} 
-           />
-             <TouchableOpacity style={{position: 'absolute',
-             top: 15,
-            left:360,
-            right: 30,}  
-            }
-            onPress={() => this.props.navigation.MyDrawer()}
-            >
-                 <Image source={ require('../Images/baru.jpg')} 
-            style={{ width: 30, height:30, alignSelf: 'center' }} 
-           />
-             </TouchableOpacity>
-                           </View>
-
-
-                 */}
-
+         
 
                  <ScrollView>
 
@@ -252,7 +222,7 @@ import AsyncStorage from '@react-native-community/async-storage';
             </ImageBackground>
             </ScrollView>
 
-          </View>
+          </SafeAreaView>
 
         );
       

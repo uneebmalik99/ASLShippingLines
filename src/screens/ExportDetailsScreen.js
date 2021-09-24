@@ -12,6 +12,8 @@ import { Appbar } from 'react-native-paper';
 import { Content,List, Header, Body, Title,ListItem, Container, Left, Right, Icon,Badge} from "native-base";
 import AsyncStorage from '@react-native-community/async-storage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Slideshow from 'react-native-image-slider-show-razzium';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const { config, fs } = RNFetchBlob;
 
@@ -34,6 +36,7 @@ class ExportDetailsScreen extends Component {
             locationList: [],
             imageList: [],
             drawerview:false,
+            showimagemodel:false,
 
         }
     }
@@ -59,49 +62,8 @@ class ExportDetailsScreen extends Component {
           }
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
-     
-
-        // NetInfo.fetch().then(state => {
-        //     if (state.isConnected == true) {
-                //this.setState({ vehicleList: vehicleList })
-                // this.callingLocationAPI();
-              
-                    console.log('Export url ELE :: = ', AppUrlCollection.EXPORT_DETAIL + 'exportId=' + exportObj.id)
-                    fetch(AppUrlCollection.EXPORT_DETAIL + exportObj.id, {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
-                        },
-                    })
-                        .then((response) => response.json())
-                        .then((responseJson) => {
-                            console.log('export detail ', responseJson)
-                            if (responseJson.status == AppConstance.API_SUCESSCODE) {
-                                ////TODo
-
-                                var a =[];
-           
-                             for (let index = 0; index < responseJson.data.export_details.container_images.length; index++) {
-                                    const element = responseJson.data.export_details.container_images[index].url;
-                                    var b ={};
-                                    b.url = element
-                                    a.push(b)
-                                }
-                                this.setState({images:a})
-
-                                //this.setState({ exportDetailObj: responseJson.data.export, vehicleList: responseJson.data.export.vehicleExports, imageList: this.state.imageList })
-                                this.setState({ exportDetailObj: responseJson.data.export_details, vehicleList: responseJson.data.vehicles, imageList: this.state.imageList })
-                                // vehicleImageBAsePath = responseJson.other.vehicle_image;
-                            } else {
-                                AppConstance.showSnackbarMessage(responseJson.message)
-                            }
-                        })
-                        .catch((error) => {
-                            console.warn(error)
-                        });
-                
-          
+ 
+        this.callingExportDetailAPI()               
     }
 
     componentWillUnmount() {
@@ -111,6 +73,39 @@ class ExportDetailsScreen extends Component {
     handleBackPress = () => {
         this.props.navigation.goBack();
         return true;
+    }
+
+    callingExportDetailAPI = () =>{
+        fetch(AppUrlCollection.EXPORT_DETAIL + exportObj.id, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+            },
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+                console.log('export detail ', responseJson)
+                if (responseJson.status == 'SUCCESS') {
+                 
+                    var a =[];
+                 for (let index = 0; index < responseJson.data.export_details.container_images.length; index++) {
+                        const element = responseJson.data.export_details.container_images[index].url;
+                        var b ={};
+                        b.url = element
+                        a.push(b)
+                    }
+                    // this.setState({imageList:a})
+                    //this.setState({ exportDetailObj: responseJson.data.export, vehicleList: responseJson.data.export.vehicleExports, imageList: this.state.imageList })
+                    this.setState({ exportDetailObj: responseJson.data.export_details, vehicleList: responseJson.data.vehicles, imageList: a })
+                    // vehicleImageBAsePath = responseJson.other.vehicle_image;
+                } else {
+                    AppConstance.showSnackbarMessage(responseJson.message)
+                }
+            })
+            .catch((error) => {
+                console.warn(error)
+            });
     }
 
     callingLocationAPI = () => {
@@ -132,9 +127,6 @@ class ExportDetailsScreen extends Component {
                 console.warn(error)
             });
     }
-
-    
-
 
     downloadImage = () => {
         console.log('Base Image path :: ', baseImagePath + exportObj.export_invoice)
@@ -166,7 +158,7 @@ class ExportDetailsScreen extends Component {
                     <Text style={{  color: AppColors.textColor, fontSize: 14, flex: 1 }}>{item.vehicle.model != null && item.vehicle.model != '' ? item.vehicle.model : '-'}</Text>
                     <Text style={{ color: AppColors.textColor, fontSize: 14, flex: 1 }}>{item.vehicle.lot_number != null && item.vehicle.lot_number != '' ? item.vehicle.lot_number : '-'}</Text>
                     <TouchableOpacity
-                        onPress={() => this.callingVehicleDetailScreen(item)}
+                        onPress={() => this.props.navigation.navigate('VehcilContainerDetailScreen',{vehicleObj:item})}
                     >
                         <Text style={{  fontSize: 14, color: AppColors.textColor }}>VIEW</Text>
                         {/* <MaterialCommunityIcons name='eye' color={AppColors.textColor} size={18} /> */}
@@ -182,8 +174,8 @@ class ExportDetailsScreen extends Component {
                     <Text style={{  color: AppColors.textColor, fontSize: 14, flex: 1 }}>{item.model != null && item.model != '' ? item.model : '-'}</Text>
                     <Text style={{  color: AppColors.textColor, fontSize: 14, flex: 1 }}>{item.lot_number != null && item.lot_number != '' ? item.lot_number : '-'}</Text>
                     <TouchableOpacity
-                        onPress={() => this.callingVehicleDetailScreen(item)}
-                    >
+                        onPress={() => this.props.navigation.navigate('VehcilContainerDetailScreen',{vehicleObj:item})}
+                        >
                         <Text style={{  fontSize: 14, color: AppColors.textColor }}>VIEW</Text>
                         {/* <MaterialCommunityIcons name='eye' color={AppColors.textColor} size={18} /> */}
                     </TouchableOpacity>
@@ -191,11 +183,6 @@ class ExportDetailsScreen extends Component {
             )
         }
     }
-
-    //  http://localhost/yii2_work/new_galaxy/webapi/export/billofladng-download?id=1
-    //http://localhost/yii2_work/new_galaxy/webapi/export/manifest-download?id=1
-
-    //http://erp.gwwshipping.com/webapi/export/billofladng-download?id=5
 
     downloadBill = (mode) => {
         let dirs = RNFetchBlob.fs.dirs
@@ -495,7 +482,26 @@ class ExportDetailsScreen extends Component {
             </SafeAreaView>
             
             </Modal>
-            
+  
+            <Modal
+        visible={this.state.showimagemodel}
+        animationType='fade'
+        >
+            <View style={{ justifyContent:'center',backgroundColor:'black', height:deviceHeight}}>
+                <View style={{backgroundColor:'black'}}>
+                <Slideshow 
+                height={deviceHeight*0.65}
+                   dataSource={this.state.imageList}/>
+        
+            <TouchableOpacity 
+            onPress={()=> { this.setState({showimagemodel: false})}}
+            style={{alignSelf:'center', marginTop:10}}
+            >
+                <MaterialCommunityIcons color='red'  name='close-circle-outline' size={40}/>
+            </TouchableOpacity>
+                    </View>
+            </View>
+        </Modal>          
             
             <Appbar
                                         style={{backgroundColor:AppColors.Headercolor,
@@ -545,47 +551,34 @@ class ExportDetailsScreen extends Component {
 
 
                 <View style={{ backgroundColor: AppColors.toolbarColor }}>
-                    <Toolbar headerName={'Container Detail'} isFilterIconShow={true} isInnerScreen={true} />
+                    <Text style={{paddingVertical:15,fontWeight:'700',alignSelf:'center', color:'white'}}>Container Detail </Text>
+                    {/* <Toolbar headerName={'Container Detail'} isFilterIconShow={true} isInnerScreen={true} /> */}
                 </View>
                 <ScrollView
                     behaviour="height"
                 >
                     <View style={{ flex: 1 }}>
-                        <View style={{ flex: 1, height: heightPercentageToDP('40%') }}>
-                            {this.state.imageList.length > 0 ?
-                                <TouchableOpacity style={{ height: heightPercentageToDP('40%') }}
-                                    // onPress={() => this.imageSlider()}
-                                >
-                                    <View style={{ height: heightPercentageToDP('40%') }}>
-                                        <Image source={{ uri: this.state.imageList[0] }} style={{ width: undefined, height: undefined, flex: 1 }}
-                                            resizeMode='stretch' />
-                                    </View>
-                                    {/* <ImageSlider
-                                        loopBothSides
-                                        style={{ flex: 1, height: heightPercentageToDP('30%'), }}
-                                        autoPlayWithInterval={3000}
-                                        images={this.state.imageList}
-                                        customSlide={({ index, item, style, width }) => (
-                                            // It's important to put style here because it's got offset inside
-                                            <View key={index} style={[style, { width: deviceWidth, flex: 1, backgroundColor: 'black' }]}>
-                                                <Image source={{ uri: item }} style={{ width: undefined, height: undefined, flex: 1 }} resizeMode='cover' />
-                                            </View>
-                                        )}
-                                        customButtons={(position, move) => (
-                                            <View style={{ position: 'absolute', flexDirection: 'row', height: 50, width: deviceWidth, bottom: 0, justifyContent: 'center', alignContent: 'center', alignItems: 'center', marginBottom: -10 }}>
-                                                {this.state.imageList.map((image, index) => {
-                                                    return (
-                                                        <View style={{ backgroundColor: position == index ? AppColors.toolbarColor : 'white', height: 8, width: 8, marginRight: 5, borderRadius: 5 }} />
-                                                    );
-                                                })}
-                                            </View>
-                                        )}
-                                    /> */}
-                                </TouchableOpacity> :
-                                <View style={{ height: '30%' }}>
-                                    <Image source={require('../Images/logo_final.png')} style={{ width: deviceWidth, height: 150 }} resizeMode='cover' />
-                                </View>
-                            }
+                        {this.state.imageList.length > 0 ? (
+        <View style={{width:"100%"}}
+>
+<Slideshow 
+                height={deviceHeight*0.25}
+                onPress={( )=> {this.setState({showimagemodel:true})}}
+                   dataSource={this.state.imageList}/>
+
+</View>
+
+      ) : (
+
+          <View style={{width:"100%",  height:deviceHeight*0.25}}>
+          <Image source={ require('../Images/logo_final.png')} 
+         style={{ height:'100%',width:'100%',  alignSelf: 'center', }} resizeMode='stretch' resizeMethod='resize'
+        />
+      
+       </View>
+      )}
+
+
 
 
                             <View style={{ flexDirection: 'row', position: 'absolute', bottom: 0, right: 0, marginBottom: 8, marginRight: 10 }}>
@@ -599,7 +592,6 @@ class ExportDetailsScreen extends Component {
                                     <MaterialCommunityIcons name='download' color={AppColors.toolbarColor} size={20} />
                                 </TouchableOpacity> */}
                             </View>
-                        </View>
                         <Elavation
                             elevation={3}
                             style={{ width: deviceWidth, height: 50, backgroundColor: AppColors.toolbarColor, justifyContent: 'center', alignContent: 'center', alignItems: 'center', marginBottom: 10 }}>

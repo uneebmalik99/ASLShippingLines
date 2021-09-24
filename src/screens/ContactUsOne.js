@@ -529,7 +529,7 @@ Sat:                9.00 am - 2.00 pm
                 fontSize: 18,
                 marginLeft: 15,
               }}>
-24seven@amayaworldwide.com            </Text>
+24seven@aslshippingline.com</Text>
           </View>
 
          

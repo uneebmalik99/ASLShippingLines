@@ -205,7 +205,7 @@ marginHorizontal:15
                                marginLeft: 4,
                                
                              }}>
-               1205 12th Floor,Centurion Star Tower,Block A,Opp Deira City Center,Port Saeed,Po Box 172497,Dubai,United Arab Emirates</Text>
+               1207 12th Floor,Centurion Star Tower,Block A,Opp Deira City Center,Port Saeed,Po Box 172497,Dubai,United Arab Emirates</Text>
                          </View>
                          <View style={{flexDirection: 'row',marginLeft:8, marginTop: 2, paddingVertical:15, marginBottom: 2}}>
                           
@@ -287,7 +287,7 @@ marginHorizontal:15
                                fontSize: 15,
                                marginLeft: 15,
                              }}>
-               24seven@amayaworldwide.com            </Text>
+24seven@aslshippingline.com</Text>
                          </View>
                         
                        </View>

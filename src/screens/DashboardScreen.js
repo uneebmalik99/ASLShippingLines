@@ -694,7 +694,9 @@ justifyContent:"center",
 
             <View style={styles.main_item}>
 
-            <TouchableOpacity style={styles.item}>
+            <TouchableOpacity
+            onPress={()=>{this.props.navigation.navigate('Container1')}}
+            style={styles.item}>
             <Text style={{alignSelf:'center' , color:AppColors.Signincolor}}>
                     CONTAINER
                 </Text>
@@ -708,7 +710,10 @@ justifyContent:"center",
             </TouchableOpacity>
 
 
-            <TouchableOpacity style={styles.item}>
+            <TouchableOpacity
+                        onPress={()=>{this.props.navigation.navigate('Accounts')}}
+
+            style={styles.item}>
             <Text style={{alignSelf:'center' , color:AppColors.Signincolor}}>
                    ACCOUNTING
                 </Text>

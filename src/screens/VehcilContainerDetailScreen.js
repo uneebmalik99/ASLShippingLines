@@ -843,27 +843,7 @@ class VehcilContainerDetailScreen extends Component {
                 height={deviceHeight*0.25}
                 onPress={()=> {this.setState({showimagemodel:true})}}
                    dataSource={this.state.images}/>
-{/* <SliderBox 
-          images={this.state.images}
-          sliderBoxHeight={deviceHeight*0.23}
-          dotColor="#FFEE58"
-  inactiveDotColor="#90A4AE"
-  dotStyle={{
-    width: 13,
-    height: 13,
-    borderRadius: 15,
-    marginHorizontal: -6,
-    padding: 0,
-    margin: 0
-  }}
-          resizeMethod={'resize'}  
-          resizeMode={'cover'}
-          autoplay
-  circleLoop
-          onCurrentImagePressed={index =>
-            this.setState({showimagemodel: true})
-          }
-        /> */}
+
 </View>
 
       ) : (
