@@ -173,7 +173,7 @@ class ForgotPasswordScreen extends Component {
                     <View style={{ alignContent: 'center', alignItems: 'center', marginTop: 10, justifyContent: 'center' }}>
                         <Elavation
                             elevation={2}
-                            style={{ width: deviceWidth * 0.9, height: 50, borderRadius: 20, marginTop: 10, flexDirection: 'row', alignContent: 'center', alignItems: 'center', paddingRight: 8 }}
+                            style={{ width: deviceWidth * 0.9, height: 50, borderRadius: 20, marginTop: 10, flexDirection: 'row', alignContent: 'center', alignItems: 'center',backgroundColor:'white', paddingRight: 8 }}
                         >
                             <TextInput
                                 placeholder='Email*'

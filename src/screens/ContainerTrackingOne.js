@@ -284,6 +284,8 @@ class ContainerTrackingOne extends Component {
     callingContainerApi = (isFirstTimeCaling) => {
         var url = ''
         if (isFirstTimeCaling) {
+            this.setState({isLoading: true})
+
             this.setState({ isLoading: true, isFooterLoading: false })
             url = AppUrlCollection.EXPORT_LIST + '&page=' + this.state.page
         } else {
@@ -301,9 +303,9 @@ class ContainerTrackingOne extends Component {
         })
             .then((response) => response.json())
             .then((responseJson) => {
-                this.setState({ isLoading: false })
                 console.log('Response data viw :: ', responseJson)
                 if (responseJson.data != '' || responseJson.data != null) {
+                    this.setState({ isLoading: false })
 
                     let data = responseJson.data
                     if (data.length > 0) {
@@ -321,10 +323,14 @@ class ContainerTrackingOne extends Component {
 
                     }
                 } else {
+                    this.setState({ isLoading: false })
+
                     AppConstance.showSnackbarMessage(responseJson.message)
                 }
             })
             .catch((error) => {
+                this.setState({ isLoading: false })
+
                 console.warn(error)
             });
     }
@@ -384,6 +390,7 @@ class ContainerTrackingOne extends Component {
         return (
           
 <SafeAreaView style={styles.screen}>
+<DialogLoader loading={this.state.isLoading} />
 
 <Modal 
 visible={this.state.drawerview}

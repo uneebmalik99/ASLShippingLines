@@ -35,6 +35,7 @@ class VehicleScreen extends Component {
             isLoading: false,
             isDisplayView: 0,
             drawerview:false,
+            spinner:false,
             tabIndex: 0,
             selectFilterName: '',
             isModalVisible: false,
@@ -60,7 +61,6 @@ class VehicleScreen extends Component {
     componentDidMount() {
         
 
-                this.setState({ isLoading: true })
                 // this.ccallingLocationApi();
                 // if (filterItemObj != null) {
                 //     let gettingStatusId = AppConstance.gettingStatusIfFromName(filterItemObj.name.toUpperCase())
@@ -148,6 +148,7 @@ Logout =() => {
     //calling Vehicle list
     callingVehicleApi = async (isCallingFirsttime) => {
         if (isCallingFirsttime) {
+            
             this.setState({ isLoading: true, isFooterLoading: false })
         } else {
             this.setState({ isLoading: false, isFooterLoading: true })
@@ -182,6 +183,8 @@ Logout =() => {
                 }
             })
             .catch((error) => {
+                this.setState({ isLoading: false })
+
                 console.warn(error)
             });
     }
@@ -674,6 +677,8 @@ style={{ flexDirection:'row'}}>
     render() {
         return (
             <SafeAreaView style={styles.screen}>
+
+            <DialogLoader loading={this.state.isLoading} />
 
             <Modal 
             visible={this.state.drawerview}

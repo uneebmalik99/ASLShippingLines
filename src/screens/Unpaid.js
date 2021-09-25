@@ -11,6 +11,7 @@ import { Appbar } from 'react-native-paper';
 import { Content,List, Header, Body, Title,ListItem, Container, Left, Right, Icon,Badge} from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-community/async-storage';
+import DialogLoder from '../screens/DialogLoder'
 
 
 let v = []
@@ -168,7 +169,7 @@ generateFlatList = () => {
 }
 
 callingInvoceAPI11 = () => {
-
+this.setState({isLoading : true})
   let  url = AppUrlCollection.INVOICE_UNPAID + 'customer_user_id=' + this.state.user_id
 fetch(url, {
     method: 'GET',
@@ -182,6 +183,8 @@ fetch(url, {
        
         if (responseJson.data != null || responseJson.data != '') {
             console.log(responseJson);
+            this.setState({ isLoading: false })
+
             this.setState({ allInvoiceList: responseJson.data, isLoading: false })
         } else {
             AppConstance.showSnackbarMessage(responseJson.message)
@@ -189,6 +192,8 @@ fetch(url, {
         }
     })
     .catch((error) => {
+        this.setState({ isLoading: false })
+
         console.warn(error)
     });
   
@@ -197,6 +202,9 @@ render() {
     return (
         
 <SafeAreaView style={styles.screen}>
+
+
+<DialogLoder loading={this.state.isLoading} />
 
 <Modal 
 visible={this.state.drawerview}

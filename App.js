@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect} from 'react';
 import { View, Text, TouchableOpacity, TextInput, StyleSheet, Animated, Easing, Image, Alert, AppState, BackHandler, BackAndroid, ScrollView, FlatList,ImageBackground, SafeAreaView } from 'react-native';
 
 import { NavigationContainer } from '@react-navigation/native';
@@ -32,6 +32,7 @@ import WishListScreen from './src/screens/WishListScreen';
 import LocationServiceOne from './src/screens/LocationServiceOne';
 import VehcilContainerDetailScreen from './src/screens/VehcilContainerDetailScreen';
 import ExportDetailsScreen from './src/screens/ExportDetailsScreen';
+import messaging from '@react-native-firebase/messaging';
 
 
 const Stack = createStackNavigator();
@@ -364,6 +365,28 @@ style={{ width: 30, height:30, alignSelf: 'center', resizeMode:'contain'}}
 
 
 const App = () => {
+
+
+
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
+    requestUserPermission()
+    return unsubscribe;
+  }, []);
+
+  async function requestUserPermission() {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+  
+    if (enabled) {
+      console.log('Authorization status:', authStatus);
+    }
+  }
+
  return (
    <NavigationContainer>
    <Stack.Navigator 
@@ -438,56 +461,7 @@ const App = () => {
       timing: 0,
     },
   }),  }} />
-        {/* <Stack.Screen name='RegisterActivation' component={RegisterActivation} options={{headerShown:false,animationEnabled:false,
-  transitionConfig: () => ({
-    transitionSpec: {
-      duration:0,
-      timing: 0,
-    },
-  }), }} />
-        <Stack.Screen name='RegisterOne' component={RegisterOne} options={{headerShown:false, animationEnabled:false,
-  transitionConfig: () => ({
-    transitionSpec: {
-      duration:0,
-      timing: 0,
-    },
-  }), }} />
-        <Stack.Screen name='RegisterTwo' component={RegisterTwo} options={{headerShown:false,animationEnabled:false,
-  transitionConfig: () => ({
-    transitionSpec: {
-      duration:0,
-      timing: 0,
-    },
-  }), }} />
-        <Stack.Screen name='RegisterThree' component={RegisterThree} options={{headerShown:false, animationEnabled:false,
-  transitionConfig: () => ({
-    transitionSpec: {
-      duration:0,
-      timing: 0,
-    },
-  }),}} />
-        <Stack.Screen name='RegisterOneT' component={RegisterOneT} options={{headerShown:false,animationEnabled:false,
-  transitionConfig: () => ({
-    transitionSpec: {
-      duration:0,
-      timing: 0,
-    },
-  }), }} />
-        <Stack.Screen name='RegisterTwoT' component={RegisterTwoT} options={{headerShown:false,animationEnabled:false,
-  transitionConfig: () => ({
-    transitionSpec: {
-      duration:0,
-      timing: 0,
-    },
-  }), }} />
-       
-     <Stack.Screen name='HomeScreen' component={TabScreen} options={{ headerShown:false, headerTitleAlign:"center",animationEnabled:false,
-  transitionConfig: () => ({
-    transitionSpec: {
-      duration:0,
-      timing: 0,
-    },
-  }), headerLeft: null}} /> */}
+
 
    </Stack.Navigator>
    </NavigationContainer>
