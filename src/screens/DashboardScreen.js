@@ -729,6 +729,35 @@ justifyContent:"center",
             </View>
 
 
+            <View style={styles.main_item}>
+
+            <TouchableOpacity
+            onPress={()=>{this.props.navigation.navigate('TabScreen2')}}
+            style={{
+                backgroundColor:'white',
+                borderWidth:0.8,
+                borderColor:AppColors.Signincolor,
+                width:'90%',
+                padding:20,
+                alignSelf:'center',
+                marginBottom:10,
+                borderRadius:10,
+                }}>
+            <Text style={{alignSelf:'center' ,fontSize:16, textAlign:'center', color:AppColors.Signincolor}}>
+                    Custom
+                
+                </Text>
+             
+            </TouchableOpacity>
+
+         
+
+
+            
+
+            </View>
+
+
 
 </ScrollView>
 

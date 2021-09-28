@@ -14,7 +14,9 @@ import LocationServiceScreen from './src/screens/LocationServiceScreen';
 import OurServiceListScreen from './src/screens/OurServiceListScreen'
 import ForgotPasswordScreen from './src/screens/ForgotPasswordScreen';
 
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Feather from 'react-native-vector-icons/Feather';
+
 import DashboardScreen from './src/screens/DashboardScreen';
 import VehicleScreen from './src/screens/VehicleScreen'
 import VehicleList from './src/screens/VehicleList';
@@ -33,6 +35,11 @@ import LocationServiceOne from './src/screens/LocationServiceOne';
 import VehcilContainerDetailScreen from './src/screens/VehcilContainerDetailScreen';
 import ExportDetailsScreen from './src/screens/ExportDetailsScreen';
 import messaging from '@react-native-firebase/messaging';
+import MyVehicles from './src/screens/MyVehciles';
+import MyContainerList from './src/screens/MyContainerList';
+import AddVehicle from './src/screens/AddVehicle';
+import MyVehicleDetails from './src/screens/MyVehcileDetails';
+import MyContainerDetails from './src/screens/MyContainerDetails';
 
 
 const Stack = createStackNavigator();
@@ -304,6 +311,10 @@ options={{
 }} 
  />
 
+
+
+
+
   </Stack.Navigator>
   );
 }
@@ -354,6 +365,122 @@ style={{ width: 30, height:30, alignSelf: 'center', resizeMode:'contain'}}
   )}} />
 
   
+   
+
+    
+
+   </Tab.Navigator>
+  );
+}
+
+
+const MyVehicle =() =>{
+  return(
+  <Stack.Navigator>
+
+
+<Stack.Screen name='MyVehicles' component={MyVehicles}
+options={{
+  headerShown:false,
+  animationEnabled:false,
+  transitionConfig: () => ({
+    transitionSpec: {
+      duration:0,
+      timing: 0,
+    },
+  }),
+}} 
+ />
+
+<Stack.Screen name='MyVehicleDetails' component={MyVehicleDetails}
+options={{
+  headerShown:false,
+  animationEnabled:false,
+  transitionConfig: () => ({
+    transitionSpec: {
+      duration:0,
+      timing: 0,
+    },
+  }),
+}} 
+ />
+
+  </Stack.Navigator>
+  );
+}
+
+
+const MyContainer =() =>{
+  return(
+  <Stack.Navigator>
+
+
+<Stack.Screen name='MyContainerList' component={MyContainerList}
+options={{
+  headerShown:false,
+  animationEnabled:false,
+  transitionConfig: () => ({
+    transitionSpec: {
+      duration:0,
+      timing: 0,
+    },
+  }),
+}} 
+ />
+
+<Stack.Screen name='MyContainerDetails' component={MyContainerDetails}
+options={{
+  headerShown:false,
+  animationEnabled:false,
+  transitionConfig: () => ({
+    transitionSpec: {
+      duration:0,
+      timing: 0,
+    },
+  }),
+}} 
+ />
+
+  </Stack.Navigator>
+  );
+}
+
+
+
+const TabScreen2 =()=>{
+  return(
+    <Tab.Navigator
+    screenOptions={{
+      tabBarActiveTintColor: AppColors.Signincolor,
+      keyboardHidesTabBar: true
+
+    }}
+    >
+
+    <Tab.Screen name="MyVehicle" component={MyVehicle} options={{tabBarLabel:'MY VEHICLES',headerShown:false,
+   tabBarIcon: ({ color, size }) => (
+    <Ionicons  name='md-car-sport-sharp'  size={size}/>
+    )
+  
+  ,}} />
+
+
+{/* <Tab.Screen name="AddVehicle" component={AddVehicle} options={{tabBarLabel:'ADD VEHICLE',headerShown:false,
+   tabBarIcon: ({ color, size }) => (
+    <Ionicons  name='ios-add-circle-outline'  size={size}/>
+
+  )}} /> */}
+
+
+ 
+
+  
+<Tab.Screen name="MyContainer" component={MyContainer} options={{tabBarLabel: 'CONTAINER',headerShown:false,
+   tabBarIcon: ({ color, size }) => (
+   
+    <Feather  name='box'  size={size}/>
+
+  )}} />
    
 
     
@@ -418,6 +545,20 @@ const App = () => {
       timing: 0,
     },
   }),  }} />
+
+
+<Stack.Screen name='TabScreen2' component={TabScreen2}
+options={{
+  headerShown:false,
+  animationEnabled:false,
+  transitionConfig: () => ({
+    transitionSpec: {
+      duration:0,
+      timing: 0,
+    },
+  }),
+}} 
+ />
 
 
 
