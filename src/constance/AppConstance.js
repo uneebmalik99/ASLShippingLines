@@ -14,7 +14,7 @@ export const deviceWidth = Dimensions.get('window').width;
 class AppConstance extends Component {
 
     static AUTH_KEY = 'yyx6gzTHBjb_BW1MN-atMUC9Cr2B1r2E'
-
+    static USER_ROLE  = ''
     static USER_TOKEN = '';
     static USER_ID = '';
 

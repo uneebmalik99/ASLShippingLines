@@ -1,4 +1,4 @@
-import React,{useState,useEffect ,useRef} from 'react';
+import React,{useState,useEffect,useRef} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -21,17 +21,18 @@ import AppFonts from '../AppFont/AppFonts';
 import MaterialIcons from 'react-native-vector-icons/dist/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/dist/Ionicons';
-import SimpleLineIcons from 'react-native-vector-icons/dist/SimpleLineIcons'; 
+import AntDesign from 'react-native-vector-icons/dist/AntDesign'; 
 import Entypo from  'react-native-vector-icons/dist/Entypo';
 import { SliderBox } from "react-native-image-slider-box";
 import RNFetchBlob from 'rn-fetch-blob';
 import Snackbar from 'react-native-snackbar';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Feather from  'react-native-vector-icons/dist/Feather'
-import AntDesign from  'react-native-vector-icons/dist/AntDesign'
 import { Icon} from 'react-native-elements'
+import Animated from 'react-native-reanimated';
+import RBSheet from "react-native-raw-bottom-sheet";
+// import ImageCropPicker from 'react-native-image-crop-picker';
 import { Appbar } from 'react-native-paper';
-import ActionButton from 'react-native-action-button';
 
 
 
@@ -46,14 +47,13 @@ const images = [
     
 ];
 
-const MyVehicleDetails = ({route, navigation }) => {
-
-
+const MyVehcileDetails = ({route, navigation }) => {
   const [vehicleDetails , setvehicleDetails] = useState([''])
 
-  const { item   } = route.params;
+  const { item  } = route.params;
 
   const [imgpos, setimgpos] = useState(0)
+
   const [images , setimages] = useState([
     "https://source.unsplash.com/1024x768/?nature",
     "https://source.unsplash.com/1024x768/?water",
@@ -64,28 +64,7 @@ const MyVehicleDetails = ({route, navigation }) => {
   ])
   const[spinner , setspinner ] = useState(false)
   const[SliderModel , setSliderModel] = useState(false)
-
-  const refRBSheet = useRef();
-  
-// bs = React.createRef()
-// fall = new Animated.Value(1)
-
-// renderInner = () =>(
-//   <Text>HEllo</Text>
-// );
-
-// RenderHeader =() =>(
-//   <View style={{backgroundColor:'white', shadowColor:'#333333', shadowOffset:{width:-1, height:-3}, 
-//   shadowRadius:2,shadowOpacity:0.4, paddingTop:20, borderTopLeftRadius:20, borderTopRightRadius:20} } >
-//       <View style={{alignItems:'center', }}>
-//           <View style={{width:40, height:8, borderRadius:4, backgroundColor:'red', marginBottom:10}}>
-
-//           </View>
-
-//       </View>
-
-//   </View>
-// )
+  const[Details , setDetails] = useState(item)
 
   const showSnackbarMessage = () => {
     setTimeout(() => {
@@ -97,7 +76,78 @@ const MyVehicleDetails = ({route, navigation }) => {
     }, 200);
   };
 
+  const checkPermission = async (image) => {
+    
+    // Function to check the platform
+    // If iOS then start downloading
+    // If Android then ask for permission
 
+    if (Platform.OS === 'ios') {
+      downloadImage(image);
+    } else {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+          {
+            title: 'Storage Permission Required',
+            message:
+              'App needs access to your storage to download Photos',
+          }
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          // Once user grant the permission start downloading
+          console.log('Storage Permission Granted.');
+          downloadImage(image);
+        } else {
+          // If permission denied then show alert
+          alert('Storage Permission Not Granted');
+        }
+      } catch (err) {
+        // To handle permission related exception
+        console.warn(err);
+      }
+    }
+  };
+
+
+  const downloadImage = (img) => {
+    // Main function to download the image
+    
+    // To add the time suffix in filename
+    let date = new Date();
+    // Image URL which we want to download
+    let image_URL = img;    
+    // Getting the extention of the file
+    let ext = getExtention(image_URL);
+    ext = '.' + ext[0];
+    // Get config and fs from RNFetchBlob
+    // config: To pass the downloading related options
+    // fs: Directory path where we want our image to download
+    const { config, fs } = RNFetchBlob;
+    let PictureDir = fs.dirs.PictureDir;
+    let options = {
+      fileCache: true,
+      addAndroidDownloads: {
+        // Related to the Android only
+        useDownloadManager: true,
+        notification: true,
+        path:
+          PictureDir +
+          '/image_' + 
+          Math.floor(date.getTime() + date.getSeconds() / 2) +
+          ext,
+        description: 'Image',
+      },
+    };
+    config(options)
+      .fetch('GET', image_URL)
+      .then(res => {
+        // Showing alert after successful downloading
+        console.log('res -> ', JSON.stringify(res));
+        showSnackbarMessage()
+        // alert('Image Downloaded Successfully.');
+      });
+  };
 
 
 const getExtention = filename => {
@@ -127,6 +177,38 @@ const onShare = async () => {
   }
 };
 
+const refRBSheet = useRef();
+
+
+const [width, setwidth] =useState('100%')
+  const [currentimg, setcurrentimg] = useState('')
+const [Export, setExport] = useState(false)
+const [data, setdata] = useState([
+  {
+    date: '20-12-2020',
+    Description: 'Description',
+    Lot:'473890',
+    N:'CA',
+
+  },
+  
+
+  {
+  date: '20-12-2020',
+    Description: 'Description',
+    Lot:'473890',
+    N:'CA',
+  },
+
+  {
+    date: '20-12-2020',
+    Description: 'Description',
+    Lot:'473890',
+    N:'CA',
+  },
+
+]
+)
 
 // const TakePhoto=()=>{
 //   ImageCropPicker.openCamera({
@@ -163,14 +245,61 @@ const onShare = async () => {
 
 //   });
 // }
-const [width, setwidth] =useState('100%')
-  const [currentimg, setcurrentimg] = useState('')
-const [Export, setExport] = useState(false)
-const [data, setdata] = useState([])
-
 useEffect(() => {
 
+  if (item.images != undefined && item.images != undefined) {
+    for (let index = 0; index < item.images.length; index++) {
+        const element = item.images[index];
+        images.push('https://erp.gwwshipping.com/uploads/' + element.thumbnail)
+        console.log('Image vehicle :;;', 'https://erp.gwwshipping.com/uploads/' + element.thumbnail)
+    }
 
+  }
+//   else{
+
+//     for (let index = 0; index < vehicleDetails.images.length; index++) {
+//       const element = vehicleDetails.images[index];
+//       images.push(baseImagePath + element.thumbnail)
+//       console.log('Image vehicle :;; ', baseImagePath + element.thumbnail)
+//   }
+// }
+
+//   setspinner(true)
+//   // setInterval(() => {
+
+//   //   setspinner(false)
+//   //   // this.setState({
+//   //   //   spinner: !this.state.spinner
+//   //   // });
+//   // }, 100);
+//   if(type === 'Containers'){
+//     setExport(true)
+//   }
+//   setvehicleDetails(datapre)
+
+// console.warn(baseImagePath);
+
+  // setimages(vehicleDetails.images)
+  // console.warn('length of img'+ images);
+  // if (datapre != undefined && datapre.images != undefined) {
+  //   for (let index = 0; index < datapre.images.length; index++) {
+  //       const element = datapre.images[index];
+  //       images.push(baseImagePath + element.thumbnail)
+  //       console.log('Image vehicle :;; ', baseImagePath + element.thumbnail)
+  //   }
+  //   setspinner(false)
+
+  // }else if(datapre != undefined && datapre.exportImages != undefined) {
+  //   console.warn(datapre.exportImages.length);
+  //   for (let index = 0; index < datapre.exportImages.length; index++) {
+  //     const element = datapre.exportImages[index];
+  //     images.push(baseImagePath + element.thumbnail)
+  //     console.log('Image vehicle :;; ', baseImagePath + element.thumbnail)
+  // }
+  // setspinner(false)
+
+  // }
+  // setspinner(false)
 
 
   return () => {
@@ -178,30 +307,74 @@ useEffect(() => {
   }
 }, [])
 
-// const renderContent = () => (
-//   <View
-//     style={{
-//       backgroundColor: 'white',
-//       padding: 16,
-//       height: 450,
-//     }}
-//   >
-//     <Text>Swipe down to close</Text>
-//   </View>
-// );
+const renderlist = ({item}) =>{
 
-// const sheetRef = React.useRef(null);
+  return(
+    
+<View style={{flexDirection:'row',alignSelf:'center',  width:'100%',height:45}} >
+
+<TouchableOpacity
+// onPress={()=>navigation.navigate('CarDetails')}
+
+style={{width:'60%', paddingVertical:1,paddingHorizontal:3,height:'100%',borderRadius:6, backgroundColor:'white'}}>
+<View style={{  width:'100%',height:'100%', flexDirection:'column'}}>
+
+<View style={{flexDirection:'row',width:'100%',height:'100%'}}>
+
+<View style={{ height:'100%',marginLeft:4, paddingVertical:1, width:'100%'}}>
+
+<Text style={{color:'black',paddingVertical:2, fontSize:12,}}>{vehicleDetails.year} Toyota Corolla</Text>
+<Text style={{color:'black',paddingVertical:2, fontSize:12,}}>Lot: 327228800</Text>
+</View>
+
+</View>
+
+
+
+
+</View>
+
+</TouchableOpacity>
+
+
+<View
+style={{width:'1.3%'}}>
+
+</View>
+
+
+<TouchableOpacity
+onPress={()=>navigation.navigate('CarDetails')}
+
+style={{width:'38.7%', paddingVertical:2,paddingHorizontal:3,justifyContent:'center', height:'100%',borderRadius:6, backgroundColor:'white'}}>
+<View style={{  width:'100%',height:'100%',justifyContent:'center', flexDirection:'column'}}>
+
+<Text style={{color:'black', alignSelf:'center',  fontSize:11,}}>375295925</Text>
+
+
+
+
+</View>
+
+</TouchableOpacity>
+
+</View>
+
+  
+  
+  )
+  
+   }
+
 
 
 
 return (
    
   <SafeAreaView style={{ flex: 1, backgroundColor: 'white', height: deviceHeight, }}>
-  
-
-
-
-  {/* <RBSheet
+ 
+ 
+  <RBSheet
                     ref={refRBSheet}
                     closeOnDragDown={true}
                     closeOnPressMask={true}
@@ -274,13 +447,9 @@ return (
                     </View>
 
                 </RBSheet>
-            */}
+           
 
-
-  {/* <Toolbar toggle={this.props.toggle} headerName='DASHBOARD' isFilterIconShow={false} isInnerScreen={false} /> */}
- 
- 
-         <Appbar
+                <Appbar
                             style={{backgroundColor:AppColors.Headercolor,
                         flexDirection:'row',
                         width:deviceWidth,
@@ -305,17 +474,21 @@ return (
                 </TouchableOpacity>
 
 
-                <View style={{justifyContent:'center', alignItems:'center'}}>
-              <Text style={{alignSelf:'center',color:'grey',fontWeight:'bold', fontSize:20}}>Vehicle</Text>
-              </View>
+                <View style={{width:'80%',justifyContent:'center', }}>
+                <Text style={{alignSelf:'center',color:'black',fontWeight:'bold', fontSize:20}}>Vehicle</Text>
+                </View>
 
                 
                 
-              <View style={{width:'10%',justifyContent:'center' }}>
-            <TouchableOpacity style={{alignSelf:'center', justifyContent:'center'}}>
-            <AntDesign  size={20} style={{alignSelf:'center'}} color='black' name='check'/>
-            </TouchableOpacity>
-            </View>
+                <View style={{width:'10%',justifyContent:'center' }}>
+              <TouchableOpacity style={{alignSelf:'center', justifyContent:'center'}}
+              onPress={()=>{
+                navigation.navigate('EditVehicle',{'item': item  })
+              }}
+              >
+              <MaterialIcons  size={20} style={{alignSelf:'center'}} color='black' name='mode-edit'/>
+              </TouchableOpacity>
+              </View>
 
       </Appbar>
 
@@ -324,7 +497,8 @@ return (
 
 
 <ScrollView style={{width:deviceWidth }}>
- 
+
+
  <SliderBox 
           images={images}
           sliderBoxHeight={210}
@@ -358,69 +532,71 @@ return (
   ImageComponentStyle={{ width: '100%', marginTop: 0}}
 
         />
-     
-<View style={{marginTop:-85, width:deviceWidth, paddingHorizontal:50, height:35,width:35, marginBottom:30,alignSelf:'flex-end',justifyContent:'center', }}>
-  {/* <TouchableOpacity 
+{/* 
+<View style={{marginTop:-65, height:35,width:35, marginBottom:30,alignSelf:'flex-end',justifyContent:'center', marginRight:20,}}>
+  <TouchableOpacity 
           onPress={() => refRBSheet.current.open()}
           style={{backgroundColor:'grey' , borderRadius: 50,height:'100%',width:'100%',  justifyContent:'center', }}>
   <Text style={{color:'white', alignSelf:'center'}}>+</Text>
 
-  </TouchableOpacity> */}
-  <ActionButton position='left'  size={40} buttonColor="rgba(231,76,60,1)">
-          <ActionButton.Item buttonColor='#9b59b6'  size={30} onPress={() => console.log("notes tapped!")}>
-            <Ionicons name="md-create" style={styles.actionButtonIcon} />
-          </ActionButton.Item>
-          <ActionButton.Item buttonColor='#3498db' size={30} onPress={() => {}}>
-            <Ionicons name="md-notifications-off" style={styles.actionButtonIcon} />
-          </ActionButton.Item>
+  </TouchableOpacity>
+</View> */}
 
-        </ActionButton>
-</View>
 
-<View style={{flexDirection:'column', justifyContent:'center',backgroundColor:'#F2F3F4',   shadowColor: 'grey',
+        <View style={{width:'100%',flexDirection:'row',paddingVertical:10, paddingHorizontal:10, backgroundColor:'#2C3E50', justifyContent:'center', alignSelf:'center'}}>
+          <View style={{width:'45%'}}>
+          <Text style={{color:'white'}}>VIN NUMBER</Text>
+          </View>
+
+          <View style={{width:'55%'}}>
+          <Text style={{color:'white'}}>{item.vin}</Text>
+          </View>
+
+        </View>
+
+
+<View style={{flexDirection:'column',justifyContent:'center',backgroundColor:'#F2F3F4',   shadowColor: 'grey',
     shadowOffset: { width: 3, height: 3 },
     shadowOpacity: 0.6,
     shadowRadius: 1,
-    elevation: 5,alignSelf:'center',borderRadius:10,borderWidth:0.2, marginTop:50,paddingHorizontal:10, width:'95%',}} >
+    elevation: 5,alignSelf:'center',borderRadius:10,borderWidth:0.2, marginTop:10,paddingHorizontal:10, width:'95%',}} >
 
 
 
 
 
 <View style={{width:'100%',flexDirection:'column', borderBottomWidth:0.3,paddingVertical:5,borderColor:'#B3B6B7', justifyContent:'space-between'}}>
-<Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>AR no:</Text>
-<Text style={{color:'grey',paddingVertical:2, fontSize:14,}}>{item.ar_number}</Text>
+<Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>CUSTOMER </Text>
+<Text style={{color:'grey',paddingVertical:2, fontSize:14,}}>{item.customer_name}</Text>
 </View>
 
 
 <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5, borderColor:'#B3B6B7', justifyContent:'space-between'}}>
-<Text style={{color:'black',paddingVertical:2, fontWeight:'bold',fontSize:14,}}>Container no:</Text>
-<Text style={{color:'grey',paddingVertical:2, fontSize:14,}}>{item.container_number}</Text>
+<Text style={{color:'black',paddingVertical:2, fontWeight:'bold',fontSize:14,}}>LOT NUMBER </Text>
+<Text style={{color:'grey',paddingVertical:2, fontSize:14,}}>{item.lot_number}</Text>
 </View>
 
 <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
-<Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>Broker Name:</Text>
-<Text style={{color:'grey',paddingVertical:2, fontSize:14,}}>{item.broker_name}</Text>
+<Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>MAKE</Text>
+<Text style={{color:'grey',paddingVertical:2, fontSize:14,}}>{item.make}</Text>
 </View>
 
 
 <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5, borderColor:'#B3B6B7', justifyContent:'space-between'}}>
-<Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>Booking no:</Text>
-<Text style={{color:'grey',paddingVertical:2, fontSize:14,}}>{item.booking_number}</Text>
+<Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>MODEL </Text>
+<Text style={{color:'grey',paddingVertical:2, fontSize:14,}}>{item.model}</Text>
 </View>
 
 
 <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
-<Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>Destination</Text>
-<Text style={{color:'grey',paddingVertical:2, fontSize:14,}}>{item.destination}</Text>
+<Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>YEAR </Text>
+<Text style={{color:'grey',paddingVertical:2, fontSize:14,}}>{item.year}</Text>
 </View>
 
 
 
 
 </View>
-
-
 
 
 </ScrollView>
@@ -436,18 +612,4 @@ return (
 };
 
 
-export default MyVehicleDetails;
-
-
-
-
-const styles = StyleSheet.create({
-  actionButtonIcon: {
-    fontSize: 18,
-    height: 10,
-    width:10,
-    color: 'white',
-  },
-
-
-  })
+export default MyVehcileDetails;

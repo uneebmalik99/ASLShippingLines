@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect,useRef } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -19,7 +19,7 @@ import AppConstance, { deviceHeight, deviceWidth } from '../constance/AppConstan
 import AppFonts from '../AppFont/AppFonts';
 import MaterialCommunityIcons from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/dist/Ionicons';
-import AntDesign from 'react-native-vector-icons/dist/AntDesign';
+import Entypo from 'react-native-vector-icons/dist/Entypo';
 import SimpleLineIcons from 'react-native-vector-icons/dist/SimpleLineIcons'; 
 import Feather from  'react-native-vector-icons/dist/Feather'
 import AppUrlCollection from '../UrlCollection/AppUrlCollection';
@@ -27,6 +27,7 @@ import { SliderBox } from "react-native-image-slider-box";
 import { Icon} from 'react-native-elements'
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Appbar } from 'react-native-paper';
+import RBSheet from "react-native-raw-bottom-sheet";
 
 
 const images = [
@@ -43,6 +44,7 @@ const images = [
 
 const MyContainerList = ({ navigation }) => {
 
+  const refRBSheet = useRef();
 
 const [vin , setvin] = useState(true)
   const[spinner , setspinner] = useState(false)
@@ -51,9 +53,8 @@ const [vin , setvin] = useState(true)
   const[page , setpage] = useState(1)
   const [FilteredDataSource, setFilteredDataSource]= useState([])
   const[data , setdata] = useState([])
+  const [vehicleList , setvehicleList] = useState([])
 
-  const [vehicleList , setvehicleList] = useState([
-])
   const toggleSwitch = (value) => {
     //To handle switch toggle
     console.warn(value);
@@ -236,6 +237,80 @@ const [vin , setvin] = useState(true)
 
       </Appbar>
 
+<RBSheet
+                    ref={refRBSheet}
+                    closeOnDragDown={true}
+                    closeOnPressMask={true}
+                    customStyles={{
+                        wrapper: {
+                            backgroundColor: "transparent"
+                        },
+                        container: {
+                            backgroundColor: '#ECF0F1',
+                            borderTopLeftRadius:20,
+                            borderTopRightRadius:20,
+                            height: 300,
+                            paddingTop:15,
+
+                        },
+                        draggableIcon: {
+                            backgroundColor: "grey"
+                        }
+                    }}
+                >
+                    <View>
+
+                    <TouchableOpacity>
+                        <View style={{ borderBottomWidth: 0.6,paddingVertical:5, borderColor: '#D0D3D4', width: '80%', alignSelf: 'center' }}>
+                            <Text style={{ alignSelf: 'center',  fontSize:20,fontWeight:'600', paddingVertical:5,  }}>Upload Photo</Text>
+                        </View>
+
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                    onPress={()=>TakePhoto() }
+                    >
+                        <View style={{ borderWidth: 0.5, borderRadius:12,marginTop:10, borderColor: '#1a9bef', width: '80%', alignSelf: 'center' }}>
+                            <Text style={{ alignSelf: 'center', padding: 10,fontWeight:'600', color: '#1a9bef', }}>Take Photo</Text>
+                        </View>
+
+                    </TouchableOpacity>
+             
+                    <TouchableOpacity
+                    onPress={()=> Selectphoto()}
+                    >
+                        <View style={{ borderWidth: 0.5 , borderRadius:12,marginTop:10, borderColor: '#1a9bef', width: '80%', alignSelf: 'center' }}>
+                            <Text style={{ alignSelf: 'center',fontWeight:'600', padding: 10, color: '#1a9bef', }}>Choose From Library</Text>
+                        </View>
+
+                    </TouchableOpacity>
+               
+                    <TouchableOpacity
+                                        onPress={()=> refRBSheet.current.close()}
+
+                    >
+                        <View style={{ borderWidth: 1, borderRadius:12,marginTop:10, borderColor: 'red', width: '80%', alignSelf: 'center' }}>
+                            <Text style={{ alignSelf: 'center', padding: 10, color: 'red', }}>Cancel</Text>
+                        </View>
+
+                    </TouchableOpacity>
+                    </View>
+
+               
+               <View style={{  flex: 1,
+  justifyContent: 'flex-end',
+  marginBottom: 20
+}}>
+
+             
+                    <TouchableOpacity 
+                    onPress={()=> refRBSheet.current.close()}
+                    style={{width:25,justifyContent:'center', height:25, backgroundColor:'grey', borderRadius:50, alignSelf:'flex-end', marginRight:30}}>
+                    <Entypo   name='chevron-down' color='white' size={18} style={{alignSelf:'center'}}/>
+                    </TouchableOpacity>
+                    </View>
+
+                </RBSheet>
+           
 
 
 

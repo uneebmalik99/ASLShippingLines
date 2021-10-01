@@ -40,6 +40,7 @@ import MyContainerList from './src/screens/MyContainerList';
 import AddVehicle from './src/screens/AddVehicle';
 import MyVehicleDetails from './src/screens/MyVehcileDetails';
 import MyContainerDetails from './src/screens/MyContainerDetails';
+import EditVehicle from './src/screens/EditVehicle';
 
 
 const Stack = createStackNavigator();
@@ -393,6 +394,19 @@ options={{
  />
 
 <Stack.Screen name='MyVehicleDetails' component={MyVehicleDetails}
+options={{
+  headerShown:false,
+  animationEnabled:false,
+  transitionConfig: () => ({
+    transitionSpec: {
+      duration:0,
+      timing: 0,
+    },
+  }),
+}} 
+ />
+
+<Stack.Screen name='EditVehicle' component={EditVehicle}
 options={{
   headerShown:false,
   animationEnabled:false,

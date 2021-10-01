@@ -191,6 +191,19 @@ class SplashScreen extends Component {
                                                 console.warn('json value', value)
                                                 if (value != null) {
                                                     let data = JSON.parse(value);
+
+                                                    AsyncStorage.getItem('user_role').then((role)=>{
+                                                        if(role == "Admin"){
+                                                            AppConstance.USER_ROLE = '1'
+
+                                                        }else{
+                                                            AppConstance.USER_ROLE = '0'
+
+                                                        }
+                                                        // AppConstance.USER_ROLE = role
+
+                                                    })
+                                                    
                                                     AppConstance.USER_INFO.USER_ID = data.id;
                                                     AppConstance.USER_INFO.USER_NAME = data.username;
                                                     AppConstance.USER_INFO.USER_TOKEN = auth;

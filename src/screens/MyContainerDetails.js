@@ -32,6 +32,7 @@ import AntDesign from  'react-native-vector-icons/dist/AntDesign'
 import { Icon} from 'react-native-elements'
 import { Appbar } from 'react-native-paper';
 import ActionButton from 'react-native-action-button';
+import RBSheet from "react-native-raw-bottom-sheet";
 
 
 
@@ -52,7 +53,8 @@ const MyContainerDetails = ({route, navigation }) => {
   const [vehicleDetails , setvehicleDetails] = useState([''])
 
   const { item   } = route.params;
-
+  
+  const refRBSheet = useRef();
   const [add , setadd] = useState(true)
   const [imgposition, setimgposition] = useState(0)
   const [images , setimages] = useState([
@@ -66,7 +68,6 @@ const MyContainerDetails = ({route, navigation }) => {
   const[spinner , setspinner ] = useState(false)
   const[SliderModel , setSliderModel] = useState(false)
 
-  const refRBSheet = useRef();
   
 // bs = React.createRef()
 // fall = new Animated.Value(1)
@@ -211,7 +212,7 @@ return (
 
 
 
-  {/* <RBSheet
+  <RBSheet
                     ref={refRBSheet}
                     closeOnDragDown={true}
                     closeOnPressMask={true}
@@ -220,10 +221,10 @@ return (
                             backgroundColor: "transparent"
                         },
                         container: {
-                            backgroundColor: '#ECF0F1',
+                            // backgroundColor: '#ECF0F1',
+                            backgroundColor:'white',
                             borderTopLeftRadius:20,
                             borderTopRightRadius:20,
-                            height: 300,
                             paddingTop:15,
 
                         },
@@ -234,26 +235,13 @@ return (
                 >
                     <View>
 
-                    <TouchableOpacity>
-                        <View style={{ borderBottomWidth: 0.6,paddingVertical:5, borderColor: '#D0D3D4', width: '80%', alignSelf: 'center' }}>
-                            <Text style={{ alignSelf: 'center',  fontSize:20,fontWeight:'600', paddingVertical:5,  }}>Upload Photo</Text>
-                        </View>
-
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                    onPress={()=>TakePhoto() }
-                    >
-                        <View style={{ borderWidth: 0.5, borderRadius:12,marginTop:10, borderColor: '#1a9bef', width: '80%', alignSelf: 'center' }}>
-                            <Text style={{ alignSelf: 'center', padding: 10,fontWeight:'600', color: '#1a9bef', }}>Take Photo</Text>
-                        </View>
-
-                    </TouchableOpacity>
+                   
              
                     <TouchableOpacity
-                    onPress={()=> Selectphoto()}
+                    onPress={()=> {}}
                     >
-                        <View style={{ borderWidth: 0.5 , borderRadius:12,marginTop:10, borderColor: '#1a9bef', width: '80%', alignSelf: 'center' }}>
-                            <Text style={{ alignSelf: 'center',fontWeight:'600', padding: 10, color: '#1a9bef', }}>Choose From Library</Text>
+                        <View style={{ borderWidth: 0.5 , borderRadius:12,marginTop:10, borderColor: 'red', width: '80%', alignSelf: 'center' }}>
+                            <Text style={{ alignSelf: 'center',fontWeight:'600', padding: 12, color: 'red', }}>Delete</Text>
                         </View>
 
                     </TouchableOpacity>
@@ -262,8 +250,8 @@ return (
                                         onPress={()=> refRBSheet.current.close()}
 
                     >
-                        <View style={{ borderWidth: 1, borderRadius:12,marginTop:10, borderColor: 'red', width: '80%', alignSelf: 'center' }}>
-                            <Text style={{ alignSelf: 'center', padding: 10, color: 'red', }}>Cancel</Text>
+                        <View style={{ borderWidth: 1, borderRadius:12,marginTop:10, borderColor: 'grey', width: '80%', alignSelf: 'center' }}>
+                            <Text style={{ alignSelf: 'center', padding: 12, color: 'grey',fontWeight:'bold' }}>Cancel</Text>
                         </View>
 
                     </TouchableOpacity>
@@ -284,7 +272,7 @@ return (
                     </View>
 
                 </RBSheet>
-            */}
+           
 
 
   {/* <Toolbar toggle={this.props.toggle} headerName='DASHBOARD' isFilterIconShow={false} isInnerScreen={false} /> */}
@@ -381,7 +369,7 @@ return (
      
      <View style={{marginTop:15,position:'absolute',alignSelf:'flex-end', paddingHorizontal:40, }}>
     <TouchableOpacity
-    onPress={()=> {deleteimage()}}
+    onPress={()=> {   refRBSheet.current.open()}}
     style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.toolbarColor }}>
 
      <Ionicons name="close" color={AppColors.toolbarColor}  size={25}  />

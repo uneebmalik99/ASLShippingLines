@@ -145,9 +145,6 @@ const MyVehicles = ({ navigation }) => {
         });
 }
 
-   
-
-
 
   const  renderVehicle = ({ item, index }) => {
 
@@ -159,7 +156,10 @@ const MyVehicles = ({ navigation }) => {
     for (let index = 0; index < item.photo_urls.length; index++) {
         const element = item.photo_urls[index];
         img.push(element.url)
+        // console.log(element);
     }
+
+    
 
   }
 
@@ -193,6 +193,8 @@ elevation: 5,
   dotStyle={{
     width: 10,
     height: 10,
+    marginHorizontal: -4,
+
     
   }}
           resizeMethed={'resize'}  

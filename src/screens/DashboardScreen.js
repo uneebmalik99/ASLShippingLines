@@ -26,6 +26,7 @@ class DashboardScreen extends Component {
             newPurchase: 0,
             drawerview:false,
             shipped: 0,
+            role:'',
             arrived: 0,
             allContainer:0,
             dashboardSection: [
@@ -145,7 +146,16 @@ class DashboardScreen extends Component {
 
     componentDidMount() {
 
+        if(AppConstance.USER_ROLE == "Admin"){
+                this.setState({role : '1'})
+                alert(this.state.role)
+        }else{
+            this.setState({role : '0'})
+            alert(this.state.role)
 
+
+
+        }
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         AppState.addEventListener('change', this._handleAppStateChange);
 
@@ -728,7 +738,7 @@ justifyContent:"center",
 
             </View>
 
-
+            {this.state.role == '1' ?
             <View style={styles.main_item}>
 
             <TouchableOpacity
@@ -756,8 +766,8 @@ justifyContent:"center",
             
 
             </View>
-
-
+            : null
+            }
 
 </ScrollView>
 

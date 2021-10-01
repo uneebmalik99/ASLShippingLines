@@ -22,10 +22,10 @@ import { Appbar } from 'react-native-paper';
 const LoginScreen = ({ navigation }) => {
 
     // const [email ,setemail] = useState('nooraljabal1133@gmail.com')
-    const [email ,setemail] = useState('')
+    const [email ,setemail] = useState('uneeb@impulsiontechnologies.com')
 
     // const [pass ,setpass] =useState('info@asl1001')
-    const [pass ,setpass] =useState('')
+    const [pass ,setpass] =useState('Admin@123')
   
     const [spinner , setspinner] =useState(false)
    
@@ -68,9 +68,8 @@ const LoginScreen = ({ navigation }) => {
                       .then((responseJson) => {
                         
                         // setspinner(false)
-                       
-                          console.log(responseJson);
-                          loginServiceCall(responseJson)
+                       console.log(responseJson);
+                          loginServiceCall(responseJson , responseJson.user.role_name)
                         
                           // this.setState({ isLoading: false })
                          
@@ -93,7 +92,7 @@ const LoginScreen = ({ navigation }) => {
   }
   
   
-  const loginServiceCall = (responseJson) => {
+  const loginServiceCall = (responseJson, role) => {
     console.warn(responseJson)
   
      if (responseJson != null || responseJson != '') {
@@ -102,17 +101,31 @@ const LoginScreen = ({ navigation }) => {
         // this.props.navigation.push('Dashboard');
         
         //AppConstance.showSnackbarMessage(responseJson.message)
-      callingUserService(responseJson.access_token)
+      callingUserService(responseJson.access_token, role)
     } else {
          setspinner(false)
         alert(responseJson.message);
     }
   }
   
-  const GotoNextScreen  =async  (responseJson,auth_key) => {
+  const GotoNextScreen  =async  (responseJson,auth_key, role) => {
     await AsyncStorage.setItem(AppConstance.USER_INFO_OBJ, JSON.stringify(responseJson))
    await  AsyncStorage.setItem('ISUSERLOGIN', '1')
    await  AsyncStorage.setItem('auth_key', auth_key)
+   
+   if(role == "Admin" ){
+    await AsyncStorage.setItem('user_role', '1')
+    AppConstance.USER_ROLE = '1'
+    alert(role)
+
+    }else{
+    await AsyncStorage.setItem('user_role',  '0')
+    alert('----'+role)
+
+    AppConstance.USER_ROLE = '0'
+
+}
+   AppConstance.USER_ROLE = role
    AppConstance.USER_TOKEN_KEY = auth_key;
    let userid = responseJson.id;
    userid = userid.toString();
@@ -146,24 +159,21 @@ const LoginScreen = ({ navigation }) => {
   
   }
   
-  const callingUserService = (authKey) => {
+  const callingUserService = (authKey, role) => {
     var url = AppUrlCollection.USER;
     fetch(url, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
            'Authorization': 'Bearer ' + authKey,
-
-            // 'authkey': authKey
         },
-        // body: value,
     })
         .then((response) => response.json())
         .then((responseJson) => {
           
             console.warn('USER::: ', responseJson)
   
-            GotoNextScreen(responseJson,authKey);
+            GotoNextScreen(responseJson,authKey, role);
   
             // //this.props.navigation.goBack();
             // this.props.navigation.navigate('NavigationSideScreen')
