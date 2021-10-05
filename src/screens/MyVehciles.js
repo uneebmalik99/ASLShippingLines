@@ -2,6 +2,7 @@ import React, { useState,useEffect } from 'react';
 import {
   SafeAreaView,StyleSheet,
   ScrollView,View,
+  ActivityIndicator,
   Text,ImageBackground,
   FlatList,
   TextInput,Switch,
@@ -45,6 +46,7 @@ const MyVehicles = ({ navigation }) => {
   const[spinner , setspinner] = useState(false)
   const[data , setdata] = useState([])
   const [ page , setpage] = useState(1)
+  const [loading , setloading] = useState(false)
   const[isFooterLoading, setisFooterLoading] = useState(false)
   const[noMoreDataFound , setnoMoreDataFound] = useState(true)
   const [FilteredDataSource , setFilteredDataSource ] = useState([])
@@ -89,10 +91,12 @@ const MyVehicles = ({ navigation }) => {
   };
 
   const callingVehicleApi = async (isFirstTimeCaling) => {
-    setspinner(true)
     var url = ''
     if (isFirstTimeCaling == true) {
       setisFooterLoading(false)
+      setspinner(true)
+      setpage(page+1)
+
         // this.setState({ isLoading: true, isFooterLoading: false })
         url = AppUrlCollection.VEHILE_LIST
     } else {
@@ -118,9 +122,20 @@ const MyVehicles = ({ navigation }) => {
                 // this.setState({ isLoading: false, isFooterLoading: false })
                 if (data.length > 0) {
                   setspinner(false)
-                  setisFooterLoading(false)
-                  setvehicleList(data)
-                  setFilteredDataSource(data)
+                  // setisFooterLoading(false)
+                  if(isFirstTimeCaling == false){
+                      setpage(page+1)
+                    setloading(false)
+                    setvehicleList(currentArray =>[...currentArray, ...data]);
+
+                setFilteredDataSource(currentArray =>[...currentArray, ...data]);
+              }else{
+
+                    setvehicleList(data)
+                    setFilteredDataSource(data)
+                  }
+
+                
                     // this.setState({ vehicleList: [...this.state.vehicleList, ...data], noMoreDataFound: false })
                     // this.setState({ vehicleList: this.state.vehicleList.concat(data), vehicleList2: this.state.vehicleList2.concat(data),noMoreDataFound: false })
                 } else {
@@ -233,16 +248,52 @@ elevation: 5,
   
   }
 
+const renderFooter = () =>{
+  return(
+    
+    <View style={{padding: 20,
+
+      justifyContent: 'center',
+      alignItems: 'center',
+      flexDirection: 'row',}}>
+    <TouchableOpacity
+      activeOpacity={0.9}
+      onPress={()=> {setloading(true), callingVehicleApi(false)}}
+      //On Click of button load more data
+      style={{padding: 10,
+        backgroundColor: 'white',
+        borderRadius: 7,
+        borderWidth:0.8,
+        
+        borderColor:AppColors.Signincolor,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',}}
+      >
+      <Text style={{color: 'grey',
+    fontSize: 15,
+    textAlign: 'center',}}>Load More</Text>
+      {loading == true ? (
+        <ActivityIndicator
+          color={AppColors.Signincolor}
+          style={{marginLeft: 8}} />
+      ) : null}
+    </TouchableOpacity>
+  </View>
+  )
+}
+
 
   useEffect(() => {
     callingVehicleApi(true)
     // setspinner(true)
     // callingdashboardApi()
     // setspinner(false)
-  
-    return () => {
-      
-    }
+    const willFocusSubscription = navigation.addListener('focus', () => {
+      callingVehicleApi(true);
+  });
+
+  return willFocusSubscription;
   }, [])
 
   return (
@@ -339,8 +390,9 @@ elevation: 5, borderRadius:20,backgroundColor:'white',marginTop:20, flexDirectio
                         contentContainerStyle={{marginHorizontal:10,alignSelf:'center',justifyContent:'center',paddingBottom:10,marginTop:10, paddingHorizontal:10, width:deviceWidth}}
                         renderItem={renderVehicle}
                         keyExtractor={(item, index) => index}
+                        extraData={vehicleList}
                       //   onEndReached={loadMoreData}
-                      //   ListFooterComponent={renderFooter}
+                        ListFooterComponent={renderFooter}
                       //  onEndReachedThreshold={0.01}
                       
                     />
