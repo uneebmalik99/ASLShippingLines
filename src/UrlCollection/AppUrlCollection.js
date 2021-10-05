@@ -9,7 +9,7 @@ class AppUrlCollection extends Component{
     static EXPORT_DETAIL = AppUrlCollection.BASE_URL+ 'exports/';
     static VEHILE_LIST = AppUrlCollection.BASE_URL + 'vehicles?';
     static VEHICLE_DETAIL = AppUrlCollection.BASE_URL + 'vehicles/';
-    static LOCATION = AppUrlCollection.BASE_URL + 'location';
+    static LOCATION = AppUrlCollection.BASE_URL + 'settings/locations';
     static LOCATION2 = AppUrlCollection.BASE_URL + 'search/location';
     static CONTACT_US = AppUrlCollection.BASE_URL + 'contact-us/create';
     static INVOICE = AppUrlCollection.BASE_URL + 'invoices?';

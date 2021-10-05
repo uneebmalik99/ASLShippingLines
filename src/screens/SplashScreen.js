@@ -192,17 +192,6 @@ class SplashScreen extends Component {
                                                 if (value != null) {
                                                     let data = JSON.parse(value);
 
-                                                    AsyncStorage.getItem('user_role').then((role)=>{
-                                                        if(role == "Admin"){
-                                                            AppConstance.USER_ROLE = '1'
-
-                                                        }else{
-                                                            AppConstance.USER_ROLE = '0'
-
-                                                        }
-                                                        // AppConstance.USER_ROLE = role
-
-                                                    })
                                                     
                                                     AppConstance.USER_INFO.USER_ID = data.id;
                                                     AppConstance.USER_INFO.USER_NAME = data.username;
@@ -221,18 +210,23 @@ class SplashScreen extends Component {
                                                     AppConstance.USER_INFO.USER_IS_BLOCK = data.is_blocked;
                                                    // this.props.navigation.goBack();
 
-                                                    if (this.state.isFindNotificationVehicleId > 0) {
-                                                        //66666
-                                                        this.props.navigation.push('NotificationVehicleDetailscreen', { 'vehicleObj': this.state.isFindNotificationVehicleId })
-                                                        this.props.navigation.push('LoginScreen', { 'vehicleObj': this.state.isFindNotificationVehicleId })
-                                                    } else if (this.state.isInvoiceScreen > 0) {
-                                                        ///7777
-                                                        this.props.navigation.push('NotificationInvoiceDetailsScreen', { 'invoceObj': this.state.isInvoiceScreen })
-                                                    }
-                                                    else {
-                                                    //5555
+                                                   AsyncStorage.getItem('user_role').then((role)=>{
+                                                    if(role == "1"){
+                                                        AppConstance.USER_ROLE = '1'
                                                         this.props.navigation.navigate('TabScreen')
+
+
+                                                    }else{
+                                                        AppConstance.USER_ROLE = '0'
+                                                        this.props.navigation.navigate('TabScreen')
+
+
                                                     }
+                                                    // AppConstance.USER_ROLE = role
+
+                                                })
+                                                  
+                                                  
         
                                                     // this.props.navigation.navigate('NoInternetConnectionFoundScreen')
                                                 } else {

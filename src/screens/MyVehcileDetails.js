@@ -33,6 +33,7 @@ import Animated from 'react-native-reanimated';
 import RBSheet from "react-native-raw-bottom-sheet";
 // import ImageCropPicker from 'react-native-image-crop-picker';
 import { Appbar } from 'react-native-paper';
+import AppUrlCollection from '../UrlCollection/AppUrlCollection';
 
 
 
@@ -53,14 +54,9 @@ const MyVehcileDetails = ({route, navigation }) => {
   const { item  } = route.params;
 
   const [imgpos, setimgpos] = useState(0)
-
+  const[showimagemodel , setshowimagemodel] = useState(false)
   const [images , setimages] = useState([
-    "https://source.unsplash.com/1024x768/?nature",
-    "https://source.unsplash.com/1024x768/?water",
-    "https://source.unsplash.com/1024x768/?girl",
-    "https://source.unsplash.com/1024x768/?tree", 
-
-
+   
   ])
   const[spinner , setspinner ] = useState(false)
   const[SliderModel , setSliderModel] = useState(false)
@@ -245,14 +241,50 @@ const [data, setdata] = useState([
 
 //   });
 // }
+
+const callingVehicledetailedApi = () =>{
+
+  fetch(AppUrlCollection.VEHICLE_DETAIL  + item.id, {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+    },
+})
+    .then((response) => response.json())
+    .then((responseJson) => {
+        console.log(responseJson)
+
+
+      
+        if (responseJson.status == 'SUCCESS') {
+            // alert(responseJson.data.vehicle_conditions[3])
+            setDetails(responseJson.data)
+            // alert(responseJson.data.id)
+
+       
+           }
+    })
+    .catch((error) => {
+        console.warn(error)
+    });
+
+}
+
+
 useEffect(() => {
 
-  if (item.images != undefined && item.images != undefined) {
-    for (let index = 0; index < item.images.length; index++) {
-        const element = item.images[index];
-        images.push('https://erp.gwwshipping.com/uploads/' + element.thumbnail)
-        console.log('Image vehicle :;;', 'https://erp.gwwshipping.com/uploads/' + element.thumbnail)
+  callingVehicledetailedApi()
+
+  if (item.photo_urls != undefined && item.photo_urls != null) {
+    // setimg(responseJson.data.vehicle.images)
+    for (let index = 0; index < item.photo_urls.length; index++) {
+        const element = item.photo_urls[index];
+        images.push(element)
+        console.log(element);
     }
+  
+    
 
   }
 //   else{
@@ -483,7 +515,7 @@ return (
                 <View style={{width:'10%',justifyContent:'center' }}>
               <TouchableOpacity style={{alignSelf:'center', justifyContent:'center'}}
               onPress={()=>{
-                navigation.navigate('EditVehicle',{'item': item  })
+                navigation.navigate('EditVehicle',{'item': Details  })
               }}
               >
               <MaterialIcons  size={20} style={{alignSelf:'center'}} color='black' name='mode-edit'/>
@@ -493,13 +525,63 @@ return (
       </Appbar>
 
 
-      
+      <Modal
+        visible={showimagemodel}
+        animationType='fade'
+        >
+            <View style={{ justifyContent:'center',backgroundColor:'black', height:deviceHeight}}>
+                <View style={{backgroundColor:'black'}}>
+                <SliderBox 
+          images={images}
+          sliderBoxHeight={deviceHeight*0.5}
+          
+          dotColor="#FFEE58"
+  inactiveDotColor="#90A4AE"
+  dotStyle={{
+    width: 10,
+    height: 10,
+    marginHorizontal: -4,
+    padding: 0,
+    margin: 0
+  }}
+          resizeMethod={'resize'}  
+          resizeMode={'cover'}
+  circleLoop
+  currentImageEmitter={index => { setimgpos(index); 
+   }}
+
+          onCurrentImagePressed={index =>
+          //setcurrentimg()
+            // console.warn(`image ${index} pressed`)
+            setSliderModel(true)
+          }
+  paginationBoxStyle={{
+    alignItems: "center",
+    alignSelf: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+  }}
+  ImageComponentStyle={{ width: '100%', marginTop: 0}}
+
+        />
+        
+            <TouchableOpacity 
+            onPress={()=> { setshowimagemodel(false)}}
+            style={{alignSelf:'center', marginTop:10}}
+            >
+                <MaterialCommunityIcons color='red'  name='close-circle-outline' size={40}/>
+            </TouchableOpacity>
+                    </View>
+            </View>
+        </Modal>
+          
 
 
 <ScrollView style={{width:deviceWidth }}>
 
 
  <SliderBox 
+ 
           images={images}
           sliderBoxHeight={210}
           
@@ -521,7 +603,7 @@ return (
           onCurrentImagePressed={index =>
           //setcurrentimg()
             // console.warn(`image ${index} pressed`)
-            setSliderModel(true)
+            setshowimagemodel(true)
           }
   paginationBoxStyle={{
     alignItems: "center",

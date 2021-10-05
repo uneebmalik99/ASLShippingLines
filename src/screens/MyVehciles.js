@@ -149,19 +149,18 @@ const MyVehicles = ({ navigation }) => {
   const  renderVehicle = ({ item, index }) => {
 
     var img = [];
-  console.log('items are'+JSON.stringify(item.photo_urls));    
 
-  if (item.photo_urls != undefined && item.photo_urls != null) {
-    // setimg(responseJson.data.vehicle.images)
-    for (let index = 0; index < item.photo_urls.length; index++) {
-        const element = item.photo_urls[index];
-        img.push(element.url)
-        // console.log(element);
-    }
-
+    if (item.photo_urls != undefined && item.photo_urls != null) {
+      // setimg(responseJson.data.vehicle.images)
+      for (let index = 0; index < item.photo_urls.length; index++) {
+          const element = item.photo_urls[index];
+          img.push(element)
+          console.log(element);
+      }
     
-
-  }
+      
+  
+    }
 
   
     return(

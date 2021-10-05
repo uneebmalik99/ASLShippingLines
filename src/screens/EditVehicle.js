@@ -39,6 +39,7 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import { RadioButton } from 'react-native-paper';
 import { Appbar } from 'react-native-paper';
 import ActionButton from 'react-native-action-button';
+// import BarcodeScanner from 'react-native-scan-barcode';
 
 
 
@@ -54,15 +55,12 @@ const picture = [
   }
   ]  
   const [images , setimages] = useState([
-    "https://source.unsplash.com/1024x768/?nature",
-    "https://source.unsplash.com/1024x768/?water",
-    "https://source.unsplash.com/1024x768/?girl",
-    "https://source.unsplash.com/1024x768/?tree", 
-
+    
 
   ])
   const [add , setadd] = useState(true)
   const [imgposition, setimgposition] = useState(0)
+  const [ vin , setvin] = useState(item.vin == ''? '':item.vin)
   const [Customerlist , setCustomerlist ] = useState([])
   const [Filteredcustomer , setFilteredcustomer ] = useState([])
   const[Search , setSearch]= useState()
@@ -70,6 +68,7 @@ const picture = [
   const [location_id ,setlocation_id ] = useState(item.location)
   const [location_name, setlocation_name] = useState()
   const [location , setlocation ] = useState(item.location);
+  const [vehicletype , setvehicletype] =useState(item.vehicle_type)
   const [make , setmake ] = useState(item.make);
   const [model , setmodel ] = useState(item.model);
   const [color , setcolor ] = useState(item.color);
@@ -78,14 +77,14 @@ const picture = [
   const [hatnumber , sethatnumber ] = useState(item.hat_number);
   const [licensenumber , setlicensenumber ] = useState(item.hat_number);
   const [lotnumber , setlotnumber ] = useState(item.lot_number);
-  const [containernmber , setcontainernmber] = useState()
-  const [status , setstatus ] = useState();
-  const [condition , setcondition ] = useState();
-  const [damaged , setdamaged ] = useState();
-  const [titlenumber , settitlenumber ] = useState();
+  const [containernmber , setcontainernmber] = useState(item.container_number)
+  const [status , setstatus ] = useState(item.status);
+  const [condition , setcondition ] = useState(item.condition);
+  const [damaged , setdamaged ] = useState(item.damaged);
+  const [titlenumber , settitlenumber ] = useState(item.title_number);
   const [pictures , setpictures] = useState();
-  const [deliverdate , setdeliverdate ] = useState();
-  const [pickupdate , setpickupdate] = useState();
+  const [deliverdate , setdeliverdate ] = useState(item.deliver_date);
+  const [pickupdate , setpickupdate] = useState(item.pickup_date);
   const [note , setnote ] = useState();
   const [checkoption , setcheckoption ] = useState();
   const [ KEYS ,setKEYS ] = useState('');
@@ -95,27 +94,27 @@ const picture = [
   const [ MIRROR ,setMIRROR] = useState('');
   const [ OTHERS ,setOTHERS ] = useState('');
 
-  const [frontwindshiled , setfrontwindshiled ] = useState();
-  const [bonnet , setbonnet ] = useState();
-  const [grill , setgrill ] = useState();
-  const [frontbumper , setfrontbumper ] = useState();
-  const [frontheadlight , setfrontheadlight ] = useState();
-  const [rearwindshield , setrearwindshield ] = useState();
-  const [trunkdoor , settrunkdoor ] = useState();
-  const [rearbumper , setrearbumper ] = useState();
-  const [rearbumpersupport , setrearbumpersupport ] = useState();
-  const [taillamp , settaillamp ] = useState();
-  const [frontleftfender , setfrontleftfender ] = useState();
-  const [leftfrontdoor , setleftfrontdoor ] = useState();
-  const [leftreardoor , setleftreardoor ] = useState();
-  const [leftrearfender , setleftrearfender ] = useState();
-  const [pillar , setpillar ] = useState();
-  const [roof, setroof] =useState();
-  const [rightrearfender , setrightrearfender ] = useState();
-  const [rightreardoor , setrightreardoor ] = useState();
-  const [rightfrontdoor , setrightfrontdoor ] = useState();
-  const [frontrightfender , setfrontrightfender ] = useState();
-  
+  const [frontwindshiled , setfrontwindshiled ] = useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[2]: '');
+  const [bonnet , setbonnet ] = useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[3]: '');
+  const [grill , setgrill ] = useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[4]: '');
+  const [frontbumper , setfrontbumper ] = useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[5]: '');
+  const [frontheadlight , setfrontheadlight ] = useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[6]: '');
+  const [rearwindshield , setrearwindshield ] = useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[7]: '');
+  const [trunkdoor , settrunkdoor ] = useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[8]: '');
+  const [rearbumper , setrearbumper ] = useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[9]: '');
+  const [rearbumpersupport , setrearbumpersupport ] = useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[10]: '');
+  const [taillamp , settaillamp ] = useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[11]: '');
+  const [frontleftfender , setfrontleftfender ] = useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[12]: '');
+  const [leftfrontdoor , setleftfrontdoor ] = useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[13]: '');
+  const [leftreardoor , setleftreardoor ] = useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[14]: '');
+  const [leftrearfender , setleftrearfender ] = useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[15]: '');
+  const [pillar , setpillar ] = useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[16]: '');
+  const [roof, setroof] =useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[17]: '');
+  const [rightrearfender , setrightrearfender ] = useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[18]: '');
+  const [rightreardoor , setrightreardoor ] = useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[19]: '');
+  const [rightfrontdoor , setrightfrontdoor ] = useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[20]: '');
+  const [frontrightfender , setfrontrightfender ] = useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[21]: '');
+  const [fronttyres , setfronttyres]= useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[22]: '');
   const Damaged = [
     {
       label: 'Yes'
@@ -190,6 +189,9 @@ const picture = [
 
 ]
 )
+const [torchMode ,settorchMode] = useState('off')
+const [cameraType ,setcameraType] = useState('back')
+const [barcodemodal , setbarcodemodal] = useState(false)
 const [date, setDate] = useState('09-10-2020');
 
 // const TakePhoto=()=>{
@@ -209,27 +211,40 @@ const [date, setDate] = useState('09-10-2020');
 //     }
 //   });
 // }
-const searchFilterFunction = (text) => {
+searchFilterFunction = (text) => {
   if (text) {
-  
-    const newData = Customerlist.filter(function (item) {
-      const itemData = item.text
-        ? item.text.toUpperCase().trim() 
-        : ''.toUpperCase();
 
-      let textData = text.toUpperCase();
-      textData = textData.trim()
-      console.log(textData+'===='+itemData);
-      return itemData.indexOf(textData) > -1;
+    const newData = Customerlist.filter(
+      function (item) {
+        
+        const itemData =  item.customer_name
+          ?  item.customer_name.toUpperCase()
+          :''.toUpperCase();
+
+         
+        const textData = text.toUpperCase();
+
+        if(itemData.indexOf(textData) > -1){
+          return  itemData.indexOf(textData) > -1;
+        }
     });
-    setFilteredcustomer(newData);
-    setSearch(text);
-  } else {
 
-    setFilteredcustomer(Customerlist);
-    setSearch(text);
+    setCustomerlist(newData)
+  //   setFilteredDataSource(newData);
+
+  //   setSearch(text);
+    console.log('text is '+text);
+  } else {
+    // Inserted text is blank
+    setCustomerlist(Filteredcustomer)
+    console.log('blank');
+  //   this.setState({vehicleList: vehicleList2})
+  //   setFilteredDataSource(data);
+  //   setSearch(text);
   }
 };
+
+
 
 const searchingCustomer = (text) => {
   if (text) {
@@ -269,7 +284,7 @@ const callinglocation =() =>{
     method: 'GET',
     headers: {
         'Content-Type': 'multipart/form-data',
-         'authkey': AppConstance.USER_INFO.USER_TOKEN
+        'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
     },
 })
     .then((response) => response.json())
@@ -290,21 +305,26 @@ const callinglocation =() =>{
 
 }
 
+const barcodeReceived =(e)=> {
+  console.log('Barcode: ' + e.data);
+  console.log('Type: ' + e.type);
+}
+
 const callingCustomer =() =>{
-  let url = AppUrlCollection.BASE_URL+'customer'
+  let url = AppUrlCollection.BASE_URL+'customers'
   fetch(url, {
     method: 'GET',
     headers: {
         'Content-Type': 'multipart/form-data',
-         'authkey': AppConstance.USER_INFO.USER_TOKEN
-    },
+        'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+      },
 })
     .then((response) => response.json())
     .then((responseJson) => {
         // this.setState({ isLoading: false })
       setspinner(false)
-      setCustomerlist(responseJson.data.results)
-      setFilteredcustomer(responseJson.data.results)
+      setCustomerlist(responseJson.data)
+      setFilteredcustomer(responseJson.data)
       // setlocationslist(responseJson.data)
         console.log('Response data viw :: ', responseJson)
         console.log('detail --------------'+details);
@@ -337,8 +357,8 @@ const callingContainerApi = () => {
       method: 'GET',
       headers: {
           'Content-Type': 'multipart/form-data',
-           'authkey': AppConstance.USER_INFO.USER_TOKEN
-      },
+          'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+        },
   })
       .then((response) => response.json())
       .then((responseJson) => {
@@ -608,14 +628,17 @@ callingContainerApi()
 callinglocation()
 callingCustomer()
 
-  if (item.images != undefined && item.images != undefined) {
-    for (let index = 0; index < item.images.length; index++) {
-        const element = item.images[index];
-        images.push('https://erp.gwwshipping.com/uploads/' + element.thumbnail)
-        console.log('Image vehicle :;;', 'https://erp.gwwshipping.com/uploads/' + element.thumbnail)
-    }
-
+if (item.photos != undefined && item.photos != null) {
+  // setimg(responseJson.data.vehicle.images)
+  for (let index = 0; index < item.photos.length; index++) {
+      const element = item.photos[index];
+      images.push(element)
+      console.log(element);
   }
+
+  
+
+}
 
   return () => {
     
@@ -627,7 +650,7 @@ const renderlist = ({item}) =>{
   return(
     <TouchableOpacity 
     onPress={()=>{setlocation_id(item.id); setlocation_name(item.name); setlocmodal(false) }}
-    style={{marginVertical:2,justifyContent:'space-between', flexDirection:'row'}}>
+    style={{marginVertical:5,justifyContent:'space-around', flexDirection:'row'}}>
       <Text>{item.id}</Text>
 <Text>{item.name}</Text>
 
@@ -642,22 +665,22 @@ const renderlist = ({item}) =>{
 const renderCustomerlist = ({item}) =>{
 
     let c ;
-    if(customername == item.text ){
+    if(customername == item.customer_name){
       c = 1
     }
     return(
       
 <TouchableOpacity 
-onPress={()=> { setcustmodal(false); setcustomername(item.text)}}
-style={{marginVertical:5,borderWidth:0.5,flexDirection:'row', borderColor:'#1a9bef', borderRadius:10,paddingVertical:12,paddingHorizontal:10,}}>
+onPress={()=> { setcustmodal(false); setcustomername(item.customer_name)}}
+style={{marginVertical:5,borderWidth:0.5,flexDirection:'row', borderColor:'grey', borderRadius:10,paddingVertical:12,paddingHorizontal:10,}}>
 
 {c == null ? 
-  <Ionicons name='ios-radio-button-off-sharp'  color='#1a9bef' style={{alignSelf:'center'}}  size={20} />:
-  <Ionicons name='ios-radio-button-on'  color='#1a9bef' style={{alignSelf:'center'}}  size={20} />
+  <Ionicons name='ios-radio-button-off-sharp'  color='grey' style={{alignSelf:'center'}}  size={20} />:
+  <Ionicons name='ios-radio-button-on'  color={AppColors.Signincolor} style={{alignSelf:'center'}}  size={20} />
 }
 
 
-  <Text style={{alignSelf:'center',color:'#1a9bef', marginLeft:5,}}>{item.text}</Text>
+  <Text style={{alignSelf:'center',color:AppColors.Signincolor, marginLeft:5,}}>{item.customer_name}</Text>
 {/* <Text>sfsdfn</Text> */}
 </TouchableOpacity>    
     
@@ -780,7 +803,7 @@ return (
                 <View style={{width:'10%',justifyContent:'center' }}>
               <TouchableOpacity style={{alignSelf:'center', justifyContent:'center'}}
               onPress={()=>{
-                navigation.navigate('EditVehicle',{'item': item  })
+                alert('j')
               }}
               >
               <AntDesign  size={20} style={{alignSelf:'center'}} color='black' name='check'/>
@@ -803,7 +826,7 @@ return (
               justifyContent:'flex-start',
               paddingVertical: 10,
               height:deviceHeight,
-              backgroundColor:'grey',
+              backgroundColor:AppColors.Signincolor,
               flexDirection: 'column',
               alignItems: 'center',
             }}>
@@ -873,6 +896,12 @@ onPress={()=> setcustmodal(false) }
     
 
           />
+
+
+          <View style={{height:180}}>
+
+
+            </View>
     {/* <RadioButtonRN
   data={datacustomer}
   color="#2c9dd1"
@@ -931,7 +960,7 @@ onPress={()=> setcustmodal(false) }
            </View>
 
         <FlatList
-         contentContainerStyle={{ paddingHorizontal:20, paddingVertical:5,}}
+         contentContainerStyle={{ paddingHorizontal:20, paddingVertical:15,}}
          
       data={locationslist}
      renderItem={renderlist}
@@ -1014,9 +1043,142 @@ onPress={()=> setcustmodal(false) }
         </Modal>
 
 
+        <Modal
+          transparent={true}
+          animationType={'none'}
+          visible={barcodemodal}
+          onRequestClose={() => {
+            console.log('close modal');
+          }}>
+          <View
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              paddingVertical: 10,
+              height:deviceHeight,
+              backgroundColor:'#0005',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}>
+            <View
+              style={{
+                width: '65%',
+                flexDirection: 'column',
+                backgroundColor:'white',
+                borderRadius:15,
+              }}>
+    
+    {/* <BarcodeScanner
+        onBarCodeRead={barcodeReceived}
+        style={{ flex: 1 }}
+        torchMode={torchMode}
+        cameraType={cameraType}
+      /> */}
+        
+            
+            </View>
+         
+          </View>
+        </Modal>
+
+        
     <ScrollView style={{width:deviceWidth }}>
 
-    <View >
+    <View>
+ {item.photos.length> 0?
+
+ <SliderBox 
+          images={images}
+          sliderBoxHeight={260}
+          
+          dotColor="#FFEE58"
+  inactiveDotColor="#90A4AE"
+  dotStyle={{
+    width: 10,
+    height: 10,
+    marginHorizontal: -4,
+    padding: 0,
+    margin: 0
+  }}
+          resizeMethod={'resize'}  
+          resizeMode={'cover'}
+  circleLoop
+  currentImageEmitter={index => { 
+    if(index == 0){
+      setadd(true)
+    }else{
+      setadd(false)
+    }
+    setimgposition(index); 
+   }}
+
+          onCurrentImagePressed={index =>
+          //setcurrentimg()
+            // console.warn(`image ${index} pressed`)
+            showimagemodel(true)
+          }
+  paginationBoxStyle={{
+    alignItems: "center",
+    alignSelf: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+  }}
+  ImageComponentStyle={{ width: '100%', marginTop: 0}}
+
+        />
+        :
+        
+        <View style={{height:260}}>
+          </View>
+          
+          }
+
+
+{item.photos.length> 0?
+
+     <View style={{marginTop:15,position:'absolute',alignSelf:'flex-end', paddingHorizontal:40, }}>
+    <TouchableOpacity
+    onPress={()=> {   setdeletemodalshow(true)}}
+    style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.toolbarColor }}>
+
+     <Ionicons name="close" color={AppColors.toolbarColor}  size={25}  />
+  </TouchableOpacity>
+       </View>
+
+       :null}
+<View style={{marginTop:-100, width:deviceWidth, paddingHorizontal:50, height:35,width:35, marginBottom:30,alignSelf:'flex-end',justifyContent:'center', }}>
+  {/* <TouchableOpacity 
+          onPress={() => refRBSheet.current.open()}
+          style={{backgroundColor:'grey' , borderRadius: 50,height:'100%',width:'100%',  justifyContent:'center', }}>
+  <Text style={{color:'white', alignSelf:'center'}}>+</Text>
+
+  </TouchableOpacity> */}
+
+
+
+{add == true ?
+ <ActionButton position='left'  size={43} buttonColor="rgba(271,74,60,1)">
+ <ActionButton.Item buttonColor='#9b59b6'  size={33} onPress={() => {chooseFile('photo')}}>
+   <Ionicons name="ios-images-outline" size={20} style={styles.actionButtonIcon} />
+ </ActionButton.Item>
+ <ActionButton.Item buttonColor='#3498db' size={33} onPress={() => {}}>
+ <Ionicons name="ios-camera-outline" size={20} style={styles.actionButtonIcon} />
+ </ActionButton.Item>
+
+</ActionButton>
+:
+null
+
+}
+
+ 
+
+</View>
+
+
+</View>
+
+    {/* <View >
 
     <SliderBox 
               images={images}
@@ -1040,7 +1202,7 @@ onPress={()=> setcustmodal(false) }
         }else{
           setadd(false)
         }
-        alert(index)
+        // alert(index)
         setimgposition(index); 
       }}
 
@@ -1091,24 +1253,28 @@ onPress={()=> setcustmodal(false) }
 
 
 
-    </View>
+    </View> */}
 
 
-    <View style={{width:'100%',flexDirection:'row',paddingVertical:10, paddingHorizontal:10, backgroundColor:'#2C3E50', justifyContent:'center', alignSelf:'center'}}>
+    <View style={{width:'100%',flexDirection:'row',marginTop:2, paddingVertical:10, paddingHorizontal:10, backgroundColor:'#2C3E50', justifyContent:'center', alignSelf:'center'}}>
               <View style={{width:'20%', }}>
               <Text style={{color:'white'}}>VIN #:</Text>
               </View>
 
               <View style={{width:'50%'}}>
                 <TextInput 
+                style={{color:'white'}}
                 placeholderTextColor='#D0D3D4'
-                placeholder='Enter vin or scan'
+                placeholder={item.vin == '' ? 'Enter VIN or scan':item.vin}
+                onChangeText={(text)=> {setvin(text)}}
                 />
               </View>
               <View style={{width:'20%'}}>
-                <TouchableOpacity  style={{alignSelf:'flex-end'}}
+                <TouchableOpacity 
+                onPress={()=> {setbarcodemodal(true)}}
+                style={{alignSelf:'flex-end'}}
                 >
-                  <Text style={{color:'white'}}>H</Text>
+                  <MaterialIcons name='qr-code-scanner' color='white' size={18} />
                   </TouchableOpacity>
               </View>
 
@@ -1144,7 +1310,7 @@ onPress={()=> setcustmodal(false) }
       setlocmodal(true)
     }}
     >
-    <Text style={{color:'grey',paddingVertical:2, fontSize:14,}}>{location_name}</Text>
+    <Text style={{color:'grey',paddingVertical:2, fontSize:14,}}>{location}</Text>
     <AntDesign  name='caretdown' color='grey'/>
     </TouchableOpacity>
     </View>
@@ -1161,8 +1327,9 @@ onPress={()=> setcustmodal(false) }
     <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
     <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>VEHICLE TYPE</Text>
     <TextInput  
-    placeholder={hatnumber}
+    placeholder={vehicletype}
     placeholderTextColor='grey'
+    onChangeText = {(Text)=> {setvehicletype(Text)}}
     />
     </View>
 
@@ -1328,7 +1495,7 @@ onPress={()=> setcustmodal(false) }
       onPress={()=>{setstatus('2')}}
     >
 
-    <Text style={{fontWeight:'500'}}>READY TO LOAD</Text>
+    <Text style={{fontWeight:'500'}}>MANIFEST</Text>
     </TouchableOpacity>
 
 
@@ -1342,16 +1509,16 @@ onPress={()=> setcustmodal(false) }
 
     <TouchableOpacity
     style={{marginTop:10,}}
-      onPress={()=>{setstatus('6')}}
+      onPress={()=>{setstatus('4')}}
     >
 
-    <Text style={{fontWeight:'500'}}>NEW PURCHASED</Text>
+    <Text style={{fontWeight:'500'}}>SHIPPED</Text>
     </TouchableOpacity>
 
 
     <TouchableOpacity
     style={{marginTop:10,}}
-      onPress={()=>{setstatus('10')}}
+      onPress={()=>{setstatus('6')}}
     >
 
     <Text style={{fontWeight:'500'}}>ARRIVED</Text>
@@ -1359,27 +1526,21 @@ onPress={()=> setcustmodal(false) }
 
     <TouchableOpacity
     style={{marginTop:10,}}
-      onPress={()=>{setstatus('11')}}
+      onPress={()=>{setstatus('7')}}
     >
 
-    <Text style={{fontWeight:'500'}}>IS_REQUESTED</Text>
+    <Text style={{fontWeight:'500'}}>Handed Over</Text>
     </TouchableOpacity>
 
     <TouchableOpacity
     style={{marginTop:10,}}
-      onPress={()=>{setstatus('12')}}
+      onPress={()=>{setstatus('5')}}
     >
 
-    <Text style={{fontWeight:'500'}}>DISPATCHED</Text>
+    <Text style={{fontWeight:'500'}}>PICKED UP</Text>
     </TouchableOpacity>
 
-    <TouchableOpacity
-    style={{marginTop:10,}}
-      onPress={()=>{setstatus('15')}}
-    >
-
-    <Text style={{fontWeight:'500'}}>LOADED</Text>
-    </TouchableOpacity>
+   
 
     </View>
 
@@ -1429,7 +1590,7 @@ onPress={()=> setcustmodal(false) }
 
       onPress={()=>{setstatus('6')}}
     >
-    {status == '6' ? 
+    {status == '4' ? 
 
     <AntDesign name='check' color='#1a9bef' size={20} /> :
     <AntDesign name='check' color='transparent' size={20}
@@ -1441,7 +1602,7 @@ onPress={()=> setcustmodal(false) }
 
       onPress={()=>{setstatus('10')}}
     >
-    {status == '10' ? 
+    {status == '6' ? 
 
     <AntDesign name='check' color='#1a9bef' size={20} /> :
     <AntDesign name='check' color='transparent' size={20}
@@ -1453,7 +1614,7 @@ onPress={()=> setcustmodal(false) }
 
       onPress={()=>{setstatus('11')}}
     >
-    {status == '11' ? 
+    {status == '7' ? 
 
     <AntDesign name='check' color='#1a9bef' size={20} /> :
     <AntDesign name='check' color='transparent' size={20}
@@ -1466,7 +1627,7 @@ onPress={()=> setcustmodal(false) }
 
       onPress={()=>{setstatus('12')}}
     >
-    {status == '12' ? 
+    {status == '5' ? 
 
     <AntDesign name='check' color='#1a9bef' size={20} /> :
     <AntDesign name='check' color='transparent' size={20}
@@ -1478,11 +1639,7 @@ onPress={()=> setcustmodal(false) }
 
       onPress={()=>{setstatus('15')}}
     >
-    {status == '15' ? 
-
-    <AntDesign name='check' color='#1a9bef' size={20} /> :
-    <AntDesign name='check' color='transparent' size={20}
-    />}
+  
     </TouchableOpacity> 
     {/*
     <TouchableOpacity
@@ -1692,13 +1849,13 @@ onPress={()=> setcustmodal(false) }
     />
     </View> */}
 
-    <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
+    {/* <View style={{width:'100%',backgroundColor:'red', flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
     <RadioButton
             value='1'
             status={ picture == '1' ? 'checked' : 'unchecked' }
             onPress={() => setpictures('1')}
           />
-    </View>
+    </View> */}
 
 
 
@@ -1714,7 +1871,7 @@ onPress={()=> setcustmodal(false) }
     <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
     <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>DELIVER DATE</Text>
     <TextInput  
-    placeholder='COROLLA'
+    placeholder={deliverdate}
     placeholderTextColor='grey'
     />
     </View>
@@ -1752,7 +1909,7 @@ onPress={()=> setcustmodal(false) }
               }}
             /> */}
     <TextInput  
-    placeholder='COROLLA'
+    placeholder={pickupdate}
     multiline={true}
     placeholderTextColor='grey'
     />
@@ -2123,6 +2280,17 @@ onPress={()=> setcustmodal(false) }
       onChangeText={text => setfrontrightfender(text)}
 
     placeholder={frontrightfender}
+    placeholderTextColor='grey'
+    />
+    </View>
+
+
+    <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
+    <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>FRONT TYRES</Text>
+    <TextInput  
+      onChangeText={text => setfronttyres(text)}
+
+    placeholder={fronttyres}
     placeholderTextColor='grey'
     />
     </View>

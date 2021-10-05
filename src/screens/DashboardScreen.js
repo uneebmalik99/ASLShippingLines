@@ -26,7 +26,7 @@ class DashboardScreen extends Component {
             newPurchase: 0,
             drawerview:false,
             shipped: 0,
-            role:'',
+            role:AppConstance.USER_ROLE,
             arrived: 0,
             allContainer:0,
             dashboardSection: [
@@ -79,6 +79,7 @@ class DashboardScreen extends Component {
                 }
             ]
         }
+      alert(AppConstance.USER_ROLE)
     }
 
 
@@ -90,10 +91,11 @@ class DashboardScreen extends Component {
   AsyncStorage.setItem('auth_key', ' ');
   AppConstance.USER_TOKEN_KEY = ' '
 
-  AsyncStorage.setItem('user_id', ' ');
+  AsyncStorage.setItem('user_id', '');
   AppConstance.USER_ID = ' '
 
-  
+  AsyncStorage.setItem('user_role' , '')
+  AppConstance.USER_ROLE = ''
 
 
   AsyncStorage.removeItem(AppConstance.USER_INFO_OBJ);
@@ -146,16 +148,6 @@ class DashboardScreen extends Component {
 
     componentDidMount() {
 
-        if(AppConstance.USER_ROLE == "Admin"){
-                this.setState({role : '1'})
-                alert(this.state.role)
-        }else{
-            this.setState({role : '0'})
-            alert(this.state.role)
-
-
-
-        }
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         AppState.addEventListener('change', this._handleAppStateChange);
 
@@ -766,8 +758,8 @@ justifyContent:"center",
             
 
             </View>
-            : null
-            }
+             : null
+            } 
 
 </ScrollView>
 

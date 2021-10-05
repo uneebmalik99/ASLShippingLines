@@ -113,19 +113,19 @@ const LoginScreen = ({ navigation }) => {
    await  AsyncStorage.setItem('ISUSERLOGIN', '1')
    await  AsyncStorage.setItem('auth_key', auth_key)
    
-   if(role == "Admin" ){
+   if(role == "Admin" || role == 'MASTER_ADMIN' || role == 'SUPER_ADMIN'){
     await AsyncStorage.setItem('user_role', '1')
     AppConstance.USER_ROLE = '1'
-    alert(role)
+    // alert(role)
 
     }else{
     await AsyncStorage.setItem('user_role',  '0')
-    alert('----'+role)
+    // alert('--no---'+role)
 
     AppConstance.USER_ROLE = '0'
 
 }
-   AppConstance.USER_ROLE = role
+ 
    AppConstance.USER_TOKEN_KEY = auth_key;
    let userid = responseJson.id;
    userid = userid.toString();
