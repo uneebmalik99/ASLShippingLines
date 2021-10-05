@@ -37,16 +37,9 @@ import AppUrlCollection from '../UrlCollection/AppUrlCollection';
 
 
 
-const images = [
-
-  "https://source.unsplash.com/1024x768/?nature",
-        "https://source.unsplash.com/1024x768/?water",
-        "https://source.unsplash.com/1024x768/?girl",
-        "https://source.unsplash.com/1024x768/?tree", 
-    
-    
-    
-];
+const dummyimages = [
+  require('../Images/noimage3.jpeg') 
+ ];
 
 const MyVehcileDetails = ({route, navigation }) => {
   const [vehicleDetails , setvehicleDetails] = useState([''])
@@ -258,11 +251,9 @@ const callingVehicledetailedApi = () =>{
 
       
         if (responseJson.status == 'SUCCESS') {
-            // alert(responseJson.data.vehicle_conditions[3])
-            setDetails(responseJson.data)
-            // alert(responseJson.data.id)
-
-       
+            setDetails(responseJson.data) 
+            
+            
            }
     })
     .catch((error) => {
@@ -339,64 +330,6 @@ useEffect(() => {
   }
 }, [])
 
-const renderlist = ({item}) =>{
-
-  return(
-    
-<View style={{flexDirection:'row',alignSelf:'center',  width:'100%',height:45}} >
-
-<TouchableOpacity
-// onPress={()=>navigation.navigate('CarDetails')}
-
-style={{width:'60%', paddingVertical:1,paddingHorizontal:3,height:'100%',borderRadius:6, backgroundColor:'white'}}>
-<View style={{  width:'100%',height:'100%', flexDirection:'column'}}>
-
-<View style={{flexDirection:'row',width:'100%',height:'100%'}}>
-
-<View style={{ height:'100%',marginLeft:4, paddingVertical:1, width:'100%'}}>
-
-<Text style={{color:'black',paddingVertical:2, fontSize:12,}}>{vehicleDetails.year} Toyota Corolla</Text>
-<Text style={{color:'black',paddingVertical:2, fontSize:12,}}>Lot: 327228800</Text>
-</View>
-
-</View>
-
-
-
-
-</View>
-
-</TouchableOpacity>
-
-
-<View
-style={{width:'1.3%'}}>
-
-</View>
-
-
-<TouchableOpacity
-onPress={()=>navigation.navigate('CarDetails')}
-
-style={{width:'38.7%', paddingVertical:2,paddingHorizontal:3,justifyContent:'center', height:'100%',borderRadius:6, backgroundColor:'white'}}>
-<View style={{  width:'100%',height:'100%',justifyContent:'center', flexDirection:'column'}}>
-
-<Text style={{color:'black', alignSelf:'center',  fontSize:11,}}>375295925</Text>
-
-
-
-
-</View>
-
-</TouchableOpacity>
-
-</View>
-
-  
-  
-  )
-  
-   }
 
 
 
@@ -582,8 +515,8 @@ return (
 
  <SliderBox 
  
-          images={images}
-          sliderBoxHeight={210}
+ images={images.length>0 ?images:dummyimages}
+ sliderBoxHeight={210}
           
           dotColor="#FFEE58"
   inactiveDotColor="#90A4AE"

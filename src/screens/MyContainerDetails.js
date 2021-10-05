@@ -44,13 +44,9 @@ import DocumentPicker from 'react-native-document-picker'
 
 
 
-const images = [
+const dummyimages = [
 
-  "https://source.unsplash.com/1024x768/?nature",
-        "https://source.unsplash.com/1024x768/?water",
-        "https://source.unsplash.com/1024x768/?girl",
-        "https://source.unsplash.com/1024x768/?tree", 
-    
+ require('../Images/noimage3.jpeg') 
     
     
 ];
@@ -61,8 +57,6 @@ const MyContainerDetails = ({route, navigation }) => {
   const [vehicleDetails , setvehicleDetails] = useState([''])
 
   const { item   } = route.params;
-// alert(item.id)
-  const refRBSheet = useRef();
   const [ export_details ,setexport_details] = useState()
   const [deletemodalshow ,setdeletemodalshow] =useState(false)
   const [add , setadd] = useState(true)
@@ -70,16 +64,8 @@ const MyContainerDetails = ({route, navigation }) => {
   const [images , setimages] = useState([])
   const [showimagemodel ,setshowimagemodel] = useState(false)
   const[spinner , setspinner ] = useState(false)
-  const[SliderModel , setSliderModel] = useState(false)
-  const [filePath, setFilePath] = useState({});
   const [imagesurls ,setimagesurls ] = useState([])
   const [ images2 , setimages2] = useState([])
-  const [deletedimages, setdeletedimages] = useState([])
-  const [width, setwidth] =useState('100%')
-  const [currentimg, setcurrentimg] = useState('')
-const [Export, setExport] = useState(false)
-const [data, setdata] = useState([])
-const  [showslider ,setshowslider]= useState(false)
 
   
 
@@ -163,7 +149,7 @@ const chooseFile = async() => {
         })
             .then((response) => response.json())
             .then((responseJson) => {
-              alert(JSON.stringify(responseJson))
+              // alert(JSON.stringify(responseJson))
               // console.log(responseJson.data);
               console.log(responseJson);
               imagesurls.push(responseJson.data)
@@ -368,20 +354,11 @@ for(var index = 0 ; index< images2.length ; index++){
     }
   }
  }
-//  alert(JSON.stringify(img2))
  setimages2(img2)
-//  setimages2(img2)
 
-
-
-
-
- 
 }
 
 const callingupdateApi = ()=>{
-// alert(export_details.vehicle_ids)
-//  setspinner(true)
 
 let array ={};
 array.customer_user_id = export_details.customer_user_id
@@ -408,32 +385,7 @@ if(images2 != null){
 array.container_images = images2
 }
 
-// alert(export_details.houstan_custom_cover_letter.consignee)
-// let d = {"customer_user_id": export_details.customer_user_id,
-// "booking_number": item.booking_number,
-// "ar_number": item.ar_number,
-// "vessel": item.vessel,
-//  "container_number": item.container_number,
-//  "broker_name": item.broker_name,
-// "terminal": item.terminal,
-// "streamship_line": export_details.streamship_line ,
-// "destination": item.destination,
-// "container_type": item.container_type,
-// "port_of_discharge":item.port_of_discharge,
-// "port_of_loading": item.port_of_loading,
-// "consignee": export_details.houstan_custom_cover_letter.consignee,
-// "vehicle_ids": export_details.vehicle_ids}
 
-// alert(JSON.stringify(d))
-
-
-// array.fileurl = 
-
-// "fileurl": {"container_images":
-//  ["https://asl-shipping-line.s3.us-west-2.amazonaws.com/uploads/exports/images/7907/yJGvNbd6yWhiySdUYlp5TWTYJBCQWGUOhjJkQFEJ.png"  ]},
-// alert(JSON.stringify(array))
-
-// alert(JSON.stringify(array))
   fetch(AppUrlCollection.EXPORT_DETAIL + item.id, {
     method: 'PUT',
     headers: {
@@ -443,38 +395,13 @@ array.container_images = images2
     
     body: JSON.stringify(array)
     
-    // body: JSON.stringify({ 
-      
-    //     "customer_user_id": export_details.customer_user_id,
-    //     "booking_number": item.booking_number,
-    //     "ar_number": item.ar_number,
-    //     "vessel": item.vessel,
-    //      "container_number": item.container_number,
-    //      "broker_name": item.broker_name,
-    //     "terminal": item.terminal,
-    //     "streamship_line": export_details.streamship_line,
-    //     "destination": item.destination,
-    //     "container_type": item.container_type,
-    //     "port_of_discharge": item.port_of_discharge,
-    //     "port_of_loading": item.port_of_loading,
-    //      "consignee": export_details.houstan_custom_cover_letter.consignee,
-    //     "vehicle_ids": [
-    //         32642
-    //     ]
-
-       
-      
-    //   })
-
-      // "fileurl": {"container_images":imagesurls}
-
-      // "container_images" : images.length != images2.length ? images2 :images2,
-
+   
 })
     .then((response) =>  response.json())
     .then((responseJson) => {
       setspinner(false)
-      alert(responseJson)
+      AppConstance.showSnackbarMessage(responseJson.message)
+
       ImagePicker.clean().then(() => {
         console.log('removed all tmp images from tmp directory');
       }).catch(e => {
@@ -673,12 +600,10 @@ return (
 
 
  <View>
- {item.container_images.length> 0?
 
  <SliderBox 
-          images={images}
-          sliderBoxHeight={260}
-          
+          images={images.length>0 ?images:dummyimages}
+          sliderBoxHeight={260}          
           dotColor="#FFEE58"
   inactiveDotColor="#90A4AE"
   dotStyle={{
@@ -703,7 +628,8 @@ return (
           onCurrentImagePressed={index =>
           //setcurrentimg()
             // console.warn(`image ${index} pressed`)
-            setshowimagemodel(true)
+            // setshowimagemodel(true)
+            {}
           }
   paginationBoxStyle={{
     alignItems: "center",
@@ -714,13 +640,7 @@ return (
   ImageComponentStyle={{ width: '100%', marginTop: 0}}
 
         />
-        :
-        
-        <View style={{height:250}}>
-          </View>
-          
-          }
-
+       
 
 {images.length > 0?
 
@@ -746,7 +666,7 @@ return (
 
 {add == true ?
  <ActionButton position='left'  size={40} buttonColor="rgba(231,76,60,1)">
- <ActionButton.Item buttonColor='#9b59b6'  size={30} onPress={() => {chooseFile('photo')}}>
+ <ActionButton.Item buttonColor='#9b59b6'   size={30} onPress={() => {chooseFile('photo')}}>
    <Ionicons name="ios-images-outline" size={20} style={styles.actionButtonIcon} />
  </ActionButton.Item>
  <ActionButton.Item buttonColor='#3498db' size={30} onPress={() => {}}>

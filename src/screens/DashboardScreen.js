@@ -79,7 +79,7 @@ class DashboardScreen extends Component {
                 }
             ]
         }
-      alert(AppConstance.USER_ROLE)
+    //   alert(AppConstance.USER_ROLE)
     }
 
 

@@ -13,7 +13,8 @@ import {
   TouchableOpacity,
   Modal,
   Image,
-  Dimensions
+  Dimensions,
+  Alert
 } from 'react-native';
 import { Icon} from 'react-native-elements'
 import AppColors from '../Colors/AppColors';
@@ -40,15 +41,16 @@ import { RadioButton } from 'react-native-paper';
 import { Appbar } from 'react-native-paper';
 import ActionButton from 'react-native-action-button';
 // import BarcodeScanner from 'react-native-scan-barcode';
+import ImagePicker from 'react-native-image-crop-picker';
 
-
+const dummyimages = [
+  require('../Images/noimage3.jpeg')      
+ ];
 
 const EditVehicle = ({route, navigation }) => {
   const refRBSheet = useRef();
-
   const { item } = route.params;
 const [details , setdetails] = useState(item)
-
 const picture = [
   {
     label: 'PICTURES'
@@ -65,6 +67,7 @@ const picture = [
   const [Filteredcustomer , setFilteredcustomer ] = useState([])
   const[Search , setSearch]= useState()
   const [customername , setcustomername] = useState(item.customer_name)
+  const [customeruserid , setcustomeruserid] = useState(item.customer_user_id)
   const [location_id ,setlocation_id ] = useState(item.location)
   const [location_name, setlocation_name] = useState()
   const [location , setlocation ] = useState(item.location);
@@ -75,25 +78,36 @@ const picture = [
   const [weight , setweight ] = useState(item.weight);
   const [year , setyear ] = useState(item.year);
   const [hatnumber , sethatnumber ] = useState(item.hat_number);
-  const [licensenumber , setlicensenumber ] = useState(item.hat_number);
+  const [licensenumber , setlicensenumber ] = useState(item.license_number);
+  const [note2 , setnote2] = useState(item.note)
   const [lotnumber , setlotnumber ] = useState(item.lot_number);
   const [containernmber , setcontainernmber] = useState(item.container_number)
   const [status , setstatus ] = useState(item.status);
+  const [ statusname , setstatusname] = useState(item.status_name)
+  const [ vcr , setvcr] = useState(item.vcr)
+  const [ loadstatus ,setloadstatus] = useState(item.load_status)
   const [condition , setcondition ] = useState(item.condition);
   const [damaged , setdamaged ] = useState(item.damaged);
   const [titlenumber , settitlenumber ] = useState(item.title_number);
   const [pictures , setpictures] = useState();
   const [deliverdate , setdeliverdate ] = useState(item.deliver_date);
   const [pickupdate , setpickupdate] = useState(item.pickup_date);
+  const [ auctionat , setauctionat] = useState(item.auction_at)
   const [note , setnote ] = useState();
   const [checkoption , setcheckoption ] = useState();
-  const [ KEYS ,setKEYS ] = useState('');
-  const [ CDPLAYER ,setCDPLAYER ] = useState('');
+  const [vehicle_features , setvehicle_features]=(item.vehicle_features)
+  const [ KEYS ,setKEYS ] = useState(vehicle_features == 1? 1 :'');
+  const [keynote , setkeynote] = useState(item.key_note)
+  const [ CDChanger,  setCDChanger]= useState('')
+  const [GPSNavigationSystem ,setGPSNavigationSystem]= useState('')
+  const [SpareTireJack, setSpareTireJack] = useState('')
+  const [WheelCovers, setWheelCovers] = useState('')
+  const [Radio ,setRadio]= useState('')
+  const [ CDPLAYER ,setCDPLAYER ] = useState(vehicle_features == 3? 1 :'');
   const [ SPEAKER ,setSPEAKER ] = useState('');
   const [ WHEELCAPS ,setWHEELCAPS] = useState('');
   const [ MIRROR ,setMIRROR] = useState('');
   const [ OTHERS ,setOTHERS ] = useState('');
-
   const [frontwindshiled , setfrontwindshiled ] = useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[2]: '');
   const [bonnet , setbonnet ] = useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[3]: '');
   const [grill , setgrill ] = useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[4]: '');
@@ -123,38 +137,10 @@ const picture = [
       label: 'NO'
      },
     ];
+    const [imagesurls ,setimagesurls ] = useState([])
+    const [ images2 , setimages2] = useState([])
   const [vehicleDetails , setvehicleDetails] = useState([''])
-  const [locationslist , setlocationslist] = useState([
-    {
-      id:1
-
-    },
-    {
-      id:2
-    },
-    {
-      id:1
-
-    },
-    {
-      id:2
-    },
-    {
-      id:1
-
-    },
-    {
-      id:2
-    },
-    {
-      id:1
-
-    },
-    {
-      id:2
-    }
-
-  ])
+  const [locationslist , setlocationslist] = useState([])
   const [locmodal,setlocmodal]= useState(false)
   const [custmodal,setcustmodal]= useState(false)
   const [imgpos, setimgpos] = useState(0)
@@ -245,6 +231,95 @@ searchFilterFunction = (text) => {
 };
 
 
+
+const deleteimage = () =>{
+  // setspinner(true)
+  let pos = imgposition;
+  console.log('---'+pos);
+  let img1 = []
+  // alert(imgposition)
+  for(var i = 0 ; i< images.length ; i++){
+    if(i != pos){
+      img1.push(images[i])
+      
+    }
+   }
+   setimages(img1)
+
+let img2 = []
+for(var index = 0 ; index< images2.length ; index++){
+  if(index != pos){
+    
+    if(images2[index].id ){
+      img2.push(images2[index])
+
+    }
+  }
+ }
+ setimages2(img2)
+
+}
+
+
+const chooseFile = async() => {
+
+  ImagePicker.openPicker({
+        multiple: true,
+        compressImageQuality:0.7
+      }).then(images1 => {
+    
+        var i ;
+        for( i =0; i< images1.length; i++){
+
+          let temp = {} ;
+          temp.name = images1[i].filename;
+          temp.size = images1[i].size;
+          temp.type = images1[i].mime;
+          temp.url = images1[i].path;
+
+          images.push(temp)
+
+      var value = new FormData();
+      value.append('file',{uri:images1[i].path ,
+           name:images1[i].filename,
+           type:images1[i].mime
+         });
+
+         setspinner(true)
+
+          fetch(AppUrlCollection.VEHICLE_DETAIL + item.id +'/photos-upload', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+                'Accept': 'application/json'
+            },
+            body: value,
+                       
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+              // alert(JSON.stringify(responseJson))
+              // console.log(responseJson.data);
+              console.log(responseJson);
+              imagesurls.push(responseJson.data)
+              alert(JSON.stringify(responseJson))
+              console.log('images urll is '+imagesurls);
+
+              setspinner(false)
+               
+            })
+            .catch((error) => {
+              alert(error)
+              setspinner(false)
+                console.warn(error)
+            });
+       
+        }      
+
+      });
+
+};
 
 const searchingCustomer = (text) => {
   if (text) {
@@ -624,9 +699,60 @@ useEffect(() => {
 
 console.log('===='+JSON.stringify());
 
-callingContainerApi()
+
+if(item.vehicle_features != null || item.vehicle_features != undefined || item.vehicle_features != ''){
+  for(var i=0; i<item.vehicle_features.length; i++){
+    let element = item.vehicle_features[i];
+    console.log('-----------'+element);
+
+    switch(element) {
+      case 3:
+        setCDChanger(1)
+          break;
+ 
+      case 4:
+        setGPSNavigationSystem(1)
+        break;
+ 
+      case 5:
+          setSpareTireJack(1)
+        break;
+
+        case 6:
+          setWheelCovers(1)
+        break;
+
+        case 7:
+          setRadio(1)
+        break;
+
+        case 8:
+          setCDPLAYER(1)
+        break; 
+         case 10:
+           setMIRROR(1)
+        break;
+        case 11:
+            setSPEAKER(1)
+          break;
+        case 12:
+          setOTHERS(1)
+        break;
+       
+ 
+      default:
+    
+      }
+  }
+}
+
+// callingContainerApi()
 callinglocation()
 callingCustomer()
+
+
+
+// alert(item.vehicle_features)
 
 if (item.photos != undefined && item.photos != null) {
   // setimg(responseJson.data.vehicle.images)
@@ -649,7 +775,7 @@ const renderlist = ({item}) =>{
 
   return(
     <TouchableOpacity 
-    onPress={()=>{setlocation_id(item.id); setlocation_name(item.name); setlocmodal(false) }}
+    onPress={()=>{setlocation_id(item.status); setlocation_name(item.name); setlocmodal(false) }}
     style={{marginVertical:5,justifyContent:'space-around', flexDirection:'row'}}>
       <Text>{item.id}</Text>
 <Text>{item.name}</Text>
@@ -671,7 +797,7 @@ const renderCustomerlist = ({item}) =>{
     return(
       
 <TouchableOpacity 
-onPress={()=> { setcustmodal(false); setcustomername(item.customer_name)}}
+onPress={()=> { setcustmodal(false); setcustomername(item.customer_name), setcustomeruserid(item.user_id) }}
 style={{marginVertical:5,borderWidth:0.5,flexDirection:'row', borderColor:'grey', borderRadius:10,paddingVertical:12,paddingHorizontal:10,}}>
 
 {c == null ? 
@@ -688,7 +814,133 @@ style={{marginVertical:5,borderWidth:0.5,flexDirection:'row', borderColor:'grey'
     
      }  
 
+ const callingupdateApi = ()=>{
 
+      let array ={};
+  
+
+      
+      array.total_photos= item.total_photos;
+      array.hat_number= hatnumber;
+      array.vehicle_type= vehicletype;
+      array.year= year;
+      array.color= color;
+      array.model= model;
+      array.make = make;
+      array.vin= vin;
+      array.weight = weight;
+      array.pieces = item.pieces
+      array.lot_number = lotnumber;
+      array.towed_amount= item.towed_amount;
+      array.storage_amount= item.storage_amount;
+      array.status_name= statusname;
+      array.state_name= item.state_name;
+      array.status= status;
+      array.load_status= item.load_status;
+      array.check_number= item.check_number;
+      array.additional_charges= item.additional_charges;
+      array.location_id= item.location_id;
+      array.customer_user_id= customeruserid;
+      array.towing_request_id= item.towing_request_id;
+      array.title_amount= item.title_amount;
+      array.container_number =item.container_number;
+      array.keys = item.keys;
+      array.keys_name = item.keys_name;
+      array.key_note = item.key_note;
+      array.vcr = item.vcr;
+      array.value  = item.value;
+      array.auction_at = item.auction_at;
+      array.auction_at_name = item.auction_at_name;
+      array.towed_from = item.towed_from;
+      array.note = item.note;
+      array.loading_type = item.loading_type;
+      array.location= item.location;
+      array.customer_name = item.customer_name;
+      array.company_name = item.company_name;
+      array.export_id= item.export_id;
+      array.title_type= item.title_type;
+      array.title_type_name= item.title_type_name;
+      array.title_number= titlenumber;
+      array.title_received_date=item.title_received_date;
+      array.towing_request_date=item.towing_request_date;
+      array.deliver_date= deliverdate;
+      array.pickup_date= pickupdate;
+      array.condition = condition
+      array.damaged = damaged;
+      array.pictures = item.pictures;
+      array.towed = item.towed;
+      array.title= item.title;
+      array.title_state = item.title_state;
+      array.buyer_id = item.buyer_id;
+      array.license_number= licensenumber;
+      array.eta= item.eta;
+      array.export_date = item.export_date;
+      array.booking_number = item.booking_number;
+      array.seal_number = item.seal_number;
+      array.ar_number = item.ar_number
+      array.destination = item.destination;
+      array.photo = item.photo;
+      array.photos= item.photos;
+      array.auction_photos = item.auction_photos;
+      array.pickup_photos = item.pickup_photos;
+      array.arrived_photos = item.arrived_photos;
+      array.vehicle_features = item.vehicle_features;
+      array.vehicle_conditions = item.vehicle_conditions;
+      array.vehicle_documents= item.vehicle_documents;
+      array.invoice_photos = item.invoice_photos;
+      array.visible_export_button = item.visible_export_button;
+      array.visible_claim_button = item.visible_claim_button;  
+      array.note_status = item.note_status;
+
+
+alert(customeruserid)
+      // alert(JSON.stringify(array))
+
+
+      if(imagesurls.length > 0){
+        let photos = imagesurls
+        let img = {photos}
+        array.fileUrl=img
+      }
+      
+      // if(images2 != null){
+      // array.container_images = images2
+      // }
+      
+      
+      //   fetch(AppUrlCollection.EXPORT_DETAIL + item.id, {
+      //     method: 'PUT',
+      //     headers: {
+      //         'Content-Type': 'application/json',
+      //         'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+      //     },
+          
+      //     body: JSON.stringify(array)
+          
+         
+      // })
+      //     .then((response) =>  response.json())
+      //     .then((responseJson) => {
+      //       setspinner(false)
+      //       AppConstance.showSnackbarMessage(responseJson.message)
+      
+      //       ImagePicker.clean().then(() => {
+      //         console.log('removed all tmp images from tmp directory');
+      //       }).catch(e => {
+      //         alert(e);
+      //       });
+            
+      //         console.log('export detail ', responseJson)
+             
+      //     })
+      //     .catch((error) => {
+      //       alert(error)
+      //       setspinner(false)
+      //         console.warn(error)
+      //     });
+      
+      
+        }
 
 
 return (
@@ -803,7 +1055,7 @@ return (
                 <View style={{width:'10%',justifyContent:'center' }}>
               <TouchableOpacity style={{alignSelf:'center', justifyContent:'center'}}
               onPress={()=>{
-                alert('j')
+                callingupdateApi()
               }}
               >
               <AntDesign  size={20} style={{alignSelf:'center'}} color='black' name='check'/>
@@ -1085,12 +1337,11 @@ onPress={()=> setcustmodal(false) }
     <ScrollView style={{width:deviceWidth }}>
 
     <View>
- {item.photos.length> 0?
+ 
 
  <SliderBox 
-          images={images}
+     images={images.length>0 ?images:dummyimages}
           sliderBoxHeight={260}
-          
           dotColor="#FFEE58"
   inactiveDotColor="#90A4AE"
   dotStyle={{
@@ -1126,19 +1377,14 @@ onPress={()=> setcustmodal(false) }
   ImageComponentStyle={{ width: '100%', marginTop: 0}}
 
         />
-        :
         
-        <View style={{height:260}}>
-          </View>
-          
-          }
 
 
 {item.photos.length> 0?
 
      <View style={{marginTop:15,position:'absolute',alignSelf:'flex-end', paddingHorizontal:40, }}>
     <TouchableOpacity
-    onPress={()=> {   setdeletemodalshow(true)}}
+    onPress={()=> {   deleteimage()}}
     style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.toolbarColor }}>
 
      <Ionicons name="close" color={AppColors.toolbarColor}  size={25}  />
@@ -1178,82 +1424,7 @@ null
 
 </View>
 
-    {/* <View >
-
-    <SliderBox 
-              images={images}
-              sliderBoxHeight={250}
-              
-              dotColor="#FFEE58"
-      inactiveDotColor="#90A4AE"
-      dotStyle={{
-        width: 10,
-        height: 10,
-        marginHorizontal: -4,
-        padding: 0,
-        margin: 0
-      }}
-              resizeMethod={'resize'}  
-              resizeMode={'cover'}
-      circleLoop
-      currentImageEmitter={index => { 
-        if(index == 0){
-          setadd(true)
-        }else{
-          setadd(false)
-        }
-        // alert(index)
-        setimgposition(index); 
-      }}
-
-              onCurrentImagePressed={index =>
-              //setcurrentimg()
-                // console.warn(`image ${index} pressed`)
-                setSliderModel(true)
-              }
-      paginationBoxStyle={{
-        alignItems: "center",
-        alignSelf: "center",
-        justifyContent: "center",
-        alignSelf: "center",
-      }}
-      ImageComponentStyle={{ width: '100%', marginTop: 0}}
-
-            />
-        
-        <View style={{marginTop:15,position:'absolute',alignSelf:'flex-end', paddingHorizontal:40, }}>
-        <TouchableOpacity
-        onPress={()=> {   refRBSheet.current.open()}}
-        style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.toolbarColor }}>
-
-        <Ionicons name="close" color={AppColors.toolbarColor}  size={25}  />
-      </TouchableOpacity>
-          </View>
-    <View style={{marginTop:-85, width:deviceWidth, paddingHorizontal:50, height:35,width:35, marginBottom:30,alignSelf:'flex-end',justifyContent:'center', }}>
-
-
-
-    {add == true ?
-    <ActionButton position='left'  size={40} buttonColor="rgba(231,76,60,1)">
-    <ActionButton.Item buttonColor='#9b59b6'  size={30} onPress={() => console.log("notes tapped!")}>
-      <Ionicons name="ios-images-outline" size={20} style={styles.actionButtonIcon} />
-    </ActionButton.Item>
-    <ActionButton.Item buttonColor='#3498db' size={30} onPress={() => {}}>
-    <Ionicons name="ios-camera-outline" size={20} style={styles.actionButtonIcon} />
-    </ActionButton.Item>
-
-    </ActionButton>
-    :
-    null
-
-    }
-
-    
-    </View>
-
-
-
-    </View> */}
+  
 
 
     <View style={{width:'100%',flexDirection:'row',marginTop:2, paddingVertical:10, paddingHorizontal:10, backgroundColor:'#2C3E50', justifyContent:'center', alignSelf:'center'}}>
@@ -1338,6 +1509,9 @@ null
     <TextInput  
     placeholder={year}
     placeholderTextColor='grey'
+    onChangeText = {(Text)=> {setyear(Text)}}
+
+
     />
     </View>
 
@@ -1347,6 +1521,8 @@ null
     <TextInput  
     placeholder={color}
     placeholderTextColor='grey'
+    onChangeText = {(Text)=> {setcolor(Text)}}
+
     />
     </View>
 
@@ -1356,6 +1532,8 @@ null
     <TextInput  
     placeholder={model}
     placeholderTextColor='grey'
+    onChangeText = {(Text)=> {setmodel(Text)}}
+
     />
     </View>
 
@@ -1366,6 +1544,8 @@ null
     <TextInput  
     placeholder={make}
     placeholderTextColor='grey'
+    onChangeText = {(Text)=> {setmake(Text)}}
+
     />
     </View>
 
@@ -1378,6 +1558,8 @@ null
     <TextInput  
     placeholder={weight}
     placeholderTextColor='grey'
+    onChangeText = {(Text)=> {setweight(Text)}}
+
     />
     </View>
 
@@ -1386,8 +1568,10 @@ null
     <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
     <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>LICENSE NUMBER</Text>
     <TextInput  
-    placeholder={weight}
+    placeholder={licensenumber}
     placeholderTextColor='grey'
+    onChangeText = {(Text)=> {setlicensenumber(Text)}}
+
     />
     </View>
 
@@ -1401,6 +1585,8 @@ null
     <TextInput  
     placeholder={lotnumber}
     placeholderTextColor='grey'
+    onChangeText = {(Text)=> {setlotnumber(Text)}}
+
     />
     </View>
 
@@ -1409,8 +1595,9 @@ null
     <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
     <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>LOAD STATUS</Text>
     <TextInput  
-    placeholder={lotnumber}
+    placeholder={loadstatus}
     placeholderTextColor='grey'
+    onChangeText={(text)=> {setloadstatus(text)}}
     />
     </View>
 
@@ -1420,48 +1607,59 @@ null
     <TextInput  
     placeholder={containernmber}
     placeholderTextColor='grey'
+    onChangeText={(text)=> {setcontainernmber(text)}}
+
     />
     </View>
 
     <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
     <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>KEY NOTE</Text>
     <TextInput  
-    placeholder={lotnumber}
+    placeholder={keynote}
     placeholderTextColor='grey'
+    onChangeText={(text)=> {setkeynote(text)}}
+
     />
     </View>
 
-    <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
+    {/* <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
     <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>PREPAREDBY</Text>
     <TextInput  
     placeholder={lotnumber}
     placeholderTextColor='grey'
+    onChangeText={(text)=> {setlotnumber(text)}}
+
     />
-    </View>
+    </View> */}
 
 
 
     <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
     <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>AUCTION AT</Text>
     <TextInput  
-    placeholder={lotnumber}
+    placeholder={auctionat}
     placeholderTextColor='grey'
+    onChangeText={(text)=> {setauctionat(text)}}
+
     />
     </View>
 
-    <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
+    {/* <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
     <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>VCR</Text>
     <TextInput  
-    placeholder={lotnumber}
+    placeholder={vcr != null ? vcr : '' }
     placeholderTextColor='grey'
+        onChangeText={(text)=> {setvcr(text)}}
+
     />
-    </View>
+    </View> */}
 
     <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
     <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>NOTE2</Text>
     <TextInput  
-    placeholder={lotnumber}
+    placeholder={note2}
     placeholderTextColor='grey'
+    onChangeText={(text)=> {setnote2(text)}}
     />
     </View>
 
@@ -1484,7 +1682,7 @@ null
     <View style={{flexDirection:'column', marginLeft:5,   }}>
       <TouchableOpacity
       
-      onPress={()=>{setstatus('1')}}
+      onPress={()=>{setstatus('1') , setsetstatusname('On Hand')}}
       >
 
     <Text style={{fontWeight:'500'}}>ON HAND</Text>
@@ -1492,7 +1690,7 @@ null
 
     <TouchableOpacity
     style={{marginTop:10,}}
-      onPress={()=>{setstatus('2')}}
+      onPress={()=>{setstatus('2'), setstatusname('Manifest')}}
     >
 
     <Text style={{fontWeight:'500'}}>MANIFEST</Text>
@@ -1501,7 +1699,7 @@ null
 
     <TouchableOpacity
     style={{marginTop:10,}}
-      onPress={()=>{setstatus('3')}}
+      onPress={()=>{setstatus('3') , setstatusname('Car on the way')}}
     >
 
     <Text style={{fontWeight:'500'}}>ON THE WAY</Text>
@@ -1509,7 +1707,7 @@ null
 
     <TouchableOpacity
     style={{marginTop:10,}}
-      onPress={()=>{setstatus('4')}}
+      onPress={()=>{setstatus('4') , setstatusname('Shipped')}}
     >
 
     <Text style={{fontWeight:'500'}}>SHIPPED</Text>
@@ -1518,23 +1716,23 @@ null
 
     <TouchableOpacity
     style={{marginTop:10,}}
-      onPress={()=>{setstatus('6')}}
+      onPress={()=>{setstatus('6') , setstatusname('Arrived')}}
     >
 
     <Text style={{fontWeight:'500'}}>ARRIVED</Text>
     </TouchableOpacity>
 
-    <TouchableOpacity
+    {/* <TouchableOpacity
     style={{marginTop:10,}}
       onPress={()=>{setstatus('7')}}
     >
 
     <Text style={{fontWeight:'500'}}>Handed Over</Text>
-    </TouchableOpacity>
+    </TouchableOpacity> */}
 
     <TouchableOpacity
     style={{marginTop:10,}}
-      onPress={()=>{setstatus('5')}}
+      onPress={()=>{setstatus('5'), setstatusname('Picked Up')}}
     >
 
     <Text style={{fontWeight:'500'}}>PICKED UP</Text>
@@ -1548,9 +1746,9 @@ null
     <View style={{flexDirection:'column',  marginLeft:10, width:'60%' }}>
       
       <TouchableOpacity 
-      onPress={()=>{setstatus('1')}}
+      onPress={()=>{setstatus(1)}}
       >
-    {status == '1' ? 
+    {status == 1 ? 
     <AntDesign name='check' color='#1a9bef' size={20} /> :
     <AntDesign name='check' color='transparent' size={20}
     />}
@@ -1559,9 +1757,9 @@ null
     <TouchableOpacity
     style={{marginTop:5,}}
 
-      onPress={()=>{setstatus('2')}}
+      onPress={()=>{setstatus(2)}}
     >
-    {status == '2' ? 
+    {status == 2 ? 
 
     <AntDesign name='check' color='#1a9bef' size={20} /> :
     <AntDesign name='check' color='transparent' size={20}
@@ -1573,9 +1771,9 @@ null
     <TouchableOpacity
     style={{marginTop:5,}}
 
-      onPress={()=>{setstatus('3')}}
+      onPress={()=>{setstatus(3) }}
     >
-    {status == '3' ? 
+    {status == 3 ? 
 
     <AntDesign name='check' color='#1a9bef' size={20} /> :
     <AntDesign name='check' color='transparent' size={20}
@@ -1588,9 +1786,9 @@ null
     <TouchableOpacity
     style={{marginTop:5,}}
 
-      onPress={()=>{setstatus('6')}}
+      onPress={()=>{setstatus(4) }}
     >
-    {status == '4' ? 
+    {status == 4 ? 
 
     <AntDesign name='check' color='#1a9bef' size={20} /> :
     <AntDesign name='check' color='transparent' size={20}
@@ -1600,47 +1798,47 @@ null
     <TouchableOpacity
     style={{marginTop:8,}}
 
-      onPress={()=>{setstatus('10')}}
+      onPress={()=>{setstatus(6) }}
     >
-    {status == '6' ? 
+    {status == 6 ? 
 
     <AntDesign name='check' color='#1a9bef' size={20} /> :
     <AntDesign name='check' color='transparent' size={20}
     />}
     </TouchableOpacity>
 
-    <TouchableOpacity
+    {/* <TouchableOpacity
     style={{marginTop:8}}
 
-      onPress={()=>{setstatus('11')}}
+      onPress={()=>{setstatus(7)}}
     >
-    {status == '7' ? 
+    {status == 7 ? 
 
     <AntDesign name='check' color='#1a9bef' size={20} /> :
     <AntDesign name='check' color='transparent' size={20}
     />}
-    </TouchableOpacity>
+    </TouchableOpacity> */}
 
 
     <TouchableOpacity
     style={{marginTop:5,}}
 
-      onPress={()=>{setstatus('12')}}
+      onPress={()=>{setstatus(5)}}
     >
-    {status == '5' ? 
+    {status == 5 ? 
 
     <AntDesign name='check' color='#1a9bef' size={20} /> :
     <AntDesign name='check' color='transparent' size={20}
     />}
     </TouchableOpacity>
 
-    <TouchableOpacity
+    {/* <TouchableOpacity
     style={{marginTop:7,}}
 
       onPress={()=>{setstatus('15')}}
     >
   
-    </TouchableOpacity> 
+    </TouchableOpacity>  */}
     {/*
     <TouchableOpacity
     style={{marginTop:10,backgroundColor:'yellow'}}
@@ -1864,6 +2062,8 @@ null
     <TextInput  
     placeholder={titlenumber}
     placeholderTextColor='grey'
+    onChangeText={(text)=> {settitlenumber(text)}}
+
     />
     </View>
 
@@ -1873,6 +2073,7 @@ null
     <TextInput  
     placeholder={deliverdate}
     placeholderTextColor='grey'
+    onChangeText={(text)=> {setdeliverdate(text)}}
     />
     </View>
 
@@ -1923,9 +2124,9 @@ null
     <View style={{flexDirection:'column',  marginLeft:10, width:'10%' }}>
       
       <TouchableOpacity 
-      onPress={()=>{KEYS == 1 ? setKEYS('0'):setKEYS('1')}}
+      onPress={()=>{CDChanger == 1 ? setCDChanger(0):setCDChanger(1)}}
       >
-    {KEYS == '1' ? 
+    {CDChanger == 1 ? 
     <Ionicons name='ios-radio-button-on' style={{alignSelf:'center'}}  color='#1a9bef' size={20} /> :
     <Ionicons name='ios-radio-button-off-sharp' style={{alignSelf:'center'}}  color='#1a9bef' size={20}
     />}
@@ -1934,9 +2135,9 @@ null
     <TouchableOpacity
     style={{marginTop:5,}}
 
-    onPress={()=>{ CDPLAYER == 1 ? setCDPLAYER('0'):setCDPLAYER('1')}}
+    onPress={()=>{ GPSNavigationSystem == 1 ? setGPSNavigationSystem(0):setGPSNavigationSystem(1)}}
     >
-    {CDPLAYER == '1' ? 
+    {GPSNavigationSystem == 1 ? 
 
     <Ionicons name='ios-radio-button-on' style={{alignSelf:'center'}}  color='#1a9bef' size={20} /> :
     <Ionicons name='ios-radio-button-off-sharp' style={{alignSelf:'center'}}  color='#1a9bef' size={20}
@@ -1948,9 +2149,9 @@ null
     <TouchableOpacity
     style={{marginTop:5,}}
 
-    onPress={()=>{SPEAKER == 1 ? setSPEAKER('0'):setSPEAKER('1')}}
+    onPress={()=>{SpareTireJack == 1 ? setSpareTireJack(0):setSpareTireJack(1)}}
     >
-    {SPEAKER == '1' ? 
+    {SpareTireJack == 1 ? 
 
     <Ionicons name='ios-radio-button-on' style={{alignSelf:'center'}}  color='#1a9bef' size={20} /> :
     <Ionicons name='ios-radio-button-off-sharp' style={{alignSelf:'center'}}  color='#1a9bef' size={20}
@@ -1963,9 +2164,9 @@ null
     <TouchableOpacity
     style={{marginTop:5,}}
 
-    onPress={()=>{ WHEELCAPS == 1 ? setWHEELCAPS('0') : setWHEELCAPS('1')}}
+    onPress={()=>{ WheelCovers == 1 ? setWheelCovers(0) : setWheelCovers(1)}}
     >
-    {WHEELCAPS == '1' ? 
+    {WheelCovers == 1 ? 
 
     <Ionicons name='ios-radio-button-on' style={{alignSelf:'center'}}  color='#1a9bef' size={20} /> :
     <Ionicons name='ios-radio-button-off-sharp' style={{alignSelf:'center'}}  color='#1a9bef' size={20}
@@ -1975,9 +2176,48 @@ null
     <TouchableOpacity
     style={{marginTop:5,}}
 
-    onPress={()=>{MIRROR == 1 ? setMIRROR('0'):setMIRROR('1') }}
+    onPress={()=>{Radio == 1 ? setRadio(0):setRadio(1) }}
     >
-    {MIRROR == '1' ? 
+    {Radio == 1 ? 
+
+    <Ionicons name='ios-radio-button-on' style={{alignSelf:'center'}}  color='#1a9bef' size={20} /> :
+    <Ionicons name='ios-radio-button-off-sharp' style={{alignSelf:'center'}}  color='#1a9bef' size={20}
+    />}
+    </TouchableOpacity>
+
+
+
+
+    <TouchableOpacity
+    style={{marginTop:5,}}
+
+    onPress={()=>{CDPLAYER == 1 ? setCDPLAYER(0):setCDPLAYER(1) }}
+    >
+    {CDPLAYER == 1 ? 
+
+    <Ionicons name='ios-radio-button-on' style={{alignSelf:'center'}}  color='#1a9bef' size={20} /> :
+    <Ionicons name='ios-radio-button-off-sharp' style={{alignSelf:'center'}}  color='#1a9bef' size={20}
+    />}
+    </TouchableOpacity>
+
+    <TouchableOpacity
+    style={{marginTop:5,}}
+
+    onPress={()=>{MIRROR == 1 ? setMIRROR(0):setMIRROR(1) }}
+    >
+    {MIRROR == 1 ? 
+
+    <Ionicons name='ios-radio-button-on' style={{alignSelf:'center'}}  color='#1a9bef' size={20} /> :
+    <Ionicons name='ios-radio-button-off-sharp' style={{alignSelf:'center'}}  color='#1a9bef' size={20}
+    />}
+    </TouchableOpacity>
+
+    <TouchableOpacity
+    style={{marginTop:5,}}
+
+    onPress={()=>{SPEAKER == 1 ? setSPEAKER(0):setSPEAKER(1) }}
+    >
+    {SPEAKER == 1 ? 
 
     <Ionicons name='ios-radio-button-on' style={{alignSelf:'center'}}  color='#1a9bef' size={20} /> :
     <Ionicons name='ios-radio-button-off-sharp' style={{alignSelf:'center'}}  color='#1a9bef' size={20}
@@ -1991,9 +2231,9 @@ null
     <TouchableOpacity
     style={{marginTop:7,justifyContent:'center'}}
 
-    onPress={()=>{OTHERS == 1 ? setOTHERS('0'):setOTHERS('1')}}
+    onPress={()=>{OTHERS == 1 ? setOTHERS(0):setOTHERS(1)}}
     >
-    {OTHERS == '1' ? 
+    {OTHERS == 1 ? 
 
     <Ionicons name='ios-radio-button-on' style={{alignSelf:'center'}}  color='#1a9bef' size={20} /> :
     <Ionicons name='ios-radio-button-off-sharp' style={{alignSelf:'center'}}  color='#1a9bef' size={20}
@@ -2003,51 +2243,91 @@ null
     </View>
 
     <View style={{flexDirection:'column', marginLeft:5,   }}>
-      <TouchableOpacity
       
-      onPress={()=>{KEYS == 1 ? setKEYS('0'):setKEYS('1')}}
-      >
+    <TouchableOpacity
+   
+      onPress={()=>{ CDChanger == 1 ? setCDChanger(0):setCDChanger(1)}}
+    >
 
-    <Text style={{fontWeight:'500'}}>KEYS</Text>
-    </TouchableOpacity >
+    <Text style={{fontWeight:'500'}}>CD Changer</Text>
+    </TouchableOpacity>
+
+
+   
+    <TouchableOpacity
+    style={{marginTop:10,}}
+      onPress={()=>{GPSNavigationSystem == 1 ? setGPSNavigationSystem(0):setGPSNavigationSystem(1)}}
+    >
+
+    <Text style={{fontWeight:'500'}}>GPS Navigation System</Text>
+    </TouchableOpacity>
+
+
+
+
+
+
 
     <TouchableOpacity
     style={{marginTop:10,}}
-      onPress={()=>{ CDPLAYER == 1 ? setCDPLAYER('0'):setCDPLAYER('1')}}
+      onPress={()=>{SpareTireJack == 1 ? setSpareTireJack(0):setSpareTireJack(1)}}
     >
 
-    <Text style={{fontWeight:'500'}}>CD PLAYER</Text>
+    <Text style={{fontWeight:'500'}}>Spare Tire/Jack</Text>
+    </TouchableOpacity>
+
+    
+
+
+    <TouchableOpacity
+    style={{marginTop:10,}}
+      onPress={()=>{WheelCovers == 1 ? setWheelCovers(0):setWheelCovers(1)}}
+    >
+
+    <Text style={{fontWeight:'500'}}>Wheel Covers</Text>
     </TouchableOpacity>
 
 
     <TouchableOpacity
     style={{marginTop:10,}}
-      onPress={()=>{SPEAKER == 1 ? setSPEAKER('0'):setSPEAKER('1')}}
+      onPress={()=>{Radio == 1 ?  setRadio(0):setRadio(1)}}
     >
 
-    <Text style={{fontWeight:'500'}}>SPEAKER</Text>
+    <Text style={{fontWeight:'500'}}>Radio</Text>
     </TouchableOpacity>
+    <TouchableOpacity
+    style={{marginTop:10,}}
+      onPress={()=>{CDPLAYER == 1 ? setCDPLAYER(0):setCDPLAYER(1)}}
+    >
+
+    <Text style={{fontWeight:'500'}}>CD Player</Text>
+    </TouchableOpacity>
+
 
     <TouchableOpacity
     style={{marginTop:10,}}
-      onPress={()=>{ WHEELCAPS == 1 ? setWHEELCAPS('0') : setWHEELCAPS('1')}}
-    >
-
-    <Text style={{fontWeight:'500'}}>WHEEL CAPS</Text>
-    </TouchableOpacity>
-
-
-    <TouchableOpacity
-    style={{marginTop:10,}}
-      onPress={()=>{MIRROR == 1 ? setMIRROR('0'):setMIRROR('1') }}
+      onPress={()=>{MIRROR == 1 ? setMIRROR(0):setMIRROR(1) }}
     >
 
     <Text style={{fontWeight:'500'}}>MIRROR</Text>
     </TouchableOpacity>
 
+
+
+
+    
+
     <TouchableOpacity
     style={{marginTop:10,}}
-      onPress={()=>{OTHERS == 1 ? setOTHERS('0'):setOTHERS('1')}}
+      onPress={()=>{SPEAKER == 1 ? setSPEAKER(0):setSPEAKER(1)}}
+    >
+
+    <Text style={{fontWeight:'500'}}>Speaker</Text>
+    </TouchableOpacity>
+
+    <TouchableOpacity
+    style={{marginTop:10,}}
+      onPress={()=>{OTHERS == 1 ? setOTHERS(0):setOTHERS(1)}}
     >
 
     <Text style={{fontWeight:'500'}}>OTHERS</Text>

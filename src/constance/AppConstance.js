@@ -34,11 +34,11 @@ class AppConstance extends Component {
     static showSnackbarMessage(message) {
         setTimeout(() => {
             Snackbar.show({
-                backgroundColor: AppColors.toolbarColor,
+                backgroundColor: AppColors.Signincolor,
                 title: message,
                 duration: Snackbar.LENGTH_SHORT,
             });
-        }, 100);
+        }, 300);
 
     }
 
