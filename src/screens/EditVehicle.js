@@ -33,7 +33,6 @@ import { TextInput } from 'react-native-gesture-handler';
 import Feather from  'react-native-vector-icons/dist/Feather'
 import RadioButtonRN from 'radio-buttons-react-native';
 import AppUrlCollection from '../UrlCollection/AppUrlCollection'
-// import DatePicker from 'react-native-datepicker';
 import Animated, { cond } from 'react-native-reanimated';
 import RBSheet from "react-native-raw-bottom-sheet";
 // import ImageCropPicker from 'react-native-image-crop-picker';
@@ -42,6 +41,7 @@ import { Appbar } from 'react-native-paper';
 import ActionButton from 'react-native-action-button';
 // import BarcodeScanner from 'react-native-scan-barcode';
 import ImagePicker from 'react-native-image-crop-picker';
+import DatePicker from 'react-native-datepicker'
 
 const dummyimages = [
   require('../Images/noimage3.jpeg')      
@@ -50,6 +50,10 @@ const dummyimages = [
 const EditVehicle = ({route, navigation }) => {
   const refRBSheet = useRef();
   const { item } = route.params;
+
+
+  const [date, setDate] = useState(new Date(1598051730000));
+const [ showimagemodel ,setshowimagemodel] = useState(false)
 const [details , setdetails] = useState(item)
 const picture = [
   {
@@ -60,6 +64,7 @@ const picture = [
     
 
   ])
+  const [pickupdatemodal , setpickupdatemodal]= useState(false)
   const [add , setadd] = useState(true)
   const [imgposition, setimgposition] = useState(0)
   const [ vin , setvin] = useState(item.vin == ''? '':item.vin)
@@ -68,7 +73,7 @@ const picture = [
   const[Search , setSearch]= useState()
   const [customername , setcustomername] = useState(item.customer_name)
   const [customeruserid , setcustomeruserid] = useState(item.customer_user_id)
-  const [location_id ,setlocation_id ] = useState(item.location)
+  const [location_id ,setlocation_id ] = useState(item.location_id)
   const [location_name, setlocation_name] = useState()
   const [location , setlocation ] = useState(item.location);
   const [vehicletype , setvehicletype] =useState(item.vehicle_type)
@@ -93,20 +98,19 @@ const picture = [
   const [deliverdate , setdeliverdate ] = useState(item.deliver_date);
   const [pickupdate , setpickupdate] = useState(item.pickup_date);
   const [ auctionat , setauctionat] = useState(item.auction_at)
-  const [note , setnote ] = useState();
+  const [note , setnote ] = useState(item.note);
   const [checkoption , setcheckoption ] = useState();
   const [vehicle_features , setvehicle_features]=(item.vehicle_features)
-  const [ KEYS ,setKEYS ] = useState(vehicle_features == 1? 1 :'');
   const [keynote , setkeynote] = useState(item.key_note)
-  const [ CDChanger,  setCDChanger]= useState('')
-  const [GPSNavigationSystem ,setGPSNavigationSystem]= useState('')
+  const [ CDChanger,  setCDChanger]= useState()
+  const [GPSNavigationSystem ,setGPSNavigationSystem]= useState()
   const [SpareTireJack, setSpareTireJack] = useState('')
   const [WheelCovers, setWheelCovers] = useState('')
   const [Radio ,setRadio]= useState('')
-  const [ CDPLAYER ,setCDPLAYER ] = useState(vehicle_features == 3? 1 :'');
+  const [ CDPLAYER ,setCDPLAYER ] = useState();
   const [ SPEAKER ,setSPEAKER ] = useState('');
   const [ WHEELCAPS ,setWHEELCAPS] = useState('');
-  const [ MIRROR ,setMIRROR] = useState('');
+  const [ MIRROR ,setMIRROR] = useState();
   const [ OTHERS ,setOTHERS ] = useState('');
   const [frontwindshiled , setfrontwindshiled ] = useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[2]: '');
   const [bonnet , setbonnet ] = useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[3]: '');
@@ -125,10 +129,10 @@ const picture = [
   const [pillar , setpillar ] = useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[16]: '');
   const [roof, setroof] =useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[17]: '');
   const [rightrearfender , setrightrearfender ] = useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[18]: '');
-  const [rightreardoor , setrightreardoor ] = useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[19]: '');
-  const [rightfrontdoor , setrightfrontdoor ] = useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[20]: '');
-  const [frontrightfender , setfrontrightfender ] = useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[21]: '');
-  const [fronttyres , setfronttyres]= useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[22]: '');
+  const [rightreardoor , setrightreardoor ] = useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[20]: '');
+  const [rightfrontdoor , setrightfrontdoor ] = useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[21]: '');
+  const [frontrightfender , setfrontrightfender ] = useState(item.vehicle_conditions.length > 0 ? item.vehicle_conditions[22]: '');
+  const [fronttyres , setfronttyres]= useState(item.vehicle_conditions[23]);
   const Damaged = [
     {
       label: 'Yes'
@@ -139,6 +143,7 @@ const picture = [
     ];
     const [imagesurls ,setimagesurls ] = useState([])
     const [ images2 , setimages2] = useState([])
+  const [vehicleconditions , setvehicleconditions] = useState(item.vehicle_conditions)
   const [vehicleDetails , setvehicleDetails] = useState([''])
   const [locationslist , setlocationslist] = useState([])
   const [locmodal,setlocmodal]= useState(false)
@@ -149,54 +154,74 @@ const picture = [
   const [width, setwidth] =useState('100%')
   const [currentimg, setcurrentimg] = useState('')
   const [Export, setExport] = useState(false)
-  const [data, setdata] = useState([
-  {
-    date: '20-12-2020',
-    Description: 'Description',
-    Lot:'473890',
-    N:'CA',
-
-  },
-  
-
-  {
-  date: '20-12-2020',
-    Description: 'Description',
-    Lot:'473890',
-    N:'CA',
-  },
-
-  {
-    date: '20-12-2020',
-    Description: 'Description',
-    Lot:'473890',
-    N:'CA',
-  },
-
-]
-)
+  const [data, setdata] = useState([])
 const [torchMode ,settorchMode] = useState('off')
 const [cameraType ,setcameraType] = useState('back')
 const [barcodemodal , setbarcodemodal] = useState(false)
-const [date, setDate] = useState('09-10-2020');
 
-// const TakePhoto=()=>{
-//   ImageCropPicker.openCamera({
-//     width: 300,
-//     height: 400,
-//     cropping: false,
-//   }).then(image => {
-//     console.log(image1);
-//     refRBSheet.current.close()
 
-//     console.log(images1);
-//     console.log(images1.length);
-//     var i ;
-//     for (i = 0 ; i<images1.length ; i++){
-//       images.push(images1[i].sourceURL)
-//     }
-//   });
-// }
+
+
+const TakePhoto = async() => {
+
+  ImagePicker.openCamera({
+        multiple: true,
+        compressImageQuality:0.7
+      }).then(images1 => {
+    
+        var i ;
+        for( i =0; i< images1.length; i++){
+
+          let temp = {} ;
+          temp.name = images1[i].filename;
+          temp.size = images1[i].size;
+          temp.type = images1[i].mime;
+          temp.url = images1[i].path;
+
+          images.push(temp)
+
+      var value = new FormData();
+      value.append('file',{uri:images1[i].path ,
+           name:images1[i].filename,
+           type:images1[i].mime
+         });
+
+         setspinner(true)
+
+          fetch(AppUrlCollection.VEHICLE_DETAIL + item.id +'/photos-upload', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+                'Accept': 'application/json'
+            },
+            body: value,
+                       
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+              // alert(JSON.stringify(responseJson))
+              // console.log(responseJson.data);
+              console.log(responseJson);
+              imagesurls.push(responseJson.data)
+              // alert(JSON.stringify(responseJson))
+              console.log('images urll is '+imagesurls);
+
+              setspinner(false)
+               
+            })
+            .catch((error) => {
+              alert(error)
+              setspinner(false)
+                console.warn(error)
+            });
+       
+        }      
+
+      });
+
+};
+
 searchFilterFunction = (text) => {
   if (text) {
 
@@ -230,8 +255,6 @@ searchFilterFunction = (text) => {
   }
 };
 
-
-
 const deleteimage = () =>{
   // setspinner(true)
   let pos = imgposition;
@@ -258,8 +281,8 @@ for(var index = 0 ; index< images2.length ; index++){
  }
  setimages2(img2)
 
-}
 
+}
 
 const chooseFile = async() => {
 
@@ -303,7 +326,7 @@ const chooseFile = async() => {
               // console.log(responseJson.data);
               console.log(responseJson);
               imagesurls.push(responseJson.data)
-              alert(JSON.stringify(responseJson))
+              // alert(JSON.stringify(responseJson))
               console.log('images urll is '+imagesurls);
 
               setspinner(false)
@@ -354,7 +377,9 @@ console.log('-----==---'+Customerlist.length);
 };
 
 const callinglocation =() =>{
-  let url = AppUrlCollection.LOCATION
+  setspinner(true)
+
+let url = AppUrlCollection.LOCATION
   fetch(url, {
     method: 'GET',
     headers: {
@@ -386,6 +411,7 @@ const barcodeReceived =(e)=> {
 }
 
 const callingCustomer =() =>{
+  setspinner(true)
   let url = AppUrlCollection.BASE_URL+'customers'
   fetch(url, {
     method: 'GET',
@@ -707,36 +733,36 @@ if(item.vehicle_features != null || item.vehicle_features != undefined || item.v
 
     switch(element) {
       case 3:
-        setCDChanger(1)
+        setCDChanger(3)
           break;
  
       case 4:
-        setGPSNavigationSystem(1)
+        setGPSNavigationSystem(4)
         break;
  
       case 5:
-          setSpareTireJack(1)
+          setSpareTireJack(5)
         break;
 
         case 6:
-          setWheelCovers(1)
+          setWheelCovers(6)
         break;
 
         case 7:
-          setRadio(1)
+          setRadio(7)
         break;
 
         case 8:
-          setCDPLAYER(1)
+          setCDPLAYER(8)
         break; 
          case 10:
-           setMIRROR(1)
+           setMIRROR(10)
         break;
         case 11:
-            setSPEAKER(1)
+            setSPEAKER(11)
           break;
         case 12:
-          setOTHERS(1)
+          setOTHERS(12)
         break;
        
  
@@ -755,6 +781,9 @@ callingCustomer()
 // alert(item.vehicle_features)
 
 if (item.photos != undefined && item.photos != null) {
+
+  setimages2(item.photos)
+
   // setimg(responseJson.data.vehicle.images)
   for (let index = 0; index < item.photos.length; index++) {
       const element = item.photos[index];
@@ -762,7 +791,6 @@ if (item.photos != undefined && item.photos != null) {
       console.log(element);
   }
 
-  
 
 }
 
@@ -786,7 +814,6 @@ const renderlist = ({item}) =>{
   )
   
    }
-
 
 const renderCustomerlist = ({item}) =>{
 
@@ -816,128 +843,349 @@ style={{marginVertical:5,borderWidth:0.5,flexDirection:'row', borderColor:'grey'
 
  const callingupdateApi = ()=>{
 
-      let array ={};
+  let f = [];
+  if(CDChanger == 3){
+    f.push(CDChanger)
+  }
+  if(GPSNavigationSystem == 4){
+    f.push(GPSNavigationSystem)
+  }
+  if(SpareTireJack == 5){
+    f.push(SpareTireJack)
+  }
+  if(WheelCovers == 6){
+    f.push(WheelCovers)
+  }
+  if(Radio == 7){
+    f.push(Radio)
+  }
+  if(CDPLAYER == 8){
+    f.push(CDPLAYER)
+  }
+  if(MIRROR == 10){
+    f.push(MIRROR)
+  }
+  if(SPEAKER == 11){
+    f.push(SPEAKER)
+  }
+  if(OTHERS == 12){
+    f.push(OTHERS)
+  }
+        
+
+
+  let h = [] ;
+  
+  // for(var i =0; i < vehicleconditions.length ; i++){
+    h[0]  = null
+    h[1]  = null
+    h[2]  = frontwindshiled
+    h[3]  = bonnet
+    h[4]  = grill
+    h[5]  = frontbumper
+    h[6]  = frontheadlight
+    h[7]  = rearwindshield
+    h[8]  = trunkdoor
+    h[9]  = rearbumper
+    h[10] = rearbumpersupport
+    h[11] = taillamp
+    h[12] = frontleftfender
+    h[13] = leftfrontdoor
+    h[14] = leftreardoor
+    h[15] = leftrearfender
+    h[16] = pillar
+    h[17] = roof
+    h[18] = rightrearfender
+    h[20] = rightreardoor
+    h[21] = rightfrontdoor
+    h[22] = frontrightfender
+    h[23] = fronttyres
+  // }
+
+  //add images
   
 
-      
-      array.total_photos= item.total_photos;
-      array.hat_number= hatnumber;
-      array.vehicle_type= vehicletype;
-      array.year= year;
-      array.color= color;
-      array.model= model;
-      array.make = make;
-      array.vin= vin;
-      array.weight = weight;
-      array.pieces = item.pieces
-      array.lot_number = lotnumber;
-      array.towed_amount= item.towed_amount;
-      array.storage_amount= item.storage_amount;
-      array.status_name= statusname;
-      array.state_name= item.state_name;
-      array.status= status;
-      array.load_status= item.load_status;
-      array.check_number= item.check_number;
-      array.additional_charges= item.additional_charges;
-      array.location_id= item.location_id;
-      array.customer_user_id= customeruserid;
-      array.towing_request_id= item.towing_request_id;
-      array.title_amount= item.title_amount;
-      array.container_number =item.container_number;
-      array.keys = item.keys;
-      array.keys_name = item.keys_name;
-      array.key_note = item.key_note;
-      array.vcr = item.vcr;
-      array.value  = item.value;
-      array.auction_at = item.auction_at;
-      array.auction_at_name = item.auction_at_name;
-      array.towed_from = item.towed_from;
-      array.note = item.note;
-      array.loading_type = item.loading_type;
-      array.location= item.location;
-      array.customer_name = item.customer_name;
-      array.company_name = item.company_name;
-      array.export_id= item.export_id;
-      array.title_type= item.title_type;
-      array.title_type_name= item.title_type_name;
-      array.title_number= titlenumber;
-      array.title_received_date=item.title_received_date;
-      array.towing_request_date=item.towing_request_date;
-      array.deliver_date= deliverdate;
-      array.pickup_date= pickupdate;
-      array.condition = condition
-      array.damaged = damaged;
-      array.pictures = item.pictures;
-      array.towed = item.towed;
-      array.title= item.title;
-      array.title_state = item.title_state;
-      array.buyer_id = item.buyer_id;
-      array.license_number= licensenumber;
-      array.eta= item.eta;
-      array.export_date = item.export_date;
-      array.booking_number = item.booking_number;
-      array.seal_number = item.seal_number;
-      array.ar_number = item.ar_number
-      array.destination = item.destination;
-      array.photo = item.photo;
-      array.photos= item.photos;
-      array.auction_photos = item.auction_photos;
-      array.pickup_photos = item.pickup_photos;
-      array.arrived_photos = item.arrived_photos;
-      array.vehicle_features = item.vehicle_features;
-      array.vehicle_conditions = item.vehicle_conditions;
-      array.vehicle_documents= item.vehicle_documents;
-      array.invoice_photos = item.invoice_photos;
-      array.visible_export_button = item.visible_export_button;
-      array.visible_claim_button = item.visible_claim_button;  
-      array.note_status = item.note_status;
+
+      let array ={};
+
+      // array.hat_number= hatnumber;
+      // array.vehicle_type= vehicletype;
+      // array.year= year;
+      // array.color= color;
+      // array.model= model;
+      // array.make = make;
+      // array.vin= vin;
+      // array.weight = weight;
+      // array.lot_number = lotnumber;
+      // array.towed_amount= item.towed_amount;
+      // array.status_name= statusname;
+      // array.status= status;
+    
+      // array.customer_user_id= customeruserid;
+      // array.container_number = containernmber;
+      // array.key_note = keynote;
+      // array.load_status = loadstatus;
+      // array.auction_at = auctionat;
+      // array.towed_from = item.towed_from;
+      // array.note = note;
+      // array.location=  location;
+      // array.location_id = location_id
+      // array.customer_name = item.customer_name;
+      // array.title_number= titlenumber;
+      // array.towing_request_date=item.towing_request_date;
+      // array.deliver_date= deliverdate;
+      // array.pickup_date= pickupdate;
+      // array.condition = condition
+      // array.damaged = damaged;
+      // array.towed = item.towed;
+      // array.license_number= licensenumber;
+      // array.photos = images2
+
+      // array.auction_photos = item.auction_photos;
+      // array.pickup_photos = item.pickup_photos;
+      // array.arrived_photos = item.arrived_photos;
+      // array.vehicle_features = f;
+      // array.vehicle_conditions = h;
+      // array.vehicle_documents= item.vehicle_documents;
+      // array.invoice_photos = item.invoice_photos;
 
 
-alert(customeruserid)
-      // alert(JSON.stringify(array))
+
+
+array.hat_number = hatnumber,
+array.vehicle_type= vehicletype,
+array.year = year,
+array.color=  color,
+array.model= model,
+array.make= make,
+array.vin= vin,
+array.weight= weight,
+array.lot_number = lotnumber,
+array.towed_amount = item.towed_amount,
+array.status_name= statusname,
+array.status=  status,
+array.location_id = location_id,
+array.customer_user_id=  customeruserid,
+array.towing_request_id = item.towing_request_id,
+array.container_number= containernmber,
+array.key_note =keynote,
+array.vcr= item.vcr,
+array.value=  item.value,
+  array.auction_at = auctionat,
+  array.towed_from=  item.towed_from,
+  array.note = note,
+  array.loading_type = loadstatus,
+  array.location = location,
+  array.customer_name=  customername,
+  array.title_number=  titlenumber,
+  array.title_received_date= item.title_received_date,
+  array.towing_request_date = item.towing_request_date,
+  array.deliver_date = deliverdate,
+  array.pickup_date=  pickupdate,
+  array.condition = condition,
+  array.damaged = damaged,
+  array.license_number = licensenumber,
+  array.photos= images2,
+  array.vehicle_features = f,
+  array.vehicle_conditions = h,
+  array.vehicle_documents = item.vehicle_documents,
+  array.invoice_photos= item.invoice_photos,
+  array.auction_photos = item.auction_photos,
+  array.pickup_photos = item.pickup_photos,
+  array.arrived_photos = item.arrived_photos,
+  // array.fileUrls { "photos": ["https://asl-shipping-line.s3.us-west-2.amazonaws.com/uploads/vehicles/images/32626/rsuEFeqEjPECLr8g0nxcEq5jc1o4D8Euj7l2PCSN.jpg"]}, 
+
+
+
+
+  alert(JSON.stringify(array))
+
+
+
+//   "hat_number": null,
+//   "vehicle_type": "SUV",
+//   "year": "2021",
+//   "color": "WHITE",
+//   "model": "honda",
+//   "make": "civic",
+//   "vin": "15june2022",
+//   "weight": null,
+//   "lot_number": "15062021",
+//    "towed_amount": 200,
+//   "status_name": "ON HAND",
+//  "towing_request_date": "2021-06-13",
+//   "towed_from": "ca",
+//   "photos":[],
+//   "fileUrls" : { "photos": ["https://asl-shipping-line.s3.us-west-2.amazonaws.com/uploads/vehicles/images/32626/rsuEFeqEjPECLr8g0nxcEq5jc1o4D8Euj7l2PCSN.jpg"]},    
+
+//   "status": 1, 
+//   "location_id": 1,
+//   "customer_user_id": 7000760,
+//   "container_number": null,
+//   "key_note": "",
+//   "auction_at": null,
+//   "note": null,
+//   "location": "LA",
+//   "customer_name": "TEST15JUNE",        
+
+//   "title_number": null,
+//   "deliver_date": null,
+//   "pickup_date": null,
+//   "condition": null,
+//   "damaged": null,
+//   "license_number": null,
+//   "ar_number": null,
+//   "vehicle_features": [],
+//   "vehicle_conditions": [],
+//     "auction_photos":[],
+//   "pickup_photos":[],
+//   "arrived_photos":[],
+//   "invoice_photos":[],
+// "vehicle_documents": []
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
       if(imagesurls.length > 0){
         let photos = imagesurls
         let img = {photos}
-        array.fileUrl=img
+        array.fileUrls=img
       }
-      
+    
+      //removeing images
       // if(images2 != null){
-      // array.container_images = images2
+    
+      // array.photos = images2
       // }
+     
+      //   "lot_number": lotnumber,
+      //   "towed_amount": item.towed_amount,
+      //   "status_name": statusname,
+      //   "status": status,
+      //   "location_id": location_id,
+      //   "customer_user_id": customeruserid,
+      //   "towing_request_id": item.towing_request_id,
+      //   "container_number": containernmber,
+      //   "key_note": keynote,
+      //   "vcr": item.vcr,
+      //   "value": item.value,
+      //   "auction_at": auctionat,
+      //   "towed_from": item.towed_from,
+      //   "note": note,
+      //   "loading_type": item.loading_type,
+      //   "location": location,
+      //   "customer_name": customername,
+      //   "title_number": titlenumber,
+      //   "title_received_date": null,
+      //   "towing_request_date": item.towing_request_date,
+      //   "deliver_date": deliverdate,
+      //   "pickup_date": pickupdate,
+      //   "condition": condition,
+      //   "damaged": damaged,
+      //   "license_number": licensenumber,
+      //    "photos": images2,
+      //   "auction_photos": item.auction_photos,
+      //   "pickup_photos":item.pickup_photos,
+      //   "arrived_photos": item.arrived_photos,    
+      //   "vehicle_features": f,
+      //   "vehicle_conditions": h,
+      //   "vehicle_documents": item.vehicle_documents,
+      //   "invoice_photos": item.invoice_photos,
+
+     
+      // alert(imagesurls)
       
       
-      //   fetch(AppUrlCollection.EXPORT_DETAIL + item.id, {
-      //     method: 'PUT',
-      //     headers: {
-      //         'Content-Type': 'application/json',
-      //         'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
-      //     },
+        fetch(AppUrlCollection.VEHICLE_DETAIL + item.id, {
+          method: 'PUT',
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+          },
           
-      //     body: JSON.stringify(array)
-          
+          body: JSON.stringify(array)
+
+      // //     body: JSON.stringify({
+      // //       // "total_photos": null,
+      // //   "hat_number": hatnumber,
+      // //   "vehicle_type": vehicletype,
+      // //   "year": year,
+      // //   "color": color,
+      // //   "model": model,
+      // //   "make": make,
+      // //   "vin": vin,
+      // //   "weight": weight,
+      // //   "lot_number": lotnumber,
+      // //   "towed_amount": item.towed_amount,
+      // //   "status_name": statusname,
+      // //   "status": status,
+      // //   "location_id": location_id,
+      // //   "customer_user_id": customeruserid,
+      // //   "towing_request_id": item.towing_request_id,
+      // //   "container_number": containernmber,
+      // //   "key_note": keynote,
+      // //   "vcr": item.vcr,
+      // //   "value": item.value,
+      // //   "auction_at": auctionat,
+      // //   "towed_from": item.towed_from,
+      // //   "note": note,
+      // //   "loading_type": item.loading_type,
+      // //   "location": location,
+      // //   "customer_name": customername,
+      // //   "title_number": titlenumber,
+      // //   "title_received_date": null,
+      // //   "towing_request_date": item.towing_request_date,
+      // //   "deliver_date": deliverdate,
+      // //   "pickup_date": pickupdate,
+      // //   "condition": condition,
+      // //   "damaged": damaged,
+      // //   "license_number": licensenumber,
+      // //    "photos": images2,
+      // //   "auction_photos": item.auction_photos,
+      // //   "pickup_photos":item.pickup_photos,
+      // //   "arrived_photos": item.arrived_photos,    
+      // //   "vehicle_features": f,
+      // //   "vehicle_conditions": h,
+      // //   "vehicle_documents": item.vehicle_documents,
+      // //   "invoice_photos": item.invoice_photos,
+      // //   "fileUrls" : { "photos": ["https://asl-shipping-line.s3.us-west-2.amazonaws.com/uploads/vehicles/images/32626/rsuEFeqEjPECLr8g0nxcEq5jc1o4D8Euj7l2PCSN.jpg"]}, 
+
+      // //     })
          
-      // })
-      //     .then((response) =>  response.json())
-      //     .then((responseJson) => {
-      //       setspinner(false)
-      //       AppConstance.showSnackbarMessage(responseJson.message)
+      })
+          .then((response) =>  response.json())
+          .then((responseJson) => {
+            setspinner(false)
+            AppConstance.showSnackbarMessage(responseJson.message)
       
-      //       ImagePicker.clean().then(() => {
-      //         console.log('removed all tmp images from tmp directory');
-      //       }).catch(e => {
-      //         alert(e);
-      //       });
+            ImagePicker.clean().then(() => {
+              console.log('removed all tmp images from tmp directory');
+            }).catch(e => {
+              alert(e);
+            });
             
-      //         console.log('export detail ', responseJson)
+              console.log('export detail ', responseJson)
              
-      //     })
-      //     .catch((error) => {
-      //       alert(error)
-      //       setspinner(false)
-      //         console.warn(error)
-      //     });
+          })
+          .catch((error) => {
+            alert(error)
+            setspinner(false)
+              console.warn(error)
+          });
       
       
         }
@@ -947,80 +1195,12 @@ return (
    
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white', height: deviceHeight, }}>
 
-      <RBSheet
-                    ref={refRBSheet}
-                    closeOnDragDown={true}
-                    closeOnPressMask={true}
-                    customStyles={{
-                        wrapper: {
-                            backgroundColor: "transparent"
-                        },
-                        container: {
-                            backgroundColor: '#ECF0F1',
-                            borderTopLeftRadius:20,
-                            borderTopRightRadius:20,
-                            height: 300,
-                            paddingTop:15,
-
-                        },
-                        draggableIcon: {
-                            backgroundColor: "grey"
-                        }
-                    }}
-                >
-                    <View>
-
-                    <TouchableOpacity>
-                        <View style={{ borderBottomWidth: 0.6,paddingVertical:5, borderColor: '#D0D3D4', width: '80%', alignSelf: 'center' }}>
-                            <Text style={{ alignSelf: 'center',  fontSize:20,fontWeight:'600', paddingVertical:5,  }}>Upload Photo</Text>
-                        </View>
-
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                    onPress={()=>TakePhoto() }
-                    >
-                        <View style={{ borderWidth: 0.5, borderRadius:12,marginTop:10, borderColor: '#1a9bef', width: '80%', alignSelf: 'center' }}>
-                            <Text style={{ alignSelf: 'center', padding: 10,fontWeight:'600', color: '#1a9bef', }}>Take Photo</Text>
-                        </View>
-
-                    </TouchableOpacity>
-             
-                    <TouchableOpacity
-                    onPress={()=> Selectphoto()}
-                    >
-                        <View style={{ borderWidth: 0.5 , borderRadius:12,marginTop:10, borderColor: '#1a9bef', width: '80%', alignSelf: 'center' }}>
-                            <Text style={{ alignSelf: 'center',fontWeight:'600', padding: 10, color: '#1a9bef', }}>Choose From Library</Text>
-                        </View>
-
-                    </TouchableOpacity>
-               
-                    <TouchableOpacity
-                                        onPress={()=> refRBSheet.current.close()}
-
-                    >
-                        <View style={{ borderWidth: 1, borderRadius:12,marginTop:10, borderColor: 'red', width: '80%', alignSelf: 'center' }}>
-                            <Text style={{ alignSelf: 'center', padding: 10, color: 'red', }}>Cancel</Text>
-                        </View>
-
-                    </TouchableOpacity>
-                    </View>
-
-               
-               <View style={{  flex: 1,
-  justifyContent: 'flex-end',
-  marginBottom: 20
-}}>
-
-             
-                    <TouchableOpacity 
-                    onPress={()=> refRBSheet.current.close()}
-                    style={{width:25,justifyContent:'center', height:25, backgroundColor:'grey', borderRadius:50, alignSelf:'flex-end', marginRight:30}}>
-                    <Entypo   name='chevron-down' color='white' size={18} style={{alignSelf:'center'}}/>
-                    </TouchableOpacity>
-                    </View>
-
-                </RBSheet>
-           
+<Spinner
+          visible={spinner}
+          textContent={'Loading...'}
+          textStyle={{ color: '#FFF'}}
+        />
+    
        <Appbar
                             style={{backgroundColor:AppColors.Headercolor,
                         flexDirection:'row',
@@ -1333,7 +1513,53 @@ onPress={()=> setcustmodal(false) }
           </View>
         </Modal>
 
+        <Modal
+        visible={showimagemodel}
+        animationType='fade'
+        >
+            <View style={{ justifyContent:'center',backgroundColor:'black', height:deviceHeight}}>
+                <View style={{backgroundColor:'black'}}>
+                <SliderBox 
+          images={images}
+          sliderBoxHeight={deviceHeight*0.5}
+          
+          dotColor="#FFEE58"
+  inactiveDotColor="#90A4AE"
+  dotStyle={{
+    width: 10,
+    height: 10,
+    marginHorizontal: -4,
+    padding: 0,
+    margin: 0
+  }}
+          resizeMethod={'resize'}  
+          resizeMode={'cover'}
+  circleLoop
+  currentImageEmitter={index => {
+   }}
+
+         
+  paginationBoxStyle={{
+    alignItems: "center",
+    alignSelf: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+  }}
+  ImageComponentStyle={{ width: '100%', marginTop: 0}}
+
+        />
         
+            <TouchableOpacity 
+            onPress={()=> { setshowimagemodel(false)}}
+            style={{alignSelf:'center', marginTop:10}}
+            >
+                <MaterialCommunityIcons color='red'  name='close-circle-outline' size={40}/>
+            </TouchableOpacity>
+                    </View>
+            </View>
+        </Modal>
+      
+
     <ScrollView style={{width:deviceWidth }}>
 
     <View>
@@ -1366,7 +1592,7 @@ onPress={()=> setcustmodal(false) }
           onCurrentImagePressed={index =>
           //setcurrentimg()
             // console.warn(`image ${index} pressed`)
-            showimagemodel(true)
+            setshowimagemodel(true)
           }
   paginationBoxStyle={{
     alignItems: "center",
@@ -1380,7 +1606,7 @@ onPress={()=> setcustmodal(false) }
         
 
 
-{item.photos.length> 0?
+{images.length > 0?
 
      <View style={{marginTop:15,position:'absolute',alignSelf:'flex-end', paddingHorizontal:40, }}>
     <TouchableOpacity
@@ -1491,6 +1717,7 @@ null
     <TextInput  
     placeholder={hatnumber}
     placeholderTextColor='grey'
+    onChangeText={(text)=> {sethatnumber(text)}} 
     />
     </View>
 
@@ -1655,11 +1882,11 @@ null
     </View> */}
 
     <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
-    <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>NOTE2</Text>
+    <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>NOTE</Text>
     <TextInput  
-    placeholder={note2}
+    placeholder={note}
     placeholderTextColor='grey'
-    onChangeText={(text)=> {setnote2(text)}}
+    onChangeText={(text)=> {setnote(text)}}
     />
     </View>
 
@@ -1682,7 +1909,7 @@ null
     <View style={{flexDirection:'column', marginLeft:5,   }}>
       <TouchableOpacity
       
-      onPress={()=>{setstatus('1') , setsetstatusname('On Hand')}}
+      onPress={()=>{setstatus('1') , setstatusname('On Hand')}}
       >
 
     <Text style={{fontWeight:'500'}}>ON HAND</Text>
@@ -2068,15 +2295,47 @@ null
     </View>
 
 
+  
+
     <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
     <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>DELIVER DATE</Text>
-    <TextInput  
-    placeholder={deliverdate}
-    placeholderTextColor='grey'
-    onChangeText={(text)=> {setdeliverdate(text)}}
-    />
-    </View>
+    
 
+            <View 
+            
+            style={{width:'95%',flexDirection:'row',  justifyContent:'space-between'}}>
+            <Text style={{alignSelf:'center'}}  >{deliverdate}</Text>
+
+    <DatePicker
+        style={{width: 20}}
+        date={deliverdate}
+        mode="date"
+        placeholder="select date"
+        format="YYYY-MM-DD"
+        hideText={false}
+        confirmBtnText="Confirm"
+        cancelBtnText="Cancel"
+        customStyles={{
+          dateIcon: {
+            position: 'absolute',
+            left: 0,
+            top: 2,
+            marginLeft: 0
+          },
+          dateInput: {
+            marginLeft: 36,
+            borderWidth:0,
+          }
+          // ... You can check the source to find the other keys.
+        }}
+        onDateChange={(date) => { setdeliverdate(date)}}
+      />
+
+
+              </View>
+  
+
+    </View>
 
 
 
@@ -2109,11 +2368,51 @@ null
                 setDate(date);
               }}
             /> */}
-    <TextInput  
-    placeholder={pickupdate}
-    multiline={true}
-    placeholderTextColor='grey'
-    />
+
+            <View 
+            
+            style={{width:'95%',flexDirection:'row',  justifyContent:'space-between'}}>
+            <Text style={{alignSelf:'center'}}  >{pickupdate}</Text>
+
+    <DatePicker
+        style={{width: 20}}
+        date={pickupdate}
+        mode="date"
+        placeholder="select date"
+        format="YYYY-MM-DD"
+        hideText={false}
+        confirmBtnText="Confirm"
+        cancelBtnText="Cancel"
+        customStyles={{
+          dateIcon: {
+            position: 'absolute',
+            left: 0,
+            top: 2,
+            marginLeft: 0
+          },
+          dateInput: {
+            marginLeft: 36,
+            borderWidth:0,
+          }
+          // ... You can check the source to find the other keys.
+        }}
+        onDateChange={(date) => { setpickupdate(date)}}
+      />
+
+
+              </View>
+  
+    {/* {pickupdatemodal && (
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={date}
+          mode={'date'}
+          
+          onChange={(date)=> { setpickupdate(date)}}
+        />
+        
+    )} */}
+
     </View>
 
 
@@ -2124,9 +2423,9 @@ null
     <View style={{flexDirection:'column',  marginLeft:10, width:'10%' }}>
       
       <TouchableOpacity 
-      onPress={()=>{CDChanger == 1 ? setCDChanger(0):setCDChanger(1)}}
+      onPress={()=>{ CDChanger == 3 ? setCDChanger('') :setCDChanger(3)}}
       >
-    {CDChanger == 1 ? 
+    {CDChanger == 3 ? 
     <Ionicons name='ios-radio-button-on' style={{alignSelf:'center'}}  color='#1a9bef' size={20} /> :
     <Ionicons name='ios-radio-button-off-sharp' style={{alignSelf:'center'}}  color='#1a9bef' size={20}
     />}
@@ -2135,9 +2434,9 @@ null
     <TouchableOpacity
     style={{marginTop:5,}}
 
-    onPress={()=>{ GPSNavigationSystem == 1 ? setGPSNavigationSystem(0):setGPSNavigationSystem(1)}}
+    onPress={()=>{ GPSNavigationSystem == 4 ? setGPSNavigationSystem(''):setGPSNavigationSystem(4)}}
     >
-    {GPSNavigationSystem == 1 ? 
+    {GPSNavigationSystem == 4 ? 
 
     <Ionicons name='ios-radio-button-on' style={{alignSelf:'center'}}  color='#1a9bef' size={20} /> :
     <Ionicons name='ios-radio-button-off-sharp' style={{alignSelf:'center'}}  color='#1a9bef' size={20}
@@ -2149,9 +2448,9 @@ null
     <TouchableOpacity
     style={{marginTop:5,}}
 
-    onPress={()=>{SpareTireJack == 1 ? setSpareTireJack(0):setSpareTireJack(1)}}
+    onPress={()=>{SpareTireJack == 5 ? setSpareTireJack(''):setSpareTireJack(5)}}
     >
-    {SpareTireJack == 1 ? 
+    {SpareTireJack == 5 ? 
 
     <Ionicons name='ios-radio-button-on' style={{alignSelf:'center'}}  color='#1a9bef' size={20} /> :
     <Ionicons name='ios-radio-button-off-sharp' style={{alignSelf:'center'}}  color='#1a9bef' size={20}
@@ -2164,9 +2463,9 @@ null
     <TouchableOpacity
     style={{marginTop:5,}}
 
-    onPress={()=>{ WheelCovers == 1 ? setWheelCovers(0) : setWheelCovers(1)}}
+    onPress={()=>{ WheelCovers == 6 ? setWheelCovers('') : setWheelCovers(6)}}
     >
-    {WheelCovers == 1 ? 
+    {WheelCovers == 6 ? 
 
     <Ionicons name='ios-radio-button-on' style={{alignSelf:'center'}}  color='#1a9bef' size={20} /> :
     <Ionicons name='ios-radio-button-off-sharp' style={{alignSelf:'center'}}  color='#1a9bef' size={20}
@@ -2176,9 +2475,9 @@ null
     <TouchableOpacity
     style={{marginTop:5,}}
 
-    onPress={()=>{Radio == 1 ? setRadio(0):setRadio(1) }}
+    onPress={()=>{Radio == 7 ? setRadio(''):setRadio(7) }}
     >
-    {Radio == 1 ? 
+    {Radio == 7 ? 
 
     <Ionicons name='ios-radio-button-on' style={{alignSelf:'center'}}  color='#1a9bef' size={20} /> :
     <Ionicons name='ios-radio-button-off-sharp' style={{alignSelf:'center'}}  color='#1a9bef' size={20}
@@ -2191,9 +2490,9 @@ null
     <TouchableOpacity
     style={{marginTop:5,}}
 
-    onPress={()=>{CDPLAYER == 1 ? setCDPLAYER(0):setCDPLAYER(1) }}
+    onPress={()=>{CDPLAYER == 8 ? setCDPLAYER(''):setCDPLAYER(8) }}
     >
-    {CDPLAYER == 1 ? 
+    {CDPLAYER == 8 ? 
 
     <Ionicons name='ios-radio-button-on' style={{alignSelf:'center'}}  color='#1a9bef' size={20} /> :
     <Ionicons name='ios-radio-button-off-sharp' style={{alignSelf:'center'}}  color='#1a9bef' size={20}
@@ -2203,9 +2502,9 @@ null
     <TouchableOpacity
     style={{marginTop:5,}}
 
-    onPress={()=>{MIRROR == 1 ? setMIRROR(0):setMIRROR(1) }}
+    onPress={()=>{MIRROR == 10 ? setMIRROR(''):setMIRROR(10) }}
     >
-    {MIRROR == 1 ? 
+    {MIRROR == 10 ? 
 
     <Ionicons name='ios-radio-button-on' style={{alignSelf:'center'}}  color='#1a9bef' size={20} /> :
     <Ionicons name='ios-radio-button-off-sharp' style={{alignSelf:'center'}}  color='#1a9bef' size={20}
@@ -2215,9 +2514,9 @@ null
     <TouchableOpacity
     style={{marginTop:5,}}
 
-    onPress={()=>{SPEAKER == 1 ? setSPEAKER(0):setSPEAKER(1) }}
+    onPress={()=>{SPEAKER == 11 ? setSPEAKER(''):setSPEAKER(11) }}
     >
-    {SPEAKER == 1 ? 
+    {SPEAKER == 11 ? 
 
     <Ionicons name='ios-radio-button-on' style={{alignSelf:'center'}}  color='#1a9bef' size={20} /> :
     <Ionicons name='ios-radio-button-off-sharp' style={{alignSelf:'center'}}  color='#1a9bef' size={20}
@@ -2231,9 +2530,9 @@ null
     <TouchableOpacity
     style={{marginTop:7,justifyContent:'center'}}
 
-    onPress={()=>{OTHERS == 1 ? setOTHERS(0):setOTHERS(1)}}
+    onPress={()=>{OTHERS == 12 ? setOTHERS(''):setOTHERS(12)}}
     >
-    {OTHERS == 1 ? 
+    {OTHERS == 12 ? 
 
     <Ionicons name='ios-radio-button-on' style={{alignSelf:'center'}}  color='#1a9bef' size={20} /> :
     <Ionicons name='ios-radio-button-off-sharp' style={{alignSelf:'center'}}  color='#1a9bef' size={20}
@@ -2358,8 +2657,8 @@ null
     <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
     <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>FRONT WINDSHILED</Text>
     <TextInput  
-      onChangeText={text =>setfrontwindshiled(text) }
-
+      onChangeText={text =>{setfrontwindshiled(text) }}
+    // onSubmitEditing={(text)=> {setfrontwindshiled(text) }}
     placeholder={frontwindshiled}
     placeholderTextColor='grey'
     />
@@ -2569,7 +2868,6 @@ null
     <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>FRONT TYRES</Text>
     <TextInput  
       onChangeText={text => setfronttyres(text)}
-
     placeholder={fronttyres}
     placeholderTextColor='grey'
     />

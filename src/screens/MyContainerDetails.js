@@ -71,7 +71,65 @@ const MyContainerDetails = ({route, navigation }) => {
 
 
 
+  const TakePhoto = async() => {
 
+    ImagePicker.openCamera({
+          multiple: true,
+          compressImageQuality:0.7
+        }).then(images1 => {
+      
+          var i ;
+          for( i =0; i< images1.length; i++){
+  
+            let temp = {} ;
+            temp.name = images1[i].filename;
+            temp.size = images1[i].size;
+            temp.type = images1[i].mime;
+            temp.url = images1[i].path;
+  
+            images.push(temp)
+  
+        var value = new FormData();
+        value.append('file',{uri:images1[i].path ,
+             name:images1[i].filename,
+             type:images1[i].mime
+           });
+  
+           setspinner(true)
+  
+            fetch(AppUrlCollection.VEHICLE_DETAIL + item.id +'/photos-upload', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'multipart/form-data',
+                  'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+                  'Accept': 'application/json'
+              },
+              body: value,
+                         
+          })
+              .then((response) => response.json())
+              .then((responseJson) => {
+                // alert(JSON.stringify(responseJson))
+                // console.log(responseJson.data);
+                console.log(responseJson);
+                imagesurls.push(responseJson.data)
+                // alert(JSON.stringify(responseJson))
+                console.log('images urll is '+imagesurls);
+  
+                setspinner(false)
+                 
+              })
+              .catch((error) => {
+                alert(error)
+                setspinner(false)
+                  console.warn(error)
+              });
+         
+          }      
+  
+        });
+  
+  };
 
 const requestCameraPermission = async () => {
   if (Platform.OS === 'android') {
@@ -84,12 +142,15 @@ const requestCameraPermission = async () => {
         },
       );
       // If CAMERA Permission is granted
-      return granted === PermissionsAndroid.RESULTS.GRANTED;
+       granted === PermissionsAndroid.RESULTS.GRANTED;
+       TakePhoto()
     } catch (err) {
       console.warn(err);
       return false;
     }
-  } else return true;
+  } else {
+    TakePhoto()
+  }
 };
 
 const requestExternalWritePermission = async () => {
@@ -103,13 +164,19 @@ const requestExternalWritePermission = async () => {
         },
       );
       // If WRITE_EXTERNAL_STORAGE Permission is granted
-      return granted === PermissionsAndroid.RESULTS.GRANTED;
+      if(granted === PermissionsAndroid.RESULTS.GRANTED){
+        requestCameraPermission()
+
+      };
     } catch (err) {
       console.warn(err);
       alert('Write permission err', err);
     }
     return false;
-  } else return true;
+  } else{
+    requestCameraPermission()
+
+  }
 };
 
 const chooseFile = async() => {
@@ -289,45 +356,6 @@ const chooseFile = async() => {
   // });
   
 };
-
-
-
-// const TakePhoto=()=>{
-//   ImageCropPicker.openCamera({
-//     width: 300,
-//     height: 400,
-//     cropping: false,
-//   }).then(image => {
-//     console.log(image1);
-//     refRBSheet.current.close()
-
-//     console.log(images1);
-//     console.log(images1.length);
-//     var i ;
-//     for (i = 0 ; i<images1.length ; i++){
-//       images.push(images1[i].sourceURL)
-//     }
-//   });
-// }
-
-
-// const Selectphoto = () =>{
-//   ImageCropPicker.openPicker({
-//     multiple: true
-//   }).then(images1 => {
-//     refRBSheet.current.close()
-
-//     console.log(images1);
-//     console.log(images1.length);
-//     var i ;
-//     for (i = 0 ; i<images1.length ; i++){
-//       images.push(images1[i].sourceURL)
-//     }
-
-
-//   });
-// }
-
 
 
 const deleteimage = () =>{
@@ -669,7 +697,7 @@ return (
  <ActionButton.Item buttonColor='#9b59b6'   size={30} onPress={() => {chooseFile('photo')}}>
    <Ionicons name="ios-images-outline" size={20} style={styles.actionButtonIcon} />
  </ActionButton.Item>
- <ActionButton.Item buttonColor='#3498db' size={30} onPress={() => {}}>
+ <ActionButton.Item buttonColor='#3498db' size={30} onPress={() => {requestExternalWritePermission()}}>
  <Ionicons name="ios-camera-outline" size={20} style={styles.actionButtonIcon} />
  </ActionButton.Item>
 

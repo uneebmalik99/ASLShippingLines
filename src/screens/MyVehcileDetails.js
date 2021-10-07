@@ -236,7 +236,7 @@ const [data, setdata] = useState([
 // }
 
 const callingVehicledetailedApi = () =>{
-
+setspinner(true)
   fetch(AppUrlCollection.VEHICLE_DETAIL  + item.id, {
     method: 'GET',
     headers: {
@@ -248,15 +248,26 @@ const callingVehicledetailedApi = () =>{
     .then((responseJson) => {
         console.log(responseJson)
 
+        setspinner(false)
 
       
         if (responseJson.status == 'SUCCESS') {
             setDetails(responseJson.data) 
-            
+            let data = responseJson.data
+            if (data.photo_urls != undefined && data.photo_urls != null) {
+              // setimg(responseJson.data.vehicle.images)
+              for (let index = 0; index < data.photo_urls.length; index++) {
+                  const element = data.photo_urls[index];
+                  images.push(element)
+                  console.log(element);
+              }
+            }
             
            }
     })
     .catch((error) => {
+      setspinner(false)
+
         console.warn(error)
     });
 
@@ -266,7 +277,6 @@ const callingVehicledetailedApi = () =>{
 useEffect(() => {
 
   callingVehicledetailedApi()
-
   if (item.photo_urls != undefined && item.photo_urls != null) {
     // setimg(responseJson.data.vehicle.images)
     for (let index = 0; index < item.photo_urls.length; index++) {
@@ -274,60 +284,16 @@ useEffect(() => {
         images.push(element)
         console.log(element);
     }
+  }
   
-    
 
-  }
-//   else{
+  const willFocusSubscription = navigation.addListener('focus', () => {
+    callingVehicledetailedApi();
+});
 
-//     for (let index = 0; index < vehicleDetails.images.length; index++) {
-//       const element = vehicleDetails.images[index];
-//       images.push(baseImagePath + element.thumbnail)
-//       console.log('Image vehicle :;; ', baseImagePath + element.thumbnail)
-//   }
-// }
-
-//   setspinner(true)
-//   // setInterval(() => {
-
-//   //   setspinner(false)
-//   //   // this.setState({
-//   //   //   spinner: !this.state.spinner
-//   //   // });
-//   // }, 100);
-//   if(type === 'Containers'){
-//     setExport(true)
-//   }
-//   setvehicleDetails(datapre)
-
-// console.warn(baseImagePath);
-
-  // setimages(vehicleDetails.images)
-  // console.warn('length of img'+ images);
-  // if (datapre != undefined && datapre.images != undefined) {
-  //   for (let index = 0; index < datapre.images.length; index++) {
-  //       const element = datapre.images[index];
-  //       images.push(baseImagePath + element.thumbnail)
-  //       console.log('Image vehicle :;; ', baseImagePath + element.thumbnail)
-  //   }
-  //   setspinner(false)
-
-  // }else if(datapre != undefined && datapre.exportImages != undefined) {
-  //   console.warn(datapre.exportImages.length);
-  //   for (let index = 0; index < datapre.exportImages.length; index++) {
-  //     const element = datapre.exportImages[index];
-  //     images.push(baseImagePath + element.thumbnail)
-  //     console.log('Image vehicle :;; ', baseImagePath + element.thumbnail)
-  // }
-  // setspinner(false)
-
-  // }
-  // setspinner(false)
+return willFocusSubscription;
 
 
-  return () => {
-    
-  }
 }, [])
 
 
@@ -338,7 +304,11 @@ return (
    
   <SafeAreaView style={{ flex: 1, backgroundColor: 'white', height: deviceHeight, }}>
  
- 
+ <Spinner
+          visible={spinner}
+          textContent={'Loading...'}
+          textStyle={{ color: '#FFF'}}
+        />
   <RBSheet
                     ref={refRBSheet}
                     closeOnDragDown={true}
@@ -515,7 +485,7 @@ return (
 
  <SliderBox 
  
- images={images.length>0 ?images:dummyimages}
+ images={images.length > 0 ?images:dummyimages}
  sliderBoxHeight={210}
           
           dotColor="#FFEE58"
@@ -564,7 +534,7 @@ return (
           </View>
 
           <View style={{width:'55%'}}>
-          <Text style={{color:'white'}}>{item.vin}</Text>
+          <Text style={{color:'white'}}>{Details.vin}</Text>
           </View>
 
         </View>
@@ -582,30 +552,30 @@ return (
 
 <View style={{width:'100%',flexDirection:'column', borderBottomWidth:0.3,paddingVertical:5,borderColor:'#B3B6B7', justifyContent:'space-between'}}>
 <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>CUSTOMER </Text>
-<Text style={{color:'grey',paddingVertical:2, fontSize:14,}}>{item.customer_name}</Text>
+<Text style={{color:'grey',paddingVertical:2, fontSize:14,}}>{Details.customer_name}</Text>
 </View>
 
 
 <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5, borderColor:'#B3B6B7', justifyContent:'space-between'}}>
 <Text style={{color:'black',paddingVertical:2, fontWeight:'bold',fontSize:14,}}>LOT NUMBER </Text>
-<Text style={{color:'grey',paddingVertical:2, fontSize:14,}}>{item.lot_number}</Text>
+<Text style={{color:'grey',paddingVertical:2, fontSize:14,}}>{Details.lot_number}</Text>
 </View>
 
 <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
 <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>MAKE</Text>
-<Text style={{color:'grey',paddingVertical:2, fontSize:14,}}>{item.make}</Text>
+<Text style={{color:'grey',paddingVertical:2, fontSize:14,}}>{Details.make}</Text>
 </View>
 
 
 <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5, borderColor:'#B3B6B7', justifyContent:'space-between'}}>
 <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>MODEL </Text>
-<Text style={{color:'grey',paddingVertical:2, fontSize:14,}}>{item.model}</Text>
+<Text style={{color:'grey',paddingVertical:2, fontSize:14,}}>{Details.model}</Text>
 </View>
 
 
 <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
 <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>YEAR </Text>
-<Text style={{color:'grey',paddingVertical:2, fontSize:14,}}>{item.year}</Text>
+<Text style={{color:'grey',paddingVertical:2, fontSize:14,}}>{Details.year}</Text>
 </View>
 
 

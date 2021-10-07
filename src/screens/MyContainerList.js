@@ -168,25 +168,25 @@ const [vin , setvin] = useState(true)
   } 
 
   const  renderVehicle = ({ item, index }) => {
-    var img = [];
+    // var img = [];
 
-    if (item.container_images != undefined && item.container_images != null) {
-      // setimg(responseJson.data.vehicle.images)
-      if(item.container_images.length > 8){
-        for (let index = 0; index < 8; index++) {
-          const element = item.container_images[index];
-          img.push(element)
-          console.log(element);
-      }
-      }else{
-        for (let index = 0; index < item.container_images.length; index++) {
-          const element = item.container_images[index];
-          img.push(element)
-          console.log(element);
-      }
-      }
+    // if (item.container_images != undefined && item.container_images != null) {
+    //   // setimg(responseJson.data.vehicle.images)
+    //   if(item.container_images.length > 8){
+    //     for (let index = 0; index < 8; index++) {
+    //       const element = item.container_images[index];
+    //       img.push(element)
+    //       console.log(element);
+    //   }
+    //   }else{
+    //     for (let index = 0; index < item.container_images.length; index++) {
+    //       const element = item.container_images[index];
+    //       img.push(element)
+    //       console.log(element);
+    //   }
+    //   }
   
-    }
+    // }
 
 
 
@@ -205,7 +205,7 @@ const [vin , setvin] = useState(true)
       onPress={()=>navigation.navigate('MyContainerDetails',{'item':item})}
       >
  
- <SliderBox 
+ {/* <SliderBox 
           images={img}
           sliderBoxHeight={160}
           
@@ -224,7 +224,7 @@ const [vin , setvin] = useState(true)
           resizeMode={'cover'}
   circleLoop
   ImageComponentStyle={{borderTopLeftRadius:10 ,width:'95%',marginLeft:-21,}}
-        />
+        /> */}
  
  <View style={{width:'94%',flexDirection:'row', justifyContent:'space-between',marginVertical:5, alignSelf:'center'}}>
 <View style={{width:'45%'}}>
