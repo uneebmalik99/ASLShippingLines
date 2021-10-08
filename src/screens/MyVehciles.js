@@ -187,13 +187,13 @@ shadowOffset: {
 	height: 2,
 },
 shadowOpacity: 0.25,
-shadowRadius: 3.84,
+shadowRadius: 7.84,
 
 elevation: 5,
       
-      backgroundColor:'white',borderTopLeftRadius:10 , borderBottomRightRadius:10,  marginTop:15, borderWidth:0.3,borderColor:AppColors.toolbarColor, flexDirection:'column'}}
+      backgroundColor:'white',borderTopLeftRadius:2 , borderBottomRightRadius:2,  marginTop:15, borderWidth:0,borderColor:AppColors.toolbarColor, flexDirection:'column'}}
       
-      onPress={()=>navigation.navigate('MyVehicleDetails', {'item' : item})}
+      onPress={()=>{navigation.navigate('MyVehicleDetails', {'item' : item}), setvehicleList('')}}
       >
 
  <SliderBox 

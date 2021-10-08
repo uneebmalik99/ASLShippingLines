@@ -200,9 +200,9 @@ const [vin , setvin] = useState(true)
       shadowOpacity: 0.25,
       shadowRadius: 3.84,
       
-      elevation: 5,   backgroundColor:'white',borderTopLeftRadius:10 , borderBottomRightRadius:10,  marginTop:15,  borderWidth:0.3,borderColor:AppColors.toolbarColor, flexDirection:'column'}}
+      elevation: 5,   backgroundColor:'white',borderTopLeftRadius:2 , borderBottomRightRadius:2,  marginTop:15,  borderWidth:0,borderColor:AppColors.toolbarColor, flexDirection:'column'}}
       
-      onPress={()=>navigation.navigate('MyContainerDetails',{'item':item})}
+      onPress={()=> {navigation.navigate('MyContainerDetails',{'item':item} , setvehicleList('') )}}
       >
  
  {/* <SliderBox 
@@ -226,6 +226,11 @@ const [vin , setvin] = useState(true)
   ImageComponentStyle={{borderTopLeftRadius:10 ,width:'95%',marginLeft:-21,}}
         /> */}
  
+
+ {item.thumbnail.length > 0 ?
+                    <Image style={{ width: '100%', height: 210, flex: 1 }} source={{ uri: item.thumbnail }} /> :
+                    <Image style={{ width: '100%', height: 210, flex: 1 }} source={require('../Images/logo_final.png')} />}
+
  <View style={{width:'94%',flexDirection:'row', justifyContent:'space-between',marginVertical:5, alignSelf:'center'}}>
 <View style={{width:'45%'}}>
 <Text style={{paddingVertical:2,fontWeight:'500'}}>AR no:</Text>

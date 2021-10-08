@@ -517,15 +517,7 @@ return (
   ImageComponentStyle={{ width: '100%', marginTop: 0}}
 
         />
-{/* 
-<View style={{marginTop:-65, height:35,width:35, marginBottom:30,alignSelf:'flex-end',justifyContent:'center', marginRight:20,}}>
-  <TouchableOpacity 
-          onPress={() => refRBSheet.current.open()}
-          style={{backgroundColor:'grey' , borderRadius: 50,height:'100%',width:'100%',  justifyContent:'center', }}>
-  <Text style={{color:'white', alignSelf:'center'}}>+</Text>
 
-  </TouchableOpacity>
-</View> */}
 
 
         <View style={{width:'100%',flexDirection:'row',paddingVertical:10, paddingHorizontal:10, backgroundColor:'#2C3E50', justifyContent:'center', alignSelf:'center'}}>
@@ -543,8 +535,8 @@ return (
 <View style={{flexDirection:'column',justifyContent:'center',backgroundColor:'#F2F3F4',   shadowColor: 'grey',
     shadowOffset: { width: 3, height: 3 },
     shadowOpacity: 0.6,
-    shadowRadius: 1,
-    elevation: 5,alignSelf:'center',borderRadius:10,borderWidth:0.2, marginTop:10,paddingHorizontal:10, width:'95%',}} >
+    shadowRadius: 10,
+    elevation: 1,alignSelf:'center',borderRadius:1,borderWidth:0.1, marginTop:12,paddingHorizontal:10, width:'95%',}} >
 
 
 

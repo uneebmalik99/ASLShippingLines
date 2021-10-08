@@ -14,7 +14,8 @@ import {
   Modal,
   Image,
   Dimensions,
-  Alert
+  Alert,
+  Platform
 } from 'react-native';
 import { Icon} from 'react-native-elements'
 import AppColors from '../Colors/AppColors';
@@ -42,10 +43,14 @@ import ActionButton from 'react-native-action-button';
 // import BarcodeScanner from 'react-native-scan-barcode';
 import ImagePicker from 'react-native-image-crop-picker';
 import DatePicker from 'react-native-datepicker'
+import QRCodeScanner from 'react-native-qrcode-scanner';
 
 const dummyimages = [
   require('../Images/noimage3.jpeg')      
  ];
+
+
+
 
 const EditVehicle = ({route, navigation }) => {
   const refRBSheet = useRef();
@@ -222,7 +227,7 @@ const TakePhoto = async() => {
 
 };
 
-searchFilterFunction = (text) => {
+const searchFilterFunction = (text) => {
   if (text) {
 
     const newData = Customerlist.filter(
@@ -1486,31 +1491,42 @@ onPress={()=> setcustmodal(false) }
             style={{
               flex: 1,
               justifyContent: 'center',
-              paddingVertical: 10,
+              paddingVertical: 40,
               height:deviceHeight,
-              backgroundColor:'#0005',
+              backgroundColor:'white',
               flexDirection: 'column',
               alignItems: 'center',
+              width:deviceWidth
             }}>
-            <View
-              style={{
-                width: '65%',
-                flexDirection: 'column',
-                backgroundColor:'white',
-                borderRadius:15,
-              }}>
-    
-    {/* <BarcodeScanner
-        onBarCodeRead={barcodeReceived}
-        style={{ flex: 1 }}
-        torchMode={torchMode}
-        cameraType={cameraType}
-      /> */}
+            
+            <View style={{width:'100%', paddingHorizontal:30, marginTop:30}}>
+
+            <TouchableOpacity
+            onPress={()=> {setbarcodemodal(false)}}
+            style={{alignSelf:'flex-end'}}>
+            <MaterialCommunityIcons color='red'  name='close-circle-outline' size={30}/>
+            </TouchableOpacity>
+            </View>
+
+    <QRCodeScanner
+        onRead={(e)=> {setvin(e.data); setbarcodemodal(false)}}
+        // flashMode={RNCamera.Constants.FlashMode.torch}
+        topContent={
+          <Text style={styles.centerText}>
+            Go to{' '}
+            <Text style={styles.textBold}>wikipedia.org/wiki/QR_code</Text> on
+            your computer and scan the QR code.
+          </Text>
+        }
+        bottomContent={
+          <TouchableOpacity style={styles.buttonTouchable}>
+            <Text style={styles.buttonText}>OK. Got it!</Text>
+          </TouchableOpacity>
+        }
+        />
         
             
             </View>
-         
-          </View>
         </Modal>
 
         <Modal
@@ -1618,7 +1634,6 @@ onPress={()=> setcustmodal(false) }
        </View>
 
        :null}
-<View style={{marginTop:-100, width:deviceWidth, paddingHorizontal:50, height:35,width:35, marginBottom:30,alignSelf:'flex-end',justifyContent:'center', }}>
   {/* <TouchableOpacity 
           onPress={() => refRBSheet.current.open()}
           style={{backgroundColor:'grey' , borderRadius: 50,height:'100%',width:'100%',  justifyContent:'center', }}>
@@ -1628,24 +1643,22 @@ onPress={()=> setcustmodal(false) }
 
 
 
-{add == true ?
- <ActionButton position='left'  size={43} buttonColor="rgba(271,74,60,1)">
- <ActionButton.Item buttonColor='#9b59b6'  size={33} onPress={() => {chooseFile('photo')}}>
+{/* {add == true ? */}
+ <ActionButton position='left' style={{marginLeft:deviceWidth-105,height:'95%', width:'90%',}} size={40} buttonColor="rgba(231,76,60,1)">
+ <ActionButton.Item buttonColor='#9b59b6'   size={30} onPress={() => {chooseFile('photo')}}>
    <Ionicons name="ios-images-outline" size={20} style={styles.actionButtonIcon} />
  </ActionButton.Item>
- <ActionButton.Item buttonColor='#3498db' size={33} onPress={() => {}}>
+ <ActionButton.Item buttonColor='#3498db' size={30} onPress={() => {requestExternalWritePermission()}}>
  <Ionicons name="ios-camera-outline" size={20} style={styles.actionButtonIcon} />
  </ActionButton.Item>
 
 </ActionButton>
-:
-null
+{/* : null } */}
 
-}
 
  
 
-</View>
+
 
 
 </View>
@@ -1653,20 +1666,20 @@ null
   
 
 
-    <View style={{width:'100%',flexDirection:'row',marginTop:2, paddingVertical:10, paddingHorizontal:10, backgroundColor:'#2C3E50', justifyContent:'center', alignSelf:'center'}}>
-              <View style={{width:'20%', }}>
-              <Text style={{color:'white'}}>VIN #:</Text>
+    <View style={{width:'100%',flexDirection:'row',marginTop:2, paddingVertical:Platform.OS == 'ios' ? 10:  0, paddingHorizontal:10, backgroundColor:'#2C3E50', justifyContent:'center', alignSelf:'center'}}>
+              <View style={{width:'20%', alignSelf:'center'}}>
+              <Text style={{color:'white', alignSelf:'center'}}>VIN #:</Text>
               </View>
 
               <View style={{width:'50%'}}>
                 <TextInput 
                 style={{color:'white'}}
                 placeholderTextColor='#D0D3D4'
-                placeholder={item.vin == '' ? 'Enter VIN or scan':item.vin}
+                placeholder={vin == '' ? 'Enter VIN or scan':vin}
                 onChangeText={(text)=> {setvin(text)}}
                 />
               </View>
-              <View style={{width:'20%'}}>
+              <View style={{alignSelf:'center', width:'20%'}}>
                 <TouchableOpacity 
                 onPress={()=> {setbarcodemodal(true)}}
                 style={{alignSelf:'flex-end'}}
@@ -1682,7 +1695,7 @@ null
         shadowOffset: { width: 3, height: 3 },
         shadowOpacity: 0.6,
         shadowRadius: 1,
-        elevation: 5,alignSelf:'center',borderRadius:10,borderWidth:0.2, marginTop:10,paddingHorizontal:10, width:'95%',}} >
+        elevation: 5,alignSelf:'center',borderRadius:1,borderWidth:0.2,marginBottom:15, marginTop:10,paddingHorizontal:10, width:'95%',}} >
 
 
 
@@ -1969,7 +1982,22 @@ null
 
     </View>
 
-
+    {/* <QRCodeScanner
+        onRead={()=> {}}
+        // flashMode={RNCamera.Constants.FlashMode.torch}
+        topContent={
+          <Text style={styles.centerText}>
+            Go to{' '}
+            <Text style={styles.textBold}>wikipedia.org/wiki/QR_code</Text> on
+            your computer and scan the QR code.
+          </Text>
+        }
+        bottomContent={
+          <TouchableOpacity style={styles.buttonTouchable}>
+            <Text style={styles.buttonText}>OK. Got it!</Text>
+          </TouchableOpacity>
+        }
+        /> */}
     <View style={{flexDirection:'column',  marginLeft:10, width:'60%' }}>
       
       <TouchableOpacity 
@@ -2281,8 +2309,6 @@ null
             onPress={() => setpictures('1')}
           />
     </View> */}
-
-
 
     <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
     <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>TITLE NUMBER</Text>
@@ -2897,6 +2923,22 @@ const styles = StyleSheet.create({
     alignSelf:'center',
     color:'white'
   },
-
+centerText: {
+    flex: 1,
+    fontSize: 18,
+    padding: 32,
+    color: '#777'
+  },
+  textBold: {
+    fontWeight: '500',
+    color: '#000'
+  },
+  buttonText: {
+    fontSize: 21,
+    color: 'rgb(0,122,255)'
+  },
+  buttonTouchable: {
+    padding: 16
+  }
 
   })

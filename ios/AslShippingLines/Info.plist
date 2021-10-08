@@ -40,18 +40,16 @@
 
 	 
 
-    <key>NSPhotoLibraryAddUsageDescription</key>
-	<key>NSCameraUsageDescription </key>
+	<key>NSCameraUsageDescription</key>
 	<string> ASLshipping  would like to use your camera</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>App needs Microphone Access Permission for testing
-</string>
+	<string>App needs Microphone Access Permission for testing</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Allow ASLshipping app to access Photos</string>
-	<key>Privacy – Camera Usage Description	</key>
-	<string>Allow ASLshipping app to access Camera</string>
+  <key>Privacy – Camera Usage Description</key>
+    <string>Allow ASLshipping app to access Camera</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>SimpleLineIcons.ttf</string>

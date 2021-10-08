@@ -13,7 +13,8 @@ import {
   TouchableOpacity,
   Modal,
   Image,
-  Dimensions
+  Dimensions,
+  Platform
 } from 'react-native';
 import AppColors from '../Colors/AppColors';
 import AppConstance, { deviceHeight, deviceWidth } from '../constance/AppConstance';
@@ -35,8 +36,9 @@ import ActionButton from 'react-native-action-button';
 import RBSheet from "react-native-raw-bottom-sheet";
 import { Slider } from 'react-native-elements/dist/slider/Slider';
 import AppUrlCollection from '../UrlCollection/AppUrlCollection';
-// import {launchCamera, launchImageLibrary}  from 'react-native-image-picker';
-import ImagePicker from 'react-native-image-crop-picker';
+import * as ImagePicker from "react-native-image-picker"
+
+import ImageCropPicker from 'react-native-image-crop-picker';
 import DocumentPicker from 'react-native-document-picker'
 // import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 // import ImagePicker from 'react-native-image-picker';
@@ -61,43 +63,249 @@ const MyContainerDetails = ({route, navigation }) => {
   const [deletemodalshow ,setdeletemodalshow] =useState(false)
   const [add , setadd] = useState(true)
   const [imgposition, setimgposition] = useState(0)
-  const [images , setimages] = useState([])
+  const [images , setimages] = useState([
+    require('../Images/noimage3.jpeg') 
+     
+
+  ])
+  const [IMG , setIMG] = useState(1)
   const [showimagemodel ,setshowimagemodel] = useState(false)
   const[spinner , setspinner ] = useState(false)
   const [imagesurls ,setimagesurls ] = useState([])
   const [ images2 , setimages2] = useState([])
 
+
+
+// for android camera
+
+  const captureImage = async (type) => {
+    let options = {
+      
+      quality: 0.8,
+      videoQuality: 'low',
+      durationLimit: 30, //Video max duration in seconds
+      saveToPhotos: true,
+    };
+    let isCameraPermitted = await requestCameraPermission();
+    let isStoragePermitted = await requestExternalWritePermission();
+    if (isCameraPermitted && isStoragePermitted) {
+      ImagePicker.launchCamera(options, (response) => {
+        console.log('Response = ', response);
+
+        if (response.didCancel) {
+          // alert('User cancelled camera picker');
+          return;
+        } else if (response.errorCode == 'camera_unavailable') {
+          alert('Camera not available on device');
+          return;
+        } else if (response.errorCode == 'permission') {
+          alert('Permission not satisfied');
+          return;
+        } else if (response.errorCode == 'others') {
+          alert(response.errorMessage);
+          return;
+        }else{
+
+
+          let temp = {} ;
+          temp.name = response.assets[0].fileName;
+          temp.size = response.assets[0].fileSize;
+          temp.type = response.assets[0].type;
+          temp.url = response.assets[0].uri;
+
+          images.push(response.assets[0])
+            alert(JSON.stringify(temp))
+      var value = new FormData();
+      value.append('file',{uri:response.assets[0].uri,
+           name:response.assets[0].fileName,
+           type:response.assets[0].type
+         });
+
+         setspinner(true)
+
+          fetch(AppUrlCollection.EXPORT_DETAIL + item.id +'/photos-upload', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+                'Accept': 'application/json'
+            },
+            body: value,
+                       
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+              // alert(JSON.stringify(responseJson))
+              // console.log(responseJson.data);
+              console.log(responseJson);
+              imagesurls.push(responseJson.data)
+              alert(JSON.stringify(responseJson))
+              // alert(JSON.stringify(responseJson))
+              console.log(responseJson.data+'images urll is '+imagesurls);
+
+              setspinner(false)
+               
+            })
+            .catch((error) => {
+              alert(error)
+              setspinner(false)
+                console.warn(error)
+            });
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        }
+
+
+
+
+        // console.log('base64 -> ', response.base64);
+        // console.log('uri -> ', response.uri);
+        // console.log('width -> ', response.width);
+        // console.log('height -> ', response.height);
+        // console.log('fileSize -> ', response.fileSize);
+        // console.log('type -> ', response.type);
+        // console.log('fileName -> ', response.fileName);
+        // setFilePath(response);
+      });
+    }
+  };
+// for android image pick from library
+  const selectFile3 = async () => {
+    try {
+      const results = await DocumentPicker.pickMultiple({
+        type: [DocumentPicker.types.images],
+        
+        //There can me more options as well find above
+      });
+  
+  console.log('-----'+JSON.stringify(results));
+
+
+      for (const res of results) {
+        //Printing the log realted to the file
+        console.log('res : ' + JSON.stringify(res));
+        console.log('URI : ' + res.uri);
+        console.log('Type : ' + res.type);
+        
+        
+        console.log('File Name : ' + res.name);
+        console.log('File Size : ' + res.size);
+    
+  
+  
+        var i ;
+        // for( i =0; i< images1.length; i++){
+
+          
+          images.push(res)
+          // alert(JSON.stringify(temp))
+
+      var value = new FormData();
+    
+         value.append('file',res);
+
+         setspinner(true)
+
+          fetch(AppUrlCollection.EXPORT_DETAIL + item.id +'/photos-upload', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+                'Accept': 'application/json'
+            },
+            body: value,
+                       
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+              // alert(JSON.stringify(responseJson))
+              // console.log(responseJson.data);
+              console.log(responseJson);
+              imagesurls.push(responseJson.data)
+              console.log('images urll is '+imagesurls);
+
+              setspinner(false)
+               
+            })
+            .catch((error) => {
+              alert(error)
+              setspinner(false)
+                console.warn(error)
+            });
+       
+        // }  
+              // console.log(JSON.stringify(res));
+      }
+
+  
+  
+    } catch (err) {
+      setspinner(false)
+  
+      //Handling any exception (If any)
+      if (DocumentPicker.isCancel(err)) {
+        //setopener(false)
+  
+        //If user canceled the document selection
+        // alert('Canceled from multiple doc picker');
+      } else {
+       // setopener(false)
+  
+        //For Unknown Error
+        alert('Unknown Error: ' + JSON.stringify(err));
+        throw err;
+      }
+    }
+  
+  
+  };
   
 
 
+const TakePhoto = async() => {
 
-  const TakePhoto = async() => {
-
-    ImagePicker.openCamera({
-          multiple: true,
+  ImageCropPicker.openCamera({
+     
           compressImageQuality:0.7
         }).then(images1 => {
       
-          var i ;
-          for( i =0; i< images1.length; i++){
+          console.log(images1);
+        
   
             let temp = {} ;
-            temp.name = images1[i].filename;
-            temp.size = images1[i].size;
-            temp.type = images1[i].mime;
-            temp.url = images1[i].path;
+            temp.name = images1.filename;
+            temp.size = images1.size;
+            temp.type = images1.mime;
+            temp.url = images1.path;
   
             images.push(temp)
   
         var value = new FormData();
-        value.append('file',{uri:images1[i].path ,
-             name:images1[i].filename,
-             type:images1[i].mime
+        value.append('file',{uri:images1.path ,
+            //  name:images1.filename,
+             type:images1.mime
            });
   
            setspinner(true)
   
-            fetch(AppUrlCollection.VEHICLE_DETAIL + item.id +'/photos-upload', {
+            fetch(AppUrlCollection.EXPORT_DETAIL + item.id +'/photos-upload', {
               method: 'POST',
               headers: {
                   'Content-Type': 'multipart/form-data',
@@ -113,8 +321,9 @@ const MyContainerDetails = ({route, navigation }) => {
                 // console.log(responseJson.data);
                 console.log(responseJson);
                 imagesurls.push(responseJson.data)
+                alert(JSON.stringify(responseJson))
                 // alert(JSON.stringify(responseJson))
-                console.log('images urll is '+imagesurls);
+                console.log(responseJson.data+'images urll is '+imagesurls);
   
                 setspinner(false)
                  
@@ -125,14 +334,14 @@ const MyContainerDetails = ({route, navigation }) => {
                   console.warn(error)
               });
          
-          }      
+              
   
         });
   
-  };
+};
 
 const requestCameraPermission = async () => {
-  if (Platform.OS === 'android') {
+    
     try {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.CAMERA,
@@ -143,14 +352,16 @@ const requestCameraPermission = async () => {
       );
       // If CAMERA Permission is granted
        granted === PermissionsAndroid.RESULTS.GRANTED;
-       TakePhoto()
+      //  launchCameraAndroid()
+      //  captureImage()
+              // addEventListener('camera')
+              return true;
+
     } catch (err) {
       console.warn(err);
       return false;
     }
-  } else {
-    TakePhoto()
-  }
+   
 };
 
 const requestExternalWritePermission = async () => {
@@ -164,36 +375,34 @@ const requestExternalWritePermission = async () => {
         },
       );
       // If WRITE_EXTERNAL_STORAGE Permission is granted
-      if(granted === PermissionsAndroid.RESULTS.GRANTED){
-        requestCameraPermission()
+      granted === PermissionsAndroid.RESULTS.GRANTED
 
-      };
+        return true;
+
     } catch (err) {
       console.warn(err);
       alert('Write permission err', err);
     }
     return false;
-  } else{
-    requestCameraPermission()
-
   }
 };
 
 const chooseFile = async() => {
-  ImagePicker.openPicker({
+  ImageCropPicker.openPicker({
         multiple: true,
         compressImageQuality:0.7
       }).then(images1 => {
-    
+    console.log(JSON.stringify(images1));
         var i ;
         for( i =0; i< images1.length; i++){
 
           let temp = {} ;
+         
           temp.name = images1[i].filename;
           temp.size = images1[i].size;
           temp.type = images1[i].mime;
           temp.url = images1[i].path;
-
+          console.log(images1[i].size);
           images.push(temp)
 
       var value = new FormData();
@@ -357,7 +566,6 @@ const chooseFile = async() => {
   
 };
 
-
 const deleteimage = () =>{
   // setspinner(true)
   let pos = imgposition;
@@ -413,45 +621,44 @@ if(images2 != null){
 array.container_images = images2
 }
 
-
-  fetch(AppUrlCollection.EXPORT_DETAIL + item.id, {
-    method: 'PUT',
-    headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
-    },
+alert(JSON.stringify(array))
+//   fetch(AppUrlCollection.EXPORT_DETAIL + item.id, {
+//     method: 'PUT',
+//     headers: {
+//         'Content-Type': 'application/json',
+//         'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+//     },
     
-    body: JSON.stringify(array)
+//     body: JSON.stringify(array)
     
    
-})
-    .then((response) =>  response.json())
-    .then((responseJson) => {
-      setspinner(false)
-      AppConstance.showSnackbarMessage(responseJson.message)
+// })
+//     .then((response) =>  response.json())
+//     .then((responseJson) => {
+//       setspinner(false)
+//       AppConstance.showSnackbarMessage(responseJson.message)
 
-      ImagePicker.clean().then(() => {
-        console.log('removed all tmp images from tmp directory');
-      }).catch(e => {
-        alert(e);
-      });
+//       ImagePicker.clean().then(() => {
+//         console.log('removed all tmp images from tmp directory');
+//       }).catch(e => {
+//         alert(e);
+//       });
       
-        console.log('export detail ', responseJson)
+//         console.log('export detail ', responseJson)
        
-    })
-    .catch((error) => {
-      alert(error)
-      setspinner(false)
-        console.warn(error)
-    });
+//     })
+//     .catch((error) => {
+//       alert(error)
+//       setspinner(false)
+//         console.warn(error)
+//     });
 
 
   }
 
   const callingContainerDetailsApi = () =>{
 
-    setimages2(item.container_images)
-
+    setspinner(true)
     fetch(AppUrlCollection.EXPORT_DETAIL + item.id, {
     method: 'GET',
     headers: {
@@ -463,8 +670,22 @@ array.container_images = images2
     .then((response) => response.json())
     .then((responseJson) => {
       setexport_details(responseJson.data.export_details)
+      setspinner(false)
+      if (responseJson.data.export_details.container_images != undefined && responseJson.data.export_details.container_images != null ) {
+        // setimg(responseJson.data.vehicle.images)
+       images.pop()
+        for (let index = 0; index < responseJson.data.export_details.container_images.length; index++) {
+            const element = responseJson.data.export_details.container_images[index].url;
+            images.push(element)
+            console.log(element);
+            setimages2(element)
+        }
+        
+     
 
-        console.log('export detail ', responseJson.data.export_details)
+      }
+
+
        
     })
     .catch((error) => {
@@ -479,17 +700,17 @@ useEffect(() => {
 
 callingContainerDetailsApi()
 
-  if (item.container_images != undefined && item.container_images != null ) {
-    // setimg(responseJson.data.vehicle.images)
-    for (let index = 0; index < item.container_images.length; index++) {
-        const element = item.container_images[index];
-        images.push(element)
-        console.log(element);
-    }
+  // if (item.container_images != undefined && item.container_images != null ) {
+  //   // setimg(responseJson.data.vehicle.images)
+  //   for (let index = 0; index < item.container_images.length; index++) {
+  //       const element = item.container_images[index];
+  //       images.push(element)
+  //       console.log(element);
+  //   }
 
-  }else{
+  // }else{
     
-  }
+  // }
     
   return () => {
     
@@ -627,10 +848,12 @@ return (
  
 
 
- <View>
+ <View style={{width:deviceWidth}}>
 
  <SliderBox 
-          images={images.length>0 ?images:dummyimages}
+          // images={images.length>0 ?images:dummyimages}
+
+          images={images}
           sliderBoxHeight={260}          
           dotColor="#FFEE58"
   inactiveDotColor="#90A4AE"
@@ -656,8 +879,8 @@ return (
           onCurrentImagePressed={index =>
           //setcurrentimg()
             // console.warn(`image ${index} pressed`)
-            // setshowimagemodel(true)
-            {}
+            setshowimagemodel(true)
+            
           }
   paginationBoxStyle={{
     alignItems: "center",
@@ -682,34 +905,22 @@ return (
        </View>
 
        :null}
-<View style={{marginTop:-100, width:deviceWidth, paddingHorizontal:50, height:35,width:35, marginBottom:30,alignSelf:'flex-end',justifyContent:'center', }}>
-  {/* <TouchableOpacity 
-          onPress={() => refRBSheet.current.open()}
-          style={{backgroundColor:'grey' , borderRadius: 50,height:'100%',width:'100%',  justifyContent:'center', }}>
-  <Text style={{color:'white', alignSelf:'center'}}>+</Text>
-
-  </TouchableOpacity> */}
-
-
 
 {add == true ?
- <ActionButton position='left'  size={40} buttonColor="rgba(231,76,60,1)">
- <ActionButton.Item buttonColor='#9b59b6'   size={30} onPress={() => {chooseFile('photo')}}>
+ <ActionButton position='left' style={{marginLeft:deviceWidth-105,height:'95%', width:'90%',}} size={40} buttonColor="rgba(231,76,60,1)">
+ <ActionButton.Item buttonColor='#9b59b6'   size={30}
+  onPress={() => {if(Platform.OS == 'ios'){ chooseFile('photo')}else{ selectFile3() }}}
+  >
    <Ionicons name="ios-images-outline" size={20} style={styles.actionButtonIcon} />
  </ActionButton.Item>
- <ActionButton.Item buttonColor='#3498db' size={30} onPress={() => {requestExternalWritePermission()}}>
+ <ActionButton.Item buttonColor='#3498db' size={30}
+ 
+ onPress={() => {if(Platform.OS == 'ios'){ TakePhoto('photo')}else{ captureImage() }}}>
  <Ionicons name="ios-camera-outline" size={20} style={styles.actionButtonIcon} />
  </ActionButton.Item>
 
 </ActionButton>
-:
-null
-
-}
-
- 
-
-</View>
+: null }
 
 
 </View>
@@ -721,7 +932,7 @@ null
     shadowOffset: { width: 3, height: 3 },
     shadowOpacity: 0.6,
     shadowRadius: 1,
-    elevation: 5,alignSelf:'center',borderRadius:10,borderWidth:0.2, marginTop:50,paddingHorizontal:10, width:'95%',}} >
+    elevation: 5,alignSelf:'center',borderRadius:10,borderWidth:0,marginBottom:15, marginTop:30,paddingHorizontal:10, width:'95%',}} >
 
 
 

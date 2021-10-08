@@ -746,7 +746,7 @@ justifyContent:"center",
                 borderRadius:10,
                 }}>
             <Text style={{alignSelf:'center' ,fontSize:16, textAlign:'center', color:AppColors.Signincolor}}>
-                    Custom
+                    Update Vehicle/Container
                 
                 </Text>
              
