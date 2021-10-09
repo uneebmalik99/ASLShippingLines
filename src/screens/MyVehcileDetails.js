@@ -44,200 +44,26 @@ const dummyimages = [
 const MyVehcileDetails = ({route, navigation }) => {
   const [vehicleDetails , setvehicleDetails] = useState([''])
 
-  const { item  } = route.params;
+  const { item } = route.params;
 
   const [imgpos, setimgpos] = useState(0)
   const[showimagemodel , setshowimagemodel] = useState(false)
   const [images , setimages] = useState([
-   
+    require('../Images/noimage3.jpeg') 
+
   ])
   const[spinner , setspinner ] = useState(false)
   const[SliderModel , setSliderModel] = useState(false)
-  const[Details , setDetails] = useState(item)
-
-  const showSnackbarMessage = () => {
-    setTimeout(() => {
-      Snackbar.show({
-        backgroundColor: '#008B8B',
-        title: 'Image Downloaded Successfully',
-        duration: Snackbar.LENGTH_SHORT,
-      });
-    }, 200);
-  };
-
-  const checkPermission = async (image) => {
-    
-    // Function to check the platform
-    // If iOS then start downloading
-    // If Android then ask for permission
-
-    if (Platform.OS === 'ios') {
-      downloadImage(image);
-    } else {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-          {
-            title: 'Storage Permission Required',
-            message:
-              'App needs access to your storage to download Photos',
-          }
-        );
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          // Once user grant the permission start downloading
-          console.log('Storage Permission Granted.');
-          downloadImage(image);
-        } else {
-          // If permission denied then show alert
-          alert('Storage Permission Not Granted');
-        }
-      } catch (err) {
-        // To handle permission related exception
-        console.warn(err);
-      }
-    }
-  };
+  const[Details , setDetails] = useState([])
+  const refRBSheet = useRef();
 
 
-  const downloadImage = (img) => {
-    // Main function to download the image
-    
-    // To add the time suffix in filename
-    let date = new Date();
-    // Image URL which we want to download
-    let image_URL = img;    
-    // Getting the extention of the file
-    let ext = getExtention(image_URL);
-    ext = '.' + ext[0];
-    // Get config and fs from RNFetchBlob
-    // config: To pass the downloading related options
-    // fs: Directory path where we want our image to download
-    const { config, fs } = RNFetchBlob;
-    let PictureDir = fs.dirs.PictureDir;
-    let options = {
-      fileCache: true,
-      addAndroidDownloads: {
-        // Related to the Android only
-        useDownloadManager: true,
-        notification: true,
-        path:
-          PictureDir +
-          '/image_' + 
-          Math.floor(date.getTime() + date.getSeconds() / 2) +
-          ext,
-        description: 'Image',
-      },
-    };
-    config(options)
-      .fetch('GET', image_URL)
-      .then(res => {
-        // Showing alert after successful downloading
-        console.log('res -> ', JSON.stringify(res));
-        showSnackbarMessage()
-        // alert('Image Downloaded Successfully.');
-      });
-  };
-
-
-const getExtention = filename => {
-  // To get the file extension
-  return /[.]/.exec(filename) ?
-           /[^.]+$/.exec(filename) : undefined;
-};
-
-const onShare = async () => {
-  try {
-    const result = await Share.share({
-      message:
-        'React Native | A framework for building native apps using React',
-    });
-
-    if (result.action === Share.sharedAction) {
-      if (result.activityType) {
-        // shared with activity type of result.activityType
-      } else {
-        // shared
-      }
-    } else if (result.action === Share.dismissedAction) {
-      // dismissed
-    }
-  } catch (error) {
-    alert(error.message);
-  }
-};
-
-const refRBSheet = useRef();
-
-
-const [width, setwidth] =useState('100%')
-  const [currentimg, setcurrentimg] = useState('')
-const [Export, setExport] = useState(false)
-const [data, setdata] = useState([
-  {
-    date: '20-12-2020',
-    Description: 'Description',
-    Lot:'473890',
-    N:'CA',
-
-  },
-  
-
-  {
-  date: '20-12-2020',
-    Description: 'Description',
-    Lot:'473890',
-    N:'CA',
-  },
-
-  {
-    date: '20-12-2020',
-    Description: 'Description',
-    Lot:'473890',
-    N:'CA',
-  },
-
-]
-)
-
-// const TakePhoto=()=>{
-//   ImageCropPicker.openCamera({
-//     width: 300,
-//     height: 400,
-//     cropping: false,
-//   }).then(image => {
-//     console.log(image1);
-//     refRBSheet.current.close()
-
-//     console.log(images1);
-//     console.log(images1.length);
-//     var i ;
-//     for (i = 0 ; i<images1.length ; i++){
-//       images.push(images1[i].sourceURL)
-//     }
-//   });
-// }
-
-
-// const Selectphoto = () =>{
-//   ImageCropPicker.openPicker({
-//     multiple: true
-//   }).then(images1 => {
-//     refRBSheet.current.close()
-
-//     console.log(images1);
-//     console.log(images1.length);
-//     var i ;
-//     for (i = 0 ; i<images1.length ; i++){
-//       images.push(images1[i].sourceURL)
-//     }
-
-
-//   });
-// }
 
 const callingVehicledetailedApi = () =>{
+  
+  // setDetails('')
 setspinner(true)
-  fetch(AppUrlCollection.VEHICLE_DETAIL  + item.id, {
+  fetch(AppUrlCollection.VEHICLE_DETAIL  + item, {
     method: 'GET',
     headers: {
         'Content-Type': 'application/json',
@@ -254,10 +80,11 @@ setspinner(true)
         if (responseJson.status == 'SUCCESS') {
             setDetails(responseJson.data) 
             let data = responseJson.data
-            if (data.photo_urls != undefined && data.photo_urls != null) {
+            if (data.photos != undefined && data.photos != null) {
+              images.pop()
               // setimg(responseJson.data.vehicle.images)
-              for (let index = 0; index < data.photo_urls.length; index++) {
-                  const element = data.photo_urls[index];
+              for (let index = 0; index < data.photos.length; index++) {
+                  const element = data.photos[index].url;
                   images.push(element)
                   console.log(element);
               }
@@ -277,21 +104,21 @@ setspinner(true)
 useEffect(() => {
 
   callingVehicledetailedApi()
-  if (item.photo_urls != undefined && item.photo_urls != null) {
-    // setimg(responseJson.data.vehicle.images)
-    for (let index = 0; index < item.photo_urls.length; index++) {
-        const element = item.photo_urls[index];
-        images.push(element)
-        console.log(element);
-    }
-  }
-  
+  // if (item.photo_urls != undefined && item.photo_urls != null) {
+  //   // setimg(responseJson.data.vehicle.images)
+  //   for (let index = 0; index < item.photo_urls.length; index++) {
+  //       const element = item.photo_urls[index];
+  //       images.push(element)
+  //       console.log(element);
+  //   }
+  // }
 
-  const willFocusSubscription = navigation.addListener('focus', () => {
-    callingVehicledetailedApi();
-});
+//   const willFocusSubscription = navigation.addListener('focus', () => {
+//     callingVehicledetailedApi();
+// });
 
-return willFocusSubscription;
+// return willFocusSubscription;
+
 
 
 }, [])
@@ -418,7 +245,7 @@ return (
                 <View style={{width:'10%',justifyContent:'center' }}>
               <TouchableOpacity style={{alignSelf:'center', justifyContent:'center'}}
               onPress={()=>{
-                navigation.navigate('EditVehicle',{'item': Details  })
+                navigation.navigate('EditVehicle',{'item': Details  }) 
               }}
               >
               <MaterialIcons  size={20} style={{alignSelf:'center'}} color='black' name='mode-edit'/>
@@ -485,7 +312,7 @@ return (
 
  <SliderBox 
  
- images={images.length > 0 ?images:dummyimages}
+ images={images}
  sliderBoxHeight={210}
           
           dotColor="#FFEE58"

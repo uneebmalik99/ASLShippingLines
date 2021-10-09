@@ -165,17 +165,36 @@ const MyVehicles = ({ navigation }) => {
 
     var img = [];
 
-    if (item.photo_urls != undefined && item.photo_urls != null) {
+    // if (item.photo_urls != undefined && item.photo_urls != null) {
+    //   // setimg(responseJson.data.vehicle.images)
+    //   for (let index = 0; index < item.photo_urls.length; index++) {
+    //       const element = item.photo_urls[index];
+    //       img.push(element)
+    //       console.log(element);
+    //   }
+    
+      
+  
+    // }
+
+    if (item.photo_urls.length > 0) {
       // setimg(responseJson.data.vehicle.images)
-      for (let index = 0; index < item.photo_urls.length; index++) {
+      if(item.photo_urls.length > 8){
+        for (let index = 0; index < 8; index++) {
           const element = item.photo_urls[index];
           img.push(element)
           console.log(element);
       }
-    
-      
+      }else{
+        for (let index = 0; index < item.photo_urls.length; index++) {
+          const element = item.photo_urls[index];
+          img.push(element)
+          console.log(element);
+      }
+    }
   
     }
+
 
   
     return(
@@ -193,7 +212,7 @@ elevation: 5,
       
       backgroundColor:'white',borderTopLeftRadius:2 , borderBottomRightRadius:2,  marginTop:15, borderWidth:0,borderColor:AppColors.toolbarColor, flexDirection:'column'}}
       
-      onPress={()=>{navigation.navigate('MyVehicleDetails', {'item' : item}), setvehicleList('')}}
+      onPress={()=>{navigation.navigate('MyVehicleDetails', {'item' : item.id}), setvehicleList('')}}
       >
 
  <SliderBox 

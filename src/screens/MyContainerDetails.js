@@ -70,6 +70,8 @@ const MyContainerDetails = ({route, navigation }) => {
   ])
   const [IMG , setIMG] = useState(1)
   const [showimagemodel ,setshowimagemodel] = useState(false)
+  const [ close , setclose] = useState(false)
+
   const[spinner , setspinner ] = useState(false)
   const [imagesurls ,setimagesurls ] = useState([])
   const [ images2 , setimages2] = useState([])
@@ -106,7 +108,10 @@ const MyContainerDetails = ({route, navigation }) => {
           return;
         }else{
 
-
+          if(images[0] == require('../Images/noimage3.jpeg')){
+            images.pop();
+            setclose(true)
+          }
           let temp = {} ;
           temp.name = response.assets[0].fileName;
           temp.size = response.assets[0].fileSize;
@@ -114,7 +119,7 @@ const MyContainerDetails = ({route, navigation }) => {
           temp.url = response.assets[0].uri;
 
           images.push(response.assets[0])
-            alert(JSON.stringify(temp))
+            // alert(JSON.stringify(temp))
       var value = new FormData();
       value.append('file',{uri:response.assets[0].uri,
            name:response.assets[0].fileName,
@@ -139,7 +144,7 @@ const MyContainerDetails = ({route, navigation }) => {
               // console.log(responseJson.data);
               console.log(responseJson);
               imagesurls.push(responseJson.data)
-              alert(JSON.stringify(responseJson))
+              // alert(JSON.stringify(responseJson))
               // alert(JSON.stringify(responseJson))
               console.log(responseJson.data+'images urll is '+imagesurls);
 
@@ -196,7 +201,10 @@ const MyContainerDetails = ({route, navigation }) => {
       });
   
   console.log('-----'+JSON.stringify(results));
-
+  if(images[0] == require('../Images/noimage3.jpeg')){
+    images.pop();
+    setclose(true)
+  }
 
       for (const res of results) {
         //Printing the log realted to the file
@@ -278,65 +286,175 @@ const MyContainerDetails = ({route, navigation }) => {
   };
   
 
-
-const TakePhoto = async() => {
-
-  ImageCropPicker.openCamera({
-     
-          compressImageQuality:0.7
-        }).then(images1 => {
+  const TakePhoto = async (type) => {
+    let options = {
       
-          console.log(images1);
+      quality: 0.8,
+      videoQuality: 'low',
+      durationLimit: 30, //Video max duration in seconds
+      saveToPhotos: true,
+    };
+    // let isCameraPermitted = await requestCameraPermission();
+    // let isStoragePermitted = await requestExternalWritePermission();
+    // if (isCameraPermitted && isStoragePermitted) {
+      ImagePicker.launchCamera(options, (response) => {
+        console.log('Response = ', response);
+
+        if (response.didCancel) {
+          // alert('User cancelled camera picker');
+          return;
+        } else if (response.errorCode == 'camera_unavailable') {
+          alert('Camera not available on device');
+          return;
+        } else if (response.errorCode == 'permission') {
+          alert('Permission not satisfied');
+          return;
+        } else if (response.errorCode == 'others') {
+          alert(response.errorMessage);
+          return;
+        }else{
+          if(images[0] == require('../Images/noimage3.jpeg')){
+            images.pop();
+            setclose(true)
+          }
+
+          let temp = {} ;
+          temp.name = response.assets[0].fileName;
+          temp.size = response.assets[0].fileSize;
+          temp.type = response.assets[0].type;
+          temp.url = response.assets[0].uri;
+
+          images.push(response.assets[0])
+            // alert(JSON.stringify(temp))
+      var value = new FormData();
+      value.append('file',{uri:response.assets[0].uri,
+           name:response.assets[0].fileName,
+           type:response.assets[0].type
+         });
+
+         setspinner(true)
+
+          fetch(AppUrlCollection.EXPORT_DETAIL + item.id +'/photos-upload', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+                'Accept': 'application/json'
+            },
+            body: value,
+                       
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+              // alert(JSON.stringify(responseJson))
+              // console.log(responseJson.data);
+              console.log(responseJson);
+              imagesurls.push(responseJson.data)
+              // alert(JSON.stringify(responseJson))
+              // alert(JSON.stringify(responseJson))
+              console.log(responseJson.data+'images urll is '+imagesurls);
+
+              setspinner(false)
+               
+            })
+            .catch((error) => {
+              alert(error)
+              setspinner(false)
+                console.warn(error)
+            });
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        }
+
+
+
+
+        // console.log('base64 -> ', response.base64);
+        // console.log('uri -> ', response.uri);
+        // console.log('width -> ', response.width);
+        // console.log('height -> ', response.height);
+        // console.log('fileSize -> ', response.fileSize);
+        // console.log('type -> ', response.type);
+        // console.log('fileName -> ', response.fileName);
+        // setFilePath(response);
+      });
+    
+  };
+const TakePhoto2 = async() => {
+
+  // ImageCropPicker.openCamera({
+   
+  //         compressImageQuality:0.7
+  //       }).then(images1 => {
+      
+  //         console.log(images1);
         
   
-            let temp = {} ;
-            temp.name = images1.filename;
-            temp.size = images1.size;
-            temp.type = images1.mime;
-            temp.url = images1.path;
+  //           let temp = {} ;
+  //           temp.name = images1.filename;
+  //           temp.size = images1.size;
+  //           temp.type = images1.mime;
+  //           temp.url = images1.path;
   
-            images.push(temp)
+  //           images.push(temp)
+  // alert(JSON.stringify(temp))
+  //       // var value = new FormData();
+  //       // value.append('file',{uri:images1.path ,
+  //       //      name:images1.filename,
+  //       //      type:images1.mime
+  //       //    });
   
-        var value = new FormData();
-        value.append('file',{uri:images1.path ,
-            //  name:images1.filename,
-             type:images1.mime
-           });
+  //       //    setspinner(true)
   
-           setspinner(true)
-  
-            fetch(AppUrlCollection.EXPORT_DETAIL + item.id +'/photos-upload', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'multipart/form-data',
-                  'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
-                  'Accept': 'application/json'
-              },
-              body: value,
+  //       //     fetch(AppUrlCollection.EXPORT_DETAIL + item.id +'/photos-upload', {
+  //       //       method: 'POST',
+  //       //       headers: {
+  //       //           'Content-Type': 'multipart/form-data',
+  //       //           'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+  //       //           'Accept': 'application/json'
+  //       //       },
+  //       //       body: value,
                          
-          })
-              .then((response) => response.json())
-              .then((responseJson) => {
-                // alert(JSON.stringify(responseJson))
-                // console.log(responseJson.data);
-                console.log(responseJson);
-                imagesurls.push(responseJson.data)
-                alert(JSON.stringify(responseJson))
-                // alert(JSON.stringify(responseJson))
-                console.log(responseJson.data+'images urll is '+imagesurls);
+  //       //   })
+  //       //       .then((response) => response.json())
+  //       //       .then((responseJson) => {
+  //       //         // alert(JSON.stringify(responseJson))
+  //       //         // console.log(responseJson.data);
+  //       //         console.log(responseJson);
+  //       //         imagesurls.push(responseJson.data)
+  //       //         // alert(JSON.stringify(responseJson))
+  //       //         // alert(JSON.stringify(responseJson))
+  //       //         console.log(responseJson.data+'images urll is '+imagesurls);
   
-                setspinner(false)
+  //       //         setspinner(false)
                  
-              })
-              .catch((error) => {
-                alert(error)
-                setspinner(false)
-                  console.warn(error)
-              });
+  //       //       })
+  //       //       .catch((error) => {
+  //       //         alert(error)
+  //       //         setspinner(false)
+  //       //           console.warn(error)
+  //       //       });
          
               
   
-        });
+  //       });
   
 };
 
@@ -388,10 +506,15 @@ const requestExternalWritePermission = async () => {
 };
 
 const chooseFile = async() => {
+  
   ImageCropPicker.openPicker({
         multiple: true,
         compressImageQuality:0.7
       }).then(images1 => {
+        if(images[0] == require('../Images/noimage3.jpeg')){
+          images.pop();
+          setclose(true)
+        }
     console.log(JSON.stringify(images1));
         var i ;
         for( i =0; i< images1.length; i++){
@@ -410,6 +533,8 @@ const chooseFile = async() => {
            name:images1[i].filename,
            type:images1[i].mime
          });
+
+        
 
          setspinner(true)
 
@@ -567,6 +692,10 @@ const chooseFile = async() => {
 };
 
 const deleteimage = () =>{
+  if(images.length == 0  ){
+    setclose(false)
+    images.push(require('../Images/noimage3.jpeg') )
+  }
   // setspinner(true)
   let pos = imgposition;
   console.log('---'+pos);
@@ -621,37 +750,37 @@ if(images2 != null){
 array.container_images = images2
 }
 
-alert(JSON.stringify(array))
-//   fetch(AppUrlCollection.EXPORT_DETAIL + item.id, {
-//     method: 'PUT',
-//     headers: {
-//         'Content-Type': 'application/json',
-//         'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
-//     },
+// alert(JSON.stringify(array))
+  fetch(AppUrlCollection.EXPORT_DETAIL + item.id, {
+    method: 'PUT',
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+    },
     
-//     body: JSON.stringify(array)
+    body: JSON.stringify(array)
     
    
-// })
-//     .then((response) =>  response.json())
-//     .then((responseJson) => {
-//       setspinner(false)
-//       AppConstance.showSnackbarMessage(responseJson.message)
+})
+    .then((response) =>  response.json())
+    .then((responseJson) => {
+      setspinner(false)
+      AppConstance.showSnackbarMessage(responseJson.message)
 
-//       ImagePicker.clean().then(() => {
-//         console.log('removed all tmp images from tmp directory');
-//       }).catch(e => {
-//         alert(e);
-//       });
+      ImageCropPicker.clean().then(() => {
+        console.log('removed all tmp images from tmp directory');
+      }).catch(e => {
+        alert(e);
+      });
       
-//         console.log('export detail ', responseJson)
+        console.log('export detail ', responseJson)
        
-//     })
-//     .catch((error) => {
-//       alert(error)
-//       setspinner(false)
-//         console.warn(error)
-//     });
+    })
+    .catch((error) => {
+      alert(error)
+      setspinner(false)
+        console.warn(error)
+    });
 
 
   }
@@ -671,18 +800,23 @@ alert(JSON.stringify(array))
     .then((responseJson) => {
       setexport_details(responseJson.data.export_details)
       setspinner(false)
-      if (responseJson.data.export_details.container_images != undefined && responseJson.data.export_details.container_images != null ) {
+      if (responseJson.data.export_details.container_images.length > 0 ) {
         // setimg(responseJson.data.vehicle.images)
+        setclose(true)
        images.pop()
         for (let index = 0; index < responseJson.data.export_details.container_images.length; index++) {
             const element = responseJson.data.export_details.container_images[index].url;
             images.push(element)
+            const element2 =  responseJson.data.export_details.container_images[index];
             console.log(element);
-            setimages2(element)
+            images2.push(element2)
+          
         }
-        
+        // setimages2(images)
      
 
+      }else{
+        setclose(false)
       }
 
 
@@ -700,17 +834,6 @@ useEffect(() => {
 
 callingContainerDetailsApi()
 
-  // if (item.container_images != undefined && item.container_images != null ) {
-  //   // setimg(responseJson.data.vehicle.images)
-  //   for (let index = 0; index < item.container_images.length; index++) {
-  //       const element = item.container_images[index];
-  //       images.push(element)
-  //       console.log(element);
-  //   }
-
-  // }else{
-    
-  // }
     
   return () => {
     
@@ -893,7 +1016,7 @@ return (
         />
        
 
-{images.length > 0?
+       {close == true ?
 
      <View style={{marginTop:15,position:'absolute',alignSelf:'flex-end', paddingHorizontal:40, }}>
     <TouchableOpacity

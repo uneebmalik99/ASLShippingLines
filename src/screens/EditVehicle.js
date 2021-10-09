@@ -32,16 +32,12 @@ import Snackbar from 'react-native-snackbar';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { TextInput } from 'react-native-gesture-handler';
 import Feather from  'react-native-vector-icons/dist/Feather'
-import RadioButtonRN from 'radio-buttons-react-native';
 import AppUrlCollection from '../UrlCollection/AppUrlCollection'
-import Animated, { cond } from 'react-native-reanimated';
-import RBSheet from "react-native-raw-bottom-sheet";
-// import ImageCropPicker from 'react-native-image-crop-picker';
-import { RadioButton } from 'react-native-paper';
 import { Appbar } from 'react-native-paper';
 import ActionButton from 'react-native-action-button';
-// import BarcodeScanner from 'react-native-scan-barcode';
-import ImagePicker from 'react-native-image-crop-picker';
+import * as ImagePicker from "react-native-image-picker"
+import ImageCropPicker from 'react-native-image-crop-picker';
+import DocumentPicker from 'react-native-document-picker';
 import DatePicker from 'react-native-datepicker'
 import QRCodeScanner from 'react-native-qrcode-scanner';
 
@@ -54,7 +50,7 @@ const dummyimages = [
 
 const EditVehicle = ({route, navigation }) => {
   const refRBSheet = useRef();
-  const { item } = route.params;
+  const { item  } = route.params;
 
 
   const [date, setDate] = useState(new Date(1598051730000));
@@ -66,9 +62,11 @@ const picture = [
   }
   ]  
   const [images , setimages] = useState([
-    
+    require('../Images/noimage3.jpeg') 
+
 
   ])
+  const [ close , setclose] = useState(false)
   const [pickupdatemodal , setpickupdatemodal]= useState(false)
   const [add , setadd] = useState(true)
   const [imgposition, setimgposition] = useState(0)
@@ -167,65 +165,374 @@ const [barcodemodal , setbarcodemodal] = useState(false)
 
 
 
-const TakePhoto = async() => {
 
-  ImagePicker.openCamera({
-        multiple: true,
-        compressImageQuality:0.7
-      }).then(images1 => {
+// for android camera
+
+const captureImage = async (type) => {
+  let options = {
     
-        var i ;
-        for( i =0; i< images1.length; i++){
+    quality: 0.8,
+    videoQuality: 'low',
+    durationLimit: 30, //Video max duration in seconds
+    saveToPhotos: true,
+  };
+  let isCameraPermitted = await requestCameraPermission();
+  let isStoragePermitted = await requestExternalWritePermission();
+  if (isCameraPermitted && isStoragePermitted) {
+    ImagePicker.launchCamera(options, (response) => {
+      console.log('Response = ', response);
 
-          let temp = {} ;
-          temp.name = images1[i].filename;
-          temp.size = images1[i].size;
-          temp.type = images1[i].mime;
-          temp.url = images1[i].path;
+      if (response.didCancel) {
+        // alert('User cancelled camera picker');
+        return;
+      } else if (response.errorCode == 'camera_unavailable') {
+        alert('Camera not available on device');
+        return;
+      } else if (response.errorCode == 'permission') {
+        alert('Permission not satisfied');
+        return;
+      } else if (response.errorCode == 'others') {
+        alert(response.errorMessage);
+        return;
+      }else{
 
-          images.push(temp)
+        if(images[0] == require('../Images/noimage3.jpeg')){
+          images.pop();
+          setclose(true)
+        }
+        let temp = {} ;
+        temp.name = response.assets[0].fileName;
+        temp.size = response.assets[0].fileSize;
+        temp.type = response.assets[0].type;
+        temp.url = response.assets[0].uri;
 
-      var value = new FormData();
-      value.append('file',{uri:images1[i].path ,
-           name:images1[i].filename,
-           type:images1[i].mime
-         });
+        images.push(response.assets[0])
+          // alert(JSON.stringify(temp))
+    var value = new FormData();
+    value.append('file',{uri:response.assets[0].uri,
+         name:response.assets[0].fileName,
+         type:response.assets[0].type
+       });
 
-         setspinner(true)
+       setspinner(true)
 
-          fetch(AppUrlCollection.VEHICLE_DETAIL + item.id +'/photos-upload', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'multipart/form-data',
-                'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
-                'Accept': 'application/json'
-            },
-            body: value,
-                       
-        })
-            .then((response) => response.json())
-            .then((responseJson) => {
-              // alert(JSON.stringify(responseJson))
-              // console.log(responseJson.data);
-              console.log(responseJson);
-              imagesurls.push(responseJson.data)
-              // alert(JSON.stringify(responseJson))
-              console.log('images urll is '+imagesurls);
+        fetch(AppUrlCollection.VEHICLE_DETAIL + item.id +'/photos-upload', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'multipart/form-data',
+              'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+              'Accept': 'application/json'
+          },
+          body: value,
+                     
+      })
+          .then((response) => response.json())
+          .then((responseJson) => {
+            // alert(JSON.stringify(responseJson))
+            // console.log(responseJson.data);
+            console.log(responseJson);
+            imagesurls.push(responseJson.data)
+            // alert(JSON.stringify(responseJson))
+            // alert(JSON.stringify(responseJson))
+            console.log(responseJson.data+'images urll is '+imagesurls);
 
-              setspinner(false)
-               
-            })
-            .catch((error) => {
-              alert(error)
-              setspinner(false)
-                console.warn(error)
-            });
-       
-        }      
+            setspinner(false)
+             
+          })
+          .catch((error) => {
+            alert(error)
+            setspinner(false)
+              console.warn(error)
+          });
+     
 
-      });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      }
+
+
+
+
+      // console.log('base64 -> ', response.base64);
+      // console.log('uri -> ', response.uri);
+      // console.log('width -> ', response.width);
+      // console.log('height -> ', response.height);
+      // console.log('fileSize -> ', response.fileSize);
+      // console.log('type -> ', response.type);
+      // console.log('fileName -> ', response.fileName);
+      // setFilePath(response);
+    });
+  }
+};
+// for android image pick from library
+const selectFile3 = async () => {
+  try {
+    const results = await DocumentPicker.pickMultiple({
+      type: [DocumentPicker.types.images],
+      
+      //There can me more options as well find above
+    });
+
+console.log('-----'+JSON.stringify(results));
+
+if(images[0] == require('../Images/noimage3.jpeg')){
+  images.pop();
+  setclose(true)
+}
+    for (const res of results) {
+      //Printing the log realted to the file
+      console.log('res : ' + JSON.stringify(res));
+      console.log('URI : ' + res.uri);
+      console.log('Type : ' + res.type);
+      
+      
+      console.log('File Name : ' + res.name);
+      console.log('File Size : ' + res.size);
+  
+
+
+      var i ;
+      // for( i =0; i< images1.length; i++){
+
+        
+        images.push(res)
+        // alert(JSON.stringify(temp))
+
+    var value = new FormData();
+  
+       value.append('file',res);
+
+       setspinner(true)
+
+        fetch(AppUrlCollection.VEHICLE_DETAIL + item.id +'/photos-upload', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'multipart/form-data',
+              'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+              'Accept': 'application/json'
+          },
+          body: value,
+                     
+      })
+          .then((response) => response.json())
+          .then((responseJson) => {
+            // alert(JSON.stringify(responseJson))
+            // console.log(responseJson.data);
+            console.log(responseJson);
+            imagesurls.push(responseJson.data)
+            console.log('images urll is '+imagesurls);
+
+            setspinner(false)
+             
+          })
+          .catch((error) => {
+            alert(error)
+            setspinner(false)
+              console.warn(error)
+          });
+     
+      // }  
+            // console.log(JSON.stringify(res));
+    }
+
+
+
+  } catch (err) {
+    setspinner(false)
+
+    //Handling any exception (If any)
+    if (DocumentPicker.isCancel(err)) {
+      //setopener(false)
+
+      //If user canceled the document selection
+      // alert('Canceled from multiple doc picker');
+    } else {
+     // setopener(false)
+
+      //For Unknown Error
+      alert('Unknown Error: ' + JSON.stringify(err));
+      throw err;
+    }
+  }
+
 
 };
+
+const TakePhoto = async (type) => {
+  let options = {
+    
+    quality: 0.8,
+    videoQuality: 'low',
+    durationLimit: 30, //Video max duration in seconds
+    saveToPhotos: true,
+  };
+  // let isCameraPermitted = await requestCameraPermission();
+  // let isStoragePermitted = await requestExternalWritePermission();
+  // if (isCameraPermitted && isStoragePermitted) {
+    ImagePicker.launchCamera(options, (response) => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        // alert('User cancelled camera picker');
+        return;
+      } else if (response.errorCode == 'camera_unavailable') {
+        alert('Camera not available on device');
+        return;
+      } else if (response.errorCode == 'permission') {
+        alert('Permission not satisfied');
+        return;
+      } else if (response.errorCode == 'others') {
+        alert(response.errorMessage);
+        return;
+      }else{
+        if(images[0] == require('../Images/noimage3.jpeg')){
+          images.pop();
+          setclose(true)
+        }
+
+
+        let temp = {} ;
+        temp.name = response.assets[0].fileName;
+        temp.size = response.assets[0].fileSize;
+        temp.type = response.assets[0].type;
+        temp.url = response.assets[0].uri;
+
+        images.push(response.assets[0])
+          // alert(JSON.stringify(temp))
+    var value = new FormData();
+    value.append('file',{uri:response.assets[0].uri,
+         name:response.assets[0].fileName,
+         type:response.assets[0].type
+       });
+
+       setspinner(true)
+
+        fetch(AppUrlCollection.VEHICLE_DETAIL + item.id +'/photos-upload', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'multipart/form-data',
+              'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+              'Accept': 'application/json'
+          },
+          body: value,
+                     
+      })
+          .then((response) => response.json())
+          .then((responseJson) => {
+            // alert(JSON.stringify(responseJson))
+            // console.log(responseJson.data);
+            console.log(responseJson);
+            imagesurls.push(responseJson.data)
+            // alert(JSON.stringify(responseJson))
+            // alert(JSON.stringify(responseJson))
+            console.log(responseJson.data+'images urll is '+imagesurls);
+
+            setspinner(false)
+             
+          })
+          .catch((error) => {
+            alert(error)
+            setspinner(false)
+              console.warn(error)
+          });
+     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      }
+
+
+
+
+      // console.log('base64 -> ', response.base64);
+      // console.log('uri -> ', response.uri);
+      // console.log('width -> ', response.width);
+      // console.log('height -> ', response.height);
+      // console.log('fileSize -> ', response.fileSize);
+      // console.log('type -> ', response.type);
+      // console.log('fileName -> ', response.fileName);
+      // setFilePath(response);
+    });
+  
+};
+
+const requestCameraPermission = async () => {
+  
+  try {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.CAMERA,
+      {
+        title: 'Camera Permission',
+        message: 'App needs camera permission',
+      },
+    );
+    // If CAMERA Permission is granted
+     granted === PermissionsAndroid.RESULTS.GRANTED;
+    //  launchCameraAndroid()
+    //  captureImage()
+            // addEventListener('camera')
+            return true;
+
+  } catch (err) {
+    console.warn(err);
+    return false;
+  }
+ 
+};
+
+const requestExternalWritePermission = async () => {
+if (Platform.OS === 'android') {
+  try {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      {
+        title: 'External Storage Write Permission',
+        message: 'App needs write permission',
+      },
+    );
+    // If WRITE_EXTERNAL_STORAGE Permission is granted
+    granted === PermissionsAndroid.RESULTS.GRANTED
+
+      return true;
+
+  } catch (err) {
+    console.warn(err);
+    alert('Write permission err', err);
+  }
+  return false;
+}
+};
+
 
 const searchFilterFunction = (text) => {
   if (text) {
@@ -262,6 +569,10 @@ const searchFilterFunction = (text) => {
 
 const deleteimage = () =>{
   // setspinner(true)
+
+  if(images.length == 0  ){
+    setclose(false)
+  }
   let pos = imgposition;
   console.log('---'+pos);
   let img1 = []
@@ -291,11 +602,14 @@ for(var index = 0 ; index< images2.length ; index++){
 
 const chooseFile = async() => {
 
-  ImagePicker.openPicker({
+  ImageCropPicker.openPicker({
         multiple: true,
         compressImageQuality:0.7
       }).then(images1 => {
-    
+        if(images[0] == require('../Images/noimage3.jpeg')){
+          images.pop();
+          setclose(true)
+        }
         var i ;
         for( i =0; i< images1.length; i++){
 
@@ -786,15 +1100,20 @@ callingCustomer()
 // alert(item.vehicle_features)
 
 if (item.photos != undefined && item.photos != null) {
-
+  images.pop();
+setclose(true)
   setimages2(item.photos)
 
   // setimg(responseJson.data.vehicle.images)
   for (let index = 0; index < item.photos.length; index++) {
-      const element = item.photos[index];
+      const element = item.photos[index].url;
       images.push(element)
       console.log(element);
   }
+
+
+}else{
+  setclose(false)
 
 
 }
@@ -1177,7 +1496,7 @@ array.value=  item.value,
             setspinner(false)
             AppConstance.showSnackbarMessage(responseJson.message)
       
-            ImagePicker.clean().then(() => {
+            ImageCropPicker.clean().then(() => {
               console.log('removed all tmp images from tmp directory');
             }).catch(e => {
               alert(e);
@@ -1221,7 +1540,7 @@ return (
 
                 <TouchableOpacity
                 style={{justifyContent:'center', }}
-                onPress={()=>navigation.goBack()}
+                onPress={()=> navigation.goBack()}
 
                 >
                 <Ionicons  name='chevron-back' size={25} color='grey'/>
@@ -1575,6 +1894,31 @@ onPress={()=> setcustmodal(false) }
             </View>
         </Modal>
       
+        <Modal
+        visible={deletemodalshow}
+        animationType='fade'
+        transparent={true}
+        >
+            <View style={{flex:1, justifyContent:'flex-end',backgroundColor:'#0005', height:deviceHeight}}>
+                <View style={{bottom:30}}>
+           
+                <TouchableOpacity 
+            onPress={()=> { setdeletemodalshow(false), deleteimage()}}
+            style={{alignSelf:'center',width:'85%', backgroundColor:'#E5E7E9',paddingVertical:20, width:'90%',borderRadius:15, marginTop:10}}
+            >
+              <Text style={{alignSelf:'center',fontSize:18, fontWeight:'400', color:'red'}}>Delete Photo</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+            onPress={()=> { setdeletemodalshow(false)}}
+            style={{alignSelf:'center',backgroundColor:'white',paddingVertical:20, width:'90%',borderRadius:15, marginTop:10}}
+            >
+              <Text style={{alignSelf:'center', fontSize:18, fontWeight:'400', }}>Cancel</Text>
+            </TouchableOpacity>
+                    </View>
+            </View>
+        </Modal>
+     
 
     <ScrollView style={{width:deviceWidth }}>
 
@@ -1582,7 +1926,7 @@ onPress={()=> setcustmodal(false) }
  
 
  <SliderBox 
-     images={images.length>0 ?images:dummyimages}
+     images={images}
           sliderBoxHeight={260}
           dotColor="#FFEE58"
   inactiveDotColor="#90A4AE"
@@ -1622,18 +1966,18 @@ onPress={()=> setcustmodal(false) }
         
 
 
-{images.length > 0?
+        {close == true ?
 
-     <View style={{marginTop:15,position:'absolute',alignSelf:'flex-end', paddingHorizontal:40, }}>
-    <TouchableOpacity
-    onPress={()=> {   deleteimage()}}
-    style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.toolbarColor }}>
+<View style={{marginTop:15,position:'absolute',alignSelf:'flex-end', paddingHorizontal:40, }}>
+<TouchableOpacity
+onPress={()=> {   setdeletemodalshow(true)}}
+style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.toolbarColor }}>
 
-     <Ionicons name="close" color={AppColors.toolbarColor}  size={25}  />
-  </TouchableOpacity>
-       </View>
+<Ionicons name="close" color={AppColors.toolbarColor}  size={25}  />
+</TouchableOpacity>
+  </View>
 
-       :null}
+  :null}
   {/* <TouchableOpacity 
           onPress={() => refRBSheet.current.open()}
           style={{backgroundColor:'grey' , borderRadius: 50,height:'100%',width:'100%',  justifyContent:'center', }}>
@@ -1643,17 +1987,22 @@ onPress={()=> setcustmodal(false) }
 
 
 
-{/* {add == true ? */}
+{add == true ?
  <ActionButton position='left' style={{marginLeft:deviceWidth-105,height:'95%', width:'90%',}} size={40} buttonColor="rgba(231,76,60,1)">
- <ActionButton.Item buttonColor='#9b59b6'   size={30} onPress={() => {chooseFile('photo')}}>
+ <ActionButton.Item buttonColor='#9b59b6'   size={30}
+  onPress={() => {if(Platform.OS == 'ios'){ chooseFile('photo')}else{ selectFile3() }}}
+  >
    <Ionicons name="ios-images-outline" size={20} style={styles.actionButtonIcon} />
  </ActionButton.Item>
- <ActionButton.Item buttonColor='#3498db' size={30} onPress={() => {requestExternalWritePermission()}}>
+ <ActionButton.Item buttonColor='#3498db' size={30}
+ 
+ onPress={() => {if(Platform.OS == 'ios'){ TakePhoto('photo')}else{ captureImage() }}}>
  <Ionicons name="ios-camera-outline" size={20} style={styles.actionButtonIcon} />
  </ActionButton.Item>
 
 </ActionButton>
-{/* : null } */}
+: null }
+
 
 
  
@@ -2458,7 +2807,7 @@ onPress={()=> setcustmodal(false) }
     </TouchableOpacity>
 
     <TouchableOpacity
-    style={{marginTop:5,}}
+    style={{marginTop:8,}}
 
     onPress={()=>{ GPSNavigationSystem == 4 ? setGPSNavigationSystem(''):setGPSNavigationSystem(4)}}
     >
@@ -2472,7 +2821,7 @@ onPress={()=> setcustmodal(false) }
 
 
     <TouchableOpacity
-    style={{marginTop:5,}}
+    style={{marginTop:10,}}
 
     onPress={()=>{SpareTireJack == 5 ? setSpareTireJack(''):setSpareTireJack(5)}}
     >
@@ -2487,7 +2836,7 @@ onPress={()=> setcustmodal(false) }
 
 
     <TouchableOpacity
-    style={{marginTop:5,}}
+    style={{marginTop:10,}}
 
     onPress={()=>{ WheelCovers == 6 ? setWheelCovers('') : setWheelCovers(6)}}
     >
@@ -2499,7 +2848,7 @@ onPress={()=> setcustmodal(false) }
     </TouchableOpacity>
 
     <TouchableOpacity
-    style={{marginTop:5,}}
+    style={{marginTop:10,}}
 
     onPress={()=>{Radio == 7 ? setRadio(''):setRadio(7) }}
     >
@@ -2514,7 +2863,7 @@ onPress={()=> setcustmodal(false) }
 
 
     <TouchableOpacity
-    style={{marginTop:5,}}
+    style={{marginTop:10,}}
 
     onPress={()=>{CDPLAYER == 8 ? setCDPLAYER(''):setCDPLAYER(8) }}
     >
@@ -2526,7 +2875,7 @@ onPress={()=> setcustmodal(false) }
     </TouchableOpacity>
 
     <TouchableOpacity
-    style={{marginTop:5,}}
+    style={{marginTop:10,}}
 
     onPress={()=>{MIRROR == 10 ? setMIRROR(''):setMIRROR(10) }}
     >
@@ -2538,7 +2887,7 @@ onPress={()=> setcustmodal(false) }
     </TouchableOpacity>
 
     <TouchableOpacity
-    style={{marginTop:5,}}
+    style={{marginTop:10,}}
 
     onPress={()=>{SPEAKER == 11 ? setSPEAKER(''):setSPEAKER(11) }}
     >
@@ -2554,7 +2903,7 @@ onPress={()=> setcustmodal(false) }
 
 
     <TouchableOpacity
-    style={{marginTop:7,justifyContent:'center'}}
+    style={{marginTop:10,justifyContent:'center'}}
 
     onPress={()=>{OTHERS == 12 ? setOTHERS(''):setOTHERS(12)}}
     >
@@ -2571,7 +2920,7 @@ onPress={()=> setcustmodal(false) }
       
     <TouchableOpacity
    
-      onPress={()=>{ CDChanger == 1 ? setCDChanger(0):setCDChanger(1)}}
+      onPress={()=>{ CDChanger == 3 ? setCDChanger(''):setCDChanger(3)}}
     >
 
     <Text style={{fontWeight:'500'}}>CD Changer</Text>
@@ -2581,7 +2930,7 @@ onPress={()=> setcustmodal(false) }
    
     <TouchableOpacity
     style={{marginTop:10,}}
-      onPress={()=>{GPSNavigationSystem == 1 ? setGPSNavigationSystem(0):setGPSNavigationSystem(1)}}
+      onPress={()=>{GPSNavigationSystem == 4 ? setGPSNavigationSystem(''):setGPSNavigationSystem(4)}}
     >
 
     <Text style={{fontWeight:'500'}}>GPS Navigation System</Text>
@@ -2595,7 +2944,7 @@ onPress={()=> setcustmodal(false) }
 
     <TouchableOpacity
     style={{marginTop:10,}}
-      onPress={()=>{SpareTireJack == 1 ? setSpareTireJack(0):setSpareTireJack(1)}}
+      onPress={()=>{SpareTireJack == 5 ? setSpareTireJack(''):setSpareTireJack(5)}}
     >
 
     <Text style={{fontWeight:'500'}}>Spare Tire/Jack</Text>
@@ -2606,7 +2955,7 @@ onPress={()=> setcustmodal(false) }
 
     <TouchableOpacity
     style={{marginTop:10,}}
-      onPress={()=>{WheelCovers == 1 ? setWheelCovers(0):setWheelCovers(1)}}
+      onPress={()=>{WheelCovers == 6 ? setWheelCovers(''):setWheelCovers(6)}}
     >
 
     <Text style={{fontWeight:'500'}}>Wheel Covers</Text>
@@ -2615,14 +2964,14 @@ onPress={()=> setcustmodal(false) }
 
     <TouchableOpacity
     style={{marginTop:10,}}
-      onPress={()=>{Radio == 1 ?  setRadio(0):setRadio(1)}}
+      onPress={()=>{Radio ==7 ?  setRadio(''):setRadio(7)}}
     >
 
     <Text style={{fontWeight:'500'}}>Radio</Text>
     </TouchableOpacity>
     <TouchableOpacity
     style={{marginTop:10,}}
-      onPress={()=>{CDPLAYER == 1 ? setCDPLAYER(0):setCDPLAYER(1)}}
+      onPress={()=>{CDPLAYER == 8 ? setCDPLAYER(''):setCDPLAYER(8)}}
     >
 
     <Text style={{fontWeight:'500'}}>CD Player</Text>
@@ -2631,7 +2980,7 @@ onPress={()=> setcustmodal(false) }
 
     <TouchableOpacity
     style={{marginTop:10,}}
-      onPress={()=>{MIRROR == 1 ? setMIRROR(0):setMIRROR(1) }}
+      onPress={()=>{MIRROR == 10 ? setMIRROR(''):setMIRROR(10) }}
     >
 
     <Text style={{fontWeight:'500'}}>MIRROR</Text>
@@ -2644,7 +2993,7 @@ onPress={()=> setcustmodal(false) }
 
     <TouchableOpacity
     style={{marginTop:10,}}
-      onPress={()=>{SPEAKER == 1 ? setSPEAKER(0):setSPEAKER(1)}}
+      onPress={()=>{SPEAKER == 11 ? setSPEAKER(''):setSPEAKER(11)}}
     >
 
     <Text style={{fontWeight:'500'}}>Speaker</Text>
@@ -2652,7 +3001,7 @@ onPress={()=> setcustmodal(false) }
 
     <TouchableOpacity
     style={{marginTop:10,}}
-      onPress={()=>{OTHERS == 1 ? setOTHERS(0):setOTHERS(1)}}
+      onPress={()=>{OTHERS == 12 ? setOTHERS(''):setOTHERS(12)}}
     >
 
     <Text style={{fontWeight:'500'}}>OTHERS</Text>

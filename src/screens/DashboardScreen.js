@@ -149,13 +149,13 @@ class DashboardScreen extends Component {
     componentDidMount() {
 
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
-        AppState.addEventListener('change', this._handleAppStateChange);
+        // AppState.addEventListener('change', this._handleAppStateChange);
 
         this.callingCounterAPI();
     }
 
     componentWillUnmount() {
-        AppState.removeEventListener('change', this._handleAppStateChange);
+        // AppState.removeEventListener('change', this._handleAppStateChange);
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 

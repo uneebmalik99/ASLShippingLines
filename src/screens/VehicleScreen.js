@@ -209,10 +209,8 @@ Logout =() => {
     }
 
     handleBackPress = () => {
-        // this.props.navigation.goBack();
-        this.props.navigation("DashboardScreen");
-
-     
+        this.props.navigation.goBack();
+        // this.props.navigation("DashboardScreen")
     }
 
     //render Vehicle
