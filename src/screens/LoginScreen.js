@@ -22,12 +22,12 @@ import { Appbar } from 'react-native-paper';
 const LoginScreen = ({ navigation }) => {
 
     // const [email ,setemail] = useState('nooraljabal1133@gmail.com')
-    // const [email ,setemail] = useState('uneeb@impulsiontechnologies.com')
-    const [email ,setemail] = useState('')
+    const [email ,setemail] = useState('uneeb@impulsiontechnologies.com')
+    // const [email ,setemail] = useState('')
 
     // const [pass ,setpass] =useState('info@asl1001')
-    // const [pass ,setpass] =useState('Admin@123')
-    const [pass ,setpass] =useState('')
+    const [pass ,setpass] =useState('Admin@123')
+    // const [pass ,setpass] =useState('')
   
     const [spinner , setspinner] =useState(false)
    

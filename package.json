@@ -27,7 +27,6 @@
     "react": "16.13.1",
     "react-native": "0.63.4",
     "react-native-action-button": "^2.8.5",
-    "react-native-barcode-scanner-google": "^1.4.2",
     "react-native-camera": "^4.2.1",
     "react-native-date-picker": "^4.1.0",
     "react-native-datepicker": "^1.7.2",

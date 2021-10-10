@@ -1,5 +1,5 @@
 import React,{useEffect} from 'react';
-import { View, Text, TouchableOpacity, TextInput, StyleSheet, Animated, Easing, Image, Alert, AppState, BackHandler, BackAndroid, ScrollView, FlatList,ImageBackground, SafeAreaView } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, StyleSheet, Animated, Easing, Image, Alert, AppState, BackHandler, BackAndroid, ScrollView, FlatList,ImageBackground, SafeAreaView, Platform } from 'react-native';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, } from '@react-navigation/stack';
@@ -479,11 +479,11 @@ const TabScreen2 =()=>{
   ,}} />
 
 
-{/* <Tab.Screen name="AddVehicle" component={AddVehicle} options={{tabBarLabel:'ADD VEHICLE',headerShown:false,
+<Tab.Screen name="AddVehicle" component={AddVehicle} options={{tabBarLabel:'ADD VEHICLE',headerShown:false,
    tabBarIcon: ({ color, size }) => (
     <Ionicons  name='ios-add-circle-outline'  size={size}/>
 
-  )}} /> */}
+  )}} />
 
 
  
@@ -513,7 +513,10 @@ const App = () => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
     });
-    requestUserPermission()
+    if(Platform.OS == 'ios' ){
+      requestUserPermission()
+
+    }
     return unsubscribe;
   }, []);
 

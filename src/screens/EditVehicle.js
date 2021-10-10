@@ -52,7 +52,7 @@ const EditVehicle = ({route, navigation }) => {
   const refRBSheet = useRef();
   const { item  } = route.params;
 
-
+  const [deletemodalshow ,setdeletemodalshow] =useState(false)
   const [date, setDate] = useState(new Date(1598051730000));
 const [ showimagemodel ,setshowimagemodel] = useState(false)
 const [details , setdetails] = useState(item)
@@ -2807,7 +2807,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     </TouchableOpacity>
 
     <TouchableOpacity
-    style={{marginTop:8,}}
+    style={{marginTop:Platform.OS == 'ios'? 5:10,}}
 
     onPress={()=>{ GPSNavigationSystem == 4 ? setGPSNavigationSystem(''):setGPSNavigationSystem(4)}}
     >
@@ -2821,7 +2821,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
 
 
     <TouchableOpacity
-    style={{marginTop:10,}}
+    style={{marginTop:Platform.OS == 'ios'? 5:10,}}
 
     onPress={()=>{SpareTireJack == 5 ? setSpareTireJack(''):setSpareTireJack(5)}}
     >
@@ -2836,7 +2836,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
 
 
     <TouchableOpacity
-    style={{marginTop:10,}}
+    style={{marginTop:Platform.OS == 'ios'? 5:10,}}
 
     onPress={()=>{ WheelCovers == 6 ? setWheelCovers('') : setWheelCovers(6)}}
     >
@@ -2848,7 +2848,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     </TouchableOpacity>
 
     <TouchableOpacity
-    style={{marginTop:10,}}
+    style={{marginTop:Platform.OS == 'ios'? 5:10,}}
 
     onPress={()=>{Radio == 7 ? setRadio(''):setRadio(7) }}
     >
@@ -2863,7 +2863,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
 
 
     <TouchableOpacity
-    style={{marginTop:10,}}
+    style={{marginTop:Platform.OS == 'ios'? 5:10,}}
 
     onPress={()=>{CDPLAYER == 8 ? setCDPLAYER(''):setCDPLAYER(8) }}
     >
@@ -2875,7 +2875,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     </TouchableOpacity>
 
     <TouchableOpacity
-    style={{marginTop:10,}}
+    style={{marginTop:Platform.OS == 'ios'? 5:10,}}
 
     onPress={()=>{MIRROR == 10 ? setMIRROR(''):setMIRROR(10) }}
     >
@@ -2887,7 +2887,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     </TouchableOpacity>
 
     <TouchableOpacity
-    style={{marginTop:10,}}
+    style={{marginTop:Platform.OS == 'ios'? 5:10,}}
 
     onPress={()=>{SPEAKER == 11 ? setSPEAKER(''):setSPEAKER(11) }}
     >
@@ -2903,7 +2903,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
 
 
     <TouchableOpacity
-    style={{marginTop:10,justifyContent:'center'}}
+    style={{marginTop:Platform.OS == 'ios'? 5:10,}}
 
     onPress={()=>{OTHERS == 12 ? setOTHERS(''):setOTHERS(12)}}
     >
