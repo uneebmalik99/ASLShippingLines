@@ -55,10 +55,11 @@ import AsyncStorage from '@react-native-community/async-storage';
       AsyncStorage.setItem('auth_key', ' ');
       AppConstance.USER_TOKEN_KEY = ' '
     
-      AsyncStorage.setItem('user_id', ' ');
+      AsyncStorage.setItem('user_id', '');
       AppConstance.USER_ID = ' '
     
-      
+      AsyncStorage.setItem('user_role' , '')
+      AppConstance.USER_ROLE = ''
     
     
       AsyncStorage.removeItem(AppConstance.USER_INFO_OBJ);

@@ -168,29 +168,7 @@ const [vin , setvin] = useState(true)
   } 
 
   const  renderVehicle = ({ item, index }) => {
-    var img = [];
-
-    if (item.container_images.length > 0) {
-      // setimg(responseJson.data.vehicle.images)
-      if(item.container_images.length > 8){
-        for (let index = 0; index < 8; index++) {
-          const element = item.container_images[index].url;
-          img.push(element)
-          console.log(element);
-      }
-      }else{
-        for (let index = 0; index < item.container_images.length; index++) {
-          const element = item.container_images[index].url;
-          img.push(element)
-          console.log(element);
-      }
-    }
-  
-    }
-
-
-
-
+   
     return(
       <TouchableOpacity style={{width:'100%',      shadowColor: "#000",
       shadowOffset: {
@@ -205,26 +183,7 @@ const [vin , setvin] = useState(true)
       onPress={()=> {navigation.navigate('MyContainerDetails',{'item':item} , setvehicleList('') )}}
       >
  
- <SliderBox 
-          images={img}
-          sliderBoxHeight={160}
-          
-          imageLoadingColor={AppColors.toolbarColor}
 
-          dotColor={AppColors.toolbarColor}
-  inactiveDotColor="#90A4AE"
-  dotStyle={{
-    width: 10,
-    height: 10,
-    marginHorizontal: -4,
-
-    
-  }}
-          resizeMethed={'resize'}  
-          resizeMode={'cover'}
-  circleLoop
-  ImageComponentStyle={{borderTopLeftRadius:10 ,width:'95%',marginLeft:-21,}}
-        />
  
 
  {/* {item.thumbnail.length > 0 ?

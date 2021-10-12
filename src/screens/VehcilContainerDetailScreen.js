@@ -82,7 +82,6 @@ class VehcilContainerDetailScreen extends Component {
 
 
     }
-
     Logout =() => {
 
         AsyncStorage.setItem('ISUSERLOGIN', '0');
@@ -91,10 +90,11 @@ class VehcilContainerDetailScreen extends Component {
         AsyncStorage.setItem('auth_key', ' ');
         AppConstance.USER_TOKEN_KEY = ' '
       
-        AsyncStorage.setItem('user_id', ' ');
+        AsyncStorage.setItem('user_id', '');
         AppConstance.USER_ID = ' '
       
-        
+        AsyncStorage.setItem('user_role' , '')
+        AppConstance.USER_ROLE = ''
       
       
         AsyncStorage.removeItem(AppConstance.USER_INFO_OBJ);

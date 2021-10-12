@@ -49,17 +49,19 @@ const MyVehcileDetails = ({route, navigation }) => {
   const [imgpos, setimgpos] = useState(0)
   const[showimagemodel , setshowimagemodel] = useState(false)
   const [images , setimages] = useState([
-    require('../Images/noimage3.jpeg') 
 
   ])
   const[spinner , setspinner ] = useState(false)
   const[SliderModel , setSliderModel] = useState(false)
-  const[Details , setDetails] = useState([])
+  const[Details , setDetails] = useState({
+    "photos": []
+    
+    })
   const refRBSheet = useRef();
 
 
 
-const callingVehicledetailedApi = () =>{
+const callingVehicledetailedApi =async () =>{
   
   // setDetails('')
 setspinner(true)
@@ -74,20 +76,23 @@ setspinner(true)
     .then((responseJson) => {
         console.log(responseJson)
 
-        setspinner(false)
 
       
         if (responseJson.status == 'SUCCESS') {
             setDetails(responseJson.data) 
             let data = responseJson.data
-            if (data.photos != undefined && data.photos != null) {
-              images.pop()
+            if (data.photos.length > 0) {
               // setimg(responseJson.data.vehicle.images)
               for (let index = 0; index < data.photos.length; index++) {
                   const element = data.photos[index].url;
-                  images.push(element)
+                   images.push(element)
                   console.log(element);
               }
+              setspinner(false)
+            }else{
+              images.push(data.photo)
+              setspinner(false)
+
             }
             
            }
@@ -104,10 +109,12 @@ setspinner(true)
 useEffect(() => {
 
   callingVehicledetailedApi()
-  // if (item.photo_urls != undefined && item.photo_urls != null) {
+
+  // if (Details.photos.length>0 ) {
+  //   images.pop()
   //   // setimg(responseJson.data.vehicle.images)
-  //   for (let index = 0; index < item.photo_urls.length; index++) {
-  //       const element = item.photo_urls[index];
+  //   for (let index = 0; index < Details.photos.length; index++) {
+  //       const element = Details.photos[index].url;
   //       images.push(element)
   //       console.log(element);
   //   }

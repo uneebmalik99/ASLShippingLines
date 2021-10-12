@@ -692,7 +692,7 @@ const chooseFile = async() => {
 };
 
 const deleteimage = () =>{
-  if(images.length == 0  ){
+  if(images.length == 1  ){
     setclose(false)
     images.push(require('../Images/noimage3.jpeg') )
   }
@@ -799,7 +799,6 @@ array.container_images = images2
     .then((response) => response.json())
     .then((responseJson) => {
       setexport_details(responseJson.data.export_details)
-      setspinner(false)
       if (responseJson.data.export_details.container_images.length > 0 ) {
         // setimg(responseJson.data.vehicle.images)
         setclose(true)
@@ -813,10 +812,13 @@ array.container_images = images2
           
         }
         // setimages2(images)
-     
+        setspinner(false)
+
 
       }else{
         setclose(false)
+        setspinner(false)
+
       }
 
 

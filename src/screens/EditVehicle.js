@@ -569,9 +569,9 @@ const searchFilterFunction = (text) => {
 
 const deleteimage = () =>{
   // setspinner(true)
-
-  if(images.length == 0  ){
+  if(images.length == 1  ){
     setclose(false)
+    images.push(require('../Images/noimage3.jpeg') )
   }
   let pos = imgposition;
   console.log('---'+pos);
@@ -597,6 +597,9 @@ for(var index = 0 ; index< images2.length ; index++){
  }
  setimages2(img2)
 
+ if(images.length === 0 ){
+  setclose(false)
+}
 
 }
 
@@ -1099,7 +1102,7 @@ callingCustomer()
 
 // alert(item.vehicle_features)
 
-if (item.photos != undefined && item.photos != null) {
+if (item.photos.length > 0) {
   images.pop();
 setclose(true)
   setimages2(item.photos)
@@ -1316,13 +1319,17 @@ array.value=  item.value,
   array.invoice_photos= item.invoice_photos,
   array.auction_photos = item.auction_photos,
   array.pickup_photos = item.pickup_photos,
-  array.arrived_photos = item.arrived_photos,
+  array.arrived_photos = item.arrived_photos
   // array.fileUrls { "photos": ["https://asl-shipping-line.s3.us-west-2.amazonaws.com/uploads/vehicles/images/32626/rsuEFeqEjPECLr8g0nxcEq5jc1o4D8Euj7l2PCSN.jpg"]}, 
 
 
+  if(imagesurls.length > 0){
+    let photos = imagesurls
+    let img = {photos}
+    array.fileUrls=img
+  }
 
-
-  alert(JSON.stringify(array))
+  // alert(JSON.stringify(array))
 
 
 
@@ -1384,11 +1391,7 @@ array.value=  item.value,
 
 
 
-      if(imagesurls.length > 0){
-        let photos = imagesurls
-        let img = {photos}
-        array.fileUrls=img
-      }
+   
     
       //removeing images
       // if(images2 != null){
@@ -1494,8 +1497,12 @@ array.value=  item.value,
           .then((response) =>  response.json())
           .then((responseJson) => {
             setspinner(false)
-            AppConstance.showSnackbarMessage(responseJson.message)
-      
+            if(responseJson.message == 'The given data was invalid.'){
+              alert(JSON.stringify(responseJson.errors))
+            }else{
+              AppConstance.showSnackbarMessage(responseJson.message)
+
+            }
             ImageCropPicker.clean().then(() => {
               console.log('removed all tmp images from tmp directory');
             }).catch(e => {
@@ -1806,7 +1813,8 @@ onPress={()=> setcustmodal(false) }
           onRequestClose={() => {
             console.log('close modal');
           }}>
-          <View
+
+<View
             style={{
               flex: 1,
               justifyContent: 'center',
@@ -1818,7 +1826,7 @@ onPress={()=> setcustmodal(false) }
               width:deviceWidth
             }}>
             
-            <View style={{width:'100%', paddingHorizontal:30, marginTop:30}}>
+            <View style={{width:'100%', paddingHorizontal:30, marginTop:20}}>
 
             <TouchableOpacity
             onPress={()=> {setbarcodemodal(false)}}
@@ -1832,21 +1840,24 @@ onPress={()=> setcustmodal(false) }
         // flashMode={RNCamera.Constants.FlashMode.torch}
         topContent={
           <Text style={styles.centerText}>
-            Go to{' '}
-            <Text style={styles.textBold}>wikipedia.org/wiki/QR_code</Text> on
-            your computer and scan the QR code.
+          SCAN VEHICLE VIN NUMBER
           </Text>
         }
         bottomContent={
-          <TouchableOpacity style={styles.buttonTouchable}>
-            <Text style={styles.buttonText}>OK. Got it!</Text>
+          <TouchableOpacity
+        onPress={()=>  setbarcodemodal(false)} 
+          style={styles.buttonTouchable}>
+            <Text style={styles.buttonText}>CANCEL</Text>
           </TouchableOpacity>
         }
         />
         
             
             </View>
-        </Modal>
+        
+
+
+       </Modal>
 
         <Modal
         visible={showimagemodel}
@@ -1926,7 +1937,7 @@ onPress={()=> setcustmodal(false) }
  
 
  <SliderBox 
-     images={images}
+          images={images}
           sliderBoxHeight={260}
           dotColor="#FFEE58"
   inactiveDotColor="#90A4AE"
@@ -3272,22 +3283,28 @@ const styles = StyleSheet.create({
     alignSelf:'center',
     color:'white'
   },
-centerText: {
-    flex: 1,
-    fontSize: 18,
-    padding: 32,
-    color: '#777'
-  },
+
   textBold: {
     fontWeight: '500',
     color: '#000'
   },
   buttonText: {
     fontSize: 21,
-    color: 'rgb(0,122,255)'
+    color: 'red'
   },
   buttonTouchable: {
-    padding: 16
-  }
-
+    paddingVertical:10,
+    paddingHorizontal:22,
+    textAlign:'center',
+    marginTop:Platform.OS == 'ios' ? 5:80,
+    borderWidth:1,
+    borderRadius:8,
+    borderColor:'red'
+  },
+  centerText: {
+    
+    fontSize: 18,
+    marginTop:0,
+    color: '#777'
+  },
   })

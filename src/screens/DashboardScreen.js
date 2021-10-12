@@ -150,7 +150,13 @@ class DashboardScreen extends Component {
 
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         // AppState.addEventListener('change', this._handleAppStateChange);
+        if(AppConstance.USER_ROLE == '1'){
+            this.setState({role :'1'})
+        }else{
+            this.setState({role:'0'})
 
+
+        }
         this.callingCounterAPI();
     }
 

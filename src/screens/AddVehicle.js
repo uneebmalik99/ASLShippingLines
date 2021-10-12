@@ -51,155 +51,18 @@ const dummyimages = [
 const AddVehicle = ({route, navigation }) => {
   const refRBSheet = useRef();
   // const { item  } = route.params;
-const item = {
-  "id": 32626,
-  "total_photos": null,
-  "hat_number": null,
-  "vehicle_type": "SUV",
-  "year": "2021",
-  "color": "WHITE",
-  "model": "honda",
-  "make": "civic",
-  "vin": "15june2022",
-  "weight": null,
-  "pieces": null,
-  "lot_number": "15062021",
-  "towed_amount": 200,
-  "storage_amount": null,
-  "status_name": "ON HAND",
-  "state_name": "",
-  "status": 1,
-  "load_status": null,
-  "check_number": null,
-  "additional_charges": null,
-  "location_id": 1,
-  "customer_user_id": 7000760,
-  "towing_request_id": 41748,
-  "title_amount": null,
-  "container_number": null,
-  "keys": "0",
-  "keys_name": "No",
-  "key_note": "",
-  "vcr": 30983,
-  "value": null,
-  "auction_at": null,
-  "auction_at_name": null,
-  "towed_from": "ca",
-  "note": null,
-  "loading_type": "",
-  "location": "LA",
-  "customer_name": "TEST15JUNE",
-  "company_name": "TEST15JUNE",
-  "export_id": null,
-  "title_type": null,
-  "title_type_name": "No TITLE",
-  "title_number": null,
-  "title_received_date": null,
-  "towing_request_date": "2021-06-13",
-  "deliver_date": null,
-  "pickup_date": null,
-  "condition": null,
-  "damaged": null,
-  "pictures": null,
-  "towed": null,
-  "title": null,
-  "title_state": null,
-  "buyer_id": null,
-  "license_number": null,
-  "eta": null,
-  "export_date": null,
-  "booking_number": null,
-  "seal_number": null,
-  "ar_number": null,
-  "destination": null,
-  "photo": "https://asl-shipping-line.s3.us-west-2.amazonaws.com/uploads/vehicles/images/32626/XouuD9XZZmDoZUJjrh1B9hzTZkk71AJ9pltqQZOD.jpg",
-  "photos": [
-      {
-          "id": 657161,
-          "name": "XouuD9XZZmDoZUJjrh1B9hzTZkk71AJ9pltqQZOD.jpg",
-          "url": "https://asl-shipping-line.s3.us-west-2.amazonaws.com/uploads/vehicles/images/32626/XouuD9XZZmDoZUJjrh1B9hzTZkk71AJ9pltqQZOD.jpg",
-          "type": "jpg",
-          "size": null
-      },
-      {
-          "id": 657163,
-          "name": "1o3FJJEhL9Oiwnn99ipChwbLzLxUc2hTNSoydcDE.jpg",
-          "url": "https://asl-shipping-line.s3.us-west-2.amazonaws.com/uploads/vehicles/images/32626/1o3FJJEhL9Oiwnn99ipChwbLzLxUc2hTNSoydcDE.jpg",
-          "type": "jpg",
-          "size": null
-      },
-      {
-          "id": 657164,
-          "name": "xP3n7Gu7abnRYAV5yXo3JncJJdHjWU6Xm6HBOoJC.jpg",
-          "url": "https://asl-shipping-line.s3.us-west-2.amazonaws.com/uploads/vehicles/images/32626/xP3n7Gu7abnRYAV5yXo3JncJJdHjWU6Xm6HBOoJC.jpg",
-          "type": "jpg",
-          "size": null
-      },
-      {
-          "id": 657165,
-          "name": "hi0nd19r6lsixIo0ty1xuMJKGdtQaRnG0iUTKpLo.jpg",
-          "url": "https://asl-shipping-line.s3.us-west-2.amazonaws.com/uploads/vehicles/images/32626/hi0nd19r6lsixIo0ty1xuMJKGdtQaRnG0iUTKpLo.jpg",
-          "type": "jpg",
-          "size": null
-      }
-  ],
-  "auction_photos": [],
-  "pickup_photos": [],
-  "arrived_photos": [],
-  "created_at": "2021-06-15",
-  "updated_at": "2021-10-09",
-  "vehicle_features": [
-      3
-  ],
-  "vehicle_conditions": [
-      null,
-      null,
-      "A",
-      "B",
-      "C",
-      "D",
-      "E",
-      "F",
-      "G",
-      "H",
-      "I",
-      "J",
-      "K",
-      "L",
-      "M",
-      "N",
-      "O",
-      "P",
-      "Q",
-      null,
-      "R",
-      "S",
-      "T",
-      "U"
-  ],
-  "vehicle_documents": [],
-  "invoice_photos": [],
-  "visible_export_button": false,
-  "visible_claim_button": true,
-  "note_status": {
-      "label": "Notes",
-      "class": "link_blue",
-      "value": 0
-  }
-}
+
   const [deletemodalshow ,setdeletemodalshow] =useState(false)
   const [date, setDate] = useState(new Date(1598051730000));
 const [ showimagemodel ,setshowimagemodel] = useState(false)
-const [details , setdetails] = useState(item)
+const [details , setdetails] = useState()
 const picture = [
   {
     label: 'PICTURES'
   }
   ]  
   const [images , setimages] = useState([
-    require('../Images/noimage3.jpeg') 
-
-
+    
   ])
   const [ close , setclose] = useState(false)
   const [pickupdatemodal , setpickupdatemodal]= useState(false)
@@ -210,36 +73,35 @@ const picture = [
   const [Filteredcustomer , setFilteredcustomer ] = useState([])
   const[Search , setSearch]= useState()
   const [customername , setcustomername] = useState()
-  const [customeruserid , setcustomeruserid] = useState()
-  const [location_id ,setlocation_id ] = useState()
-  const [location_name, setlocation_name] = useState()
-  const [location , setlocation ] = useState();
-  const [vehicletype , setvehicletype] =useState()
-  const [make , setmake ] = useState();
-  const [model , setmodel ] = useState();
-  const [color , setcolor ] = useState();
-  const [weight , setweight ] = useState();
-  const [year , setyear ] = useState();
-  const [hatnumber , sethatnumber ] = useState();
-  const [licensenumber , setlicensenumber ] = useState();
+  const [customeruserid , setcustomeruserid] = useState(null)
+  const [location_id ,setlocation_id ] = useState(null)
+  const [location_name, setlocation_name] = useState(null)
+  const [location , setlocation ] = useState(null);
+  const [vehicletype , setvehicletype] =useState(null)
+  const [make , setmake ] = useState(null);
+  const [model , setmodel ] = useState(null);
+  const [color , setcolor ] = useState(null);
+  const [weight , setweight ] = useState(null);
+  const [year , setyear ] = useState(null);
+  const [hatnumber , sethatnumber ] = useState(null);
+  const [licensenumber , setlicensenumber ] = useState(null);
   const [note2 , setnote2] = useState()
-  const [lotnumber , setlotnumber ] = useState();
-  const [containernmber , setcontainernmber] = useState()
-  const [status , setstatus ] = useState();
-  const [ statusname , setstatusname] = useState()
-  const [ vcr , setvcr] = useState()
-  const [ loadstatus ,setloadstatus] = useState()
-  const [condition , setcondition ] = useState();
-  const [damaged , setdamaged ] = useState();
-  const [titlenumber , settitlenumber ] = useState();
+  const [lotnumber , setlotnumber ] = useState(null);
+  const [containernmber , setcontainernmber] = useState(null)
+  const [status , setstatus ] = useState(null);
+  const [ statusname , setstatusname] = useState(null)
+  const [ loadstatus ,setloadstatus] = useState(null)
+  const [condition , setcondition ] = useState(null);
+  const [damaged , setdamaged ] = useState(null);
+  const [titlenumber , settitlenumber ] = useState(null);
   const [pictures , setpictures] = useState();
-  const [deliverdate , setdeliverdate ] = useState();
-  const [pickupdate , setpickupdate] = useState();
-  const [ auctionat , setauctionat] = useState()
-  const [note , setnote ] = useState();
+  const [deliverdate , setdeliverdate ] = useState(null);
+  const [pickupdate , setpickupdate] = useState(null);
+  const [ auctionat , setauctionat] = useState(null)
+  const [note , setnote ] = useState(null);
   const [checkoption , setcheckoption ] = useState();
   const [vehicle_features , setvehicle_features]=useState()
-  const [keynote , setkeynote] = useState()
+  const [keynote , setkeynote] = useState(null)
   const [ CDChanger,  setCDChanger]= useState()
   const [GPSNavigationSystem ,setGPSNavigationSystem]= useState()
   const [SpareTireJack, setSpareTireJack] = useState('')
@@ -250,27 +112,27 @@ const picture = [
   const [ WHEELCAPS ,setWHEELCAPS] = useState('');
   const [ MIRROR ,setMIRROR] = useState();
   const [ OTHERS ,setOTHERS ] = useState('');
-  const [frontwindshiled , setfrontwindshiled ] = useState();
-  const [bonnet , setbonnet ] = useState();
-  const [grill , setgrill ] = useState();
-  const [frontbumper , setfrontbumper ] = useState();
-  const [frontheadlight , setfrontheadlight ] = useState();
-  const [rearwindshield , setrearwindshield ] = useState();
-  const [trunkdoor , settrunkdoor ] = useState();
-  const [rearbumper , setrearbumper ] = useState();
-  const [rearbumpersupport , setrearbumpersupport ] = useState();
-  const [taillamp , settaillamp ] = useState();
-  const [frontleftfender , setfrontleftfender ] = useState();
-  const [leftfrontdoor , setleftfrontdoor ] = useState();
-  const [leftreardoor , setleftreardoor ] = useState();
-  const [leftrearfender , setleftrearfender ] = useState();
-  const [pillar , setpillar ] = useState();
-  const [roof, setroof] =useState();
-  const [rightrearfender , setrightrearfender ] = useState();
-  const [rightreardoor , setrightreardoor ] = useState();
-  const [rightfrontdoor , setrightfrontdoor ] = useState();
-  const [frontrightfender , setfrontrightfender ] = useState();
-  const [fronttyres , setfronttyres]= useState();
+  const [frontwindshiled , setfrontwindshiled ] = useState(null);
+  const [bonnet , setbonnet ] = useState(null);
+  const [grill , setgrill ] = useState(null);
+  const [frontbumper , setfrontbumper ] = useState(null);
+  const [frontheadlight , setfrontheadlight ] = useState(null);
+  const [rearwindshield , setrearwindshield ] = useState(null);
+  const [trunkdoor , settrunkdoor ] = useState(null);
+  const [rearbumper , setrearbumper ] = useState(null);
+  const [rearbumpersupport , setrearbumpersupport ] = useState(null);
+  const [taillamp , settaillamp ] = useState(null);
+  const [frontleftfender , setfrontleftfender ] = useState(null);
+  const [leftfrontdoor , setleftfrontdoor ] = useState(null);
+  const [leftreardoor , setleftreardoor ] = useState(null);
+  const [leftrearfender , setleftrearfender ] = useState(null);
+  const [pillar , setpillar ] = useState(null);
+  const [roof, setroof] =useState(null);
+  const [rightrearfender , setrightrearfender ] = useState(null);
+  const [rightreardoor , setrightreardoor ] = useState(null);
+  const [rightfrontdoor , setrightfrontdoor ] = useState(null);
+  const [frontrightfender , setfrontrightfender ] = useState(null);
+  const [fronttyres , setfronttyres]= useState(null);
   const Damaged = [
     {
       label: 'Yes'
@@ -315,7 +177,6 @@ const captureImage = async (type) => {
   if (isCameraPermitted && isStoragePermitted) {
     ImagePicker.launchCamera(options, (response) => {
       console.log('Response = ', response);
-
       if (response.didCancel) {
         // alert('User cancelled camera picker');
         return;
@@ -330,15 +191,16 @@ const captureImage = async (type) => {
         return;
       }else{
 
-        if(images[0] == require('../Images/noimage3.jpeg')){
-          images.pop();
-          setclose(true)
-        }
+        // if(images[0] == require('../Images/noimage3.jpeg')){
+        //   images.pop();
+        //   setclose(true)
+        // }
         let temp = {} ;
         temp.name = response.assets[0].fileName;
         temp.size = response.assets[0].fileSize;
         temp.type = response.assets[0].type;
         temp.url = response.assets[0].uri;
+        setclose(true)
 
         images.push(response.assets[0])
           // alert(JSON.stringify(temp))
@@ -350,7 +212,7 @@ const captureImage = async (type) => {
 
        setspinner(true)
 
-        fetch(AppUrlCollection.VEHICLE_DETAIL + item.id +'/photos-upload', {
+        fetch(AppUrlCollection.VEHICLE_DETAIL + 0 +'/photos-upload', {
           method: 'POST',
           headers: {
               'Content-Type': 'multipart/form-data',
@@ -415,6 +277,7 @@ const captureImage = async (type) => {
 };
 // for android image pick from library
 const selectFile3 = async () => {
+  
   try {
     const results = await DocumentPicker.pickMultiple({
       type: [DocumentPicker.types.images],
@@ -424,11 +287,13 @@ const selectFile3 = async () => {
 
 console.log('-----'+JSON.stringify(results));
 
-if(images[0] == require('../Images/noimage3.jpeg')){
-  images.pop();
-  setclose(true)
-}
+// if(images[0] == require('../Images/noimage3.jpeg')){
+//   images.pop();
+//   setclose(true)
+// }
     for (const res of results) {
+      setclose(true)
+
       //Printing the log realted to the file
       console.log('res : ' + JSON.stringify(res));
       console.log('URI : ' + res.uri);
@@ -453,7 +318,7 @@ if(images[0] == require('../Images/noimage3.jpeg')){
 
        setspinner(true)
 
-        fetch(AppUrlCollection.VEHICLE_DETAIL + item.id +'/photos-upload', {
+        fetch(AppUrlCollection.VEHICLE_DETAIL + 0 +'/photos-upload', {
           method: 'POST',
           headers: {
               'Content-Type': 'multipart/form-data',
@@ -534,10 +399,11 @@ const TakePhoto = async (type) => {
         alert(response.errorMessage);
         return;
       }else{
-        if(images[0] == require('../Images/noimage3.jpeg')){
-          images.pop();
-          setclose(true)
-        }
+        // if(images[0] == require('../Images/noimage3.jpeg')){
+        //   images.pop();
+        //   setclose(true)
+        // }
+        setclose(true)
 
 
         let temp = {} ;
@@ -556,7 +422,7 @@ const TakePhoto = async (type) => {
 
        setspinner(true)
 
-        fetch(AppUrlCollection.VEHICLE_DETAIL + item.id +'/photos-upload', {
+        fetch(AppUrlCollection.VEHICLE_DETAIL + 0 +'/photos-upload', {
           method: 'POST',
           headers: {
               'Content-Type': 'multipart/form-data',
@@ -667,7 +533,6 @@ if (Platform.OS === 'android') {
 }
 };
 
-
 const searchFilterFunction = (text) => {
   if (text) {
 
@@ -704,9 +569,7 @@ const searchFilterFunction = (text) => {
 const deleteimage = () =>{
   // setspinner(true)
 
-  if(images.length == 0  ){
-    setclose(false)
-  }
+  
   let pos = imgposition;
   console.log('---'+pos);
   let img1 = []
@@ -714,10 +577,16 @@ const deleteimage = () =>{
   for(var i = 0 ; i< images.length ; i++){
     if(i != pos){
       img1.push(images[i])
+     
       
     }
+    
    }
    setimages(img1)
+   if(img1.length == 0){
+     setclose(false)
+     setimagesurls([])
+   }
 
 let img2 = []
 for(var index = 0 ; index< images2.length ; index++){
@@ -729,6 +598,7 @@ for(var index = 0 ; index< images2.length ; index++){
     }
   }
  }
+
  setimages2(img2)
 
 
@@ -740,10 +610,12 @@ const chooseFile = async() => {
         multiple: true,
         compressImageQuality:0.7
       }).then(images1 => {
-        if(images[0] == require('../Images/noimage3.jpeg')){
-          images.pop();
-          setclose(true)
-        }
+        // if(images[0] == require('../Images/noimage3.jpeg')){
+        //   images.pop();
+        //   setclose(true)
+        // }
+        setclose(true)
+
         var i ;
         for( i =0; i< images1.length; i++){
 
@@ -763,7 +635,7 @@ const chooseFile = async() => {
 
          setspinner(true)
 
-          fetch(AppUrlCollection.VEHICLE_DETAIL + item.id +'/photos-upload', {
+          fetch(AppUrlCollection.VEHICLE_DETAIL + 0 +'/photos-upload', {
             method: 'POST',
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -1178,9 +1050,81 @@ useEffect(() => {
 callinglocation()
 callingCustomer()
 
-  return () => {
-    
+const willFocusSubscription = navigation.addListener('focus', () => {
+  setclose(false)
+  if(images.length == 1){
+images.pop()
+images.push(require('../Images/noimage3.jpeg'));
+
   }
+  setimagesurls([])
+  setvin(null);
+  setcustomeruserid(null);
+  setcustomername(null);
+  setlocation(null)
+  setlocation_name(null)
+  setlocation_id(null)
+  sethatnumber(null)
+  setvehicletype(null)
+  setyear(null)
+  setcolor(null)
+  setmodel(null)
+  setmake(null)
+  setweight(null)
+  setlicensenumber(null)
+  setlotnumber(null)
+  setloadstatus(null)
+  setcontainernmber(null)
+  setkeynote(null)
+  setauctionat(null)
+  setnote(null)
+  setstatusname(null)
+  setstatus(null)
+  setcondition(null)
+  setdamaged(null)
+  settitlenumber(null)
+  setdeliverdate(null)
+  setpickupdate(null)
+  setCDChanger(null)
+  setGPSNavigationSystem(null)
+  setSpareTireJack(null)
+  setWheelCovers(null)
+  setRadio(null)
+  setCDPLAYER(null)
+  setMIRROR(null)
+  setSPEAKER(null)
+  setOTHERS(null)
+
+  setfrontwindshiled(null)
+  setbonnet(null)
+  setgrill(null)
+  setfrontbumper(null)
+  setfrontheadlight(null)
+  setrearwindshield(null)
+  settrunkdoor(null)
+  setrearbumper(null)
+  setrearbumpersupport(null)
+  settaillamp(null)
+  setfrontleftfender(null)
+  setleftfrontdoor(null)
+  setleftreardoor(null)
+  setleftrearfender(null)
+  setpillar(null)
+  setroof(null)
+  setrightrearfender(null)
+  setrightreardoor(null)
+  setrightfrontdoor(null)
+  setfrontrightfender(null)
+  setfronttyres(null)
+
+
+
+
+
+});
+
+return willFocusSubscription;
+
 }, [])
 
 const renderlist = ({item}) =>{
@@ -1226,6 +1170,69 @@ style={{marginVertical:5,borderWidth:0.5,flexDirection:'row', borderColor:'grey'
      }  
 
  const callingupdateApi = ()=>{
+// setspinner(true)
+
+// form - validation 
+if (vin == null) {
+  alert("Please Enter VIN Number"); 
+  setspinner(false)
+
+}else if (customername == null && customeruserid == null) {
+  
+  alert('Please Select Customer Name'); 
+  setspinner(false)
+
+  } 
+  else if (location_id == null && location_name == null) {
+        alert("Please Select location"); 
+        setspinner(false)
+
+    }
+    // else if (hatnumber  {
+    //   alert("Please Enter Hat Number"); 
+    //   setspinner(false)
+
+    // }
+    // else if (vehicletype.trim().length == 0 ) {
+    //   alert("Please Enter Vehicle Type"); 
+    //   setspinner(false)
+
+    //   }
+      else if (year == null ) {
+        alert("Please Enter Vehicle year"); 
+        setspinner(false)
+
+      }
+      // else if (color.trim().length  == 0) {
+      //   alert("Please Enter Vehicle color"); 
+      //   setspinner(false)
+
+      // }
+      else if (model == null) {
+        alert("Please Enter Vehicle model"); 
+        setspinner(false)
+
+      }else if (make == null) {
+        alert("Please Enter Vehicle make"); 
+        setspinner(false)
+
+      }
+    //   else if (weight.trim().length == 0) {
+    //     alert("Please Enter Vehicle weight"); 
+    //     setspinner(false)
+
+    // } 
+    else if (lotnumber == null) {
+      alert("Please Select lot Number"); 
+      setspinner(false)
+
+    }
+    else if (status == null && statusname == null)   {
+      alert("Please Select Status"); 
+      setspinner(false)
+
+    }
+    else {
 
   let f = [];
   if(CDChanger == 3){
@@ -1261,81 +1268,127 @@ style={{marginVertical:5,borderWidth:0.5,flexDirection:'row', borderColor:'grey'
   let h = [] ;
   
   // for(var i =0; i < vehicleconditions.length ; i++){
-    h[0]  = null
-    h[1]  = null
-    h[2]  = frontwindshiled
-    h[3]  = bonnet
-    h[4]  = grill
-    h[5]  = frontbumper
-    h[6]  = frontheadlight
-    h[7]  = rearwindshield
-    h[8]  = trunkdoor
-    h[9]  = rearbumper
-    h[10] = rearbumpersupport
-    h[11] = taillamp
-    h[12] = frontleftfender
-    h[13] = leftfrontdoor
-    h[14] = leftreardoor
-    h[15] = leftrearfender
-    h[16] = pillar
-    h[17] = roof
-    h[18] = rightrearfender
-    h[20] = rightreardoor
-    h[21] = rightfrontdoor
-    h[22] = frontrightfender
-    h[23] = fronttyres
-  // }
+   
 
-  //add images
-  
+    if(frontwindshiled != null){
+     
+      h[2]  = frontwindshiled
+    }
+
+    if(bonnet != null){
+     
+      h[3]  = bonnet
+    }
+
+    if(grill != null){
+     
+      h[4]  = grill
+    }
+
+    if(frontbumper != null){
+    
+      h[5]  = frontbumper
+    }
+
+    if(frontheadlight != null){
+     
+      h[6]  = frontheadlight
+    }
+
+    if(rearwindshield != null){
+      
+      h[7]  = rearwindshield
+    }
+
+    if(trunkdoor != null){
+      
+      h[8]  = trunkdoor
+    }
+
+    if(rearbumper != null){
+      h[9]  = rearbumper
+    }
+
+    if(rearbumpersupport != null){
+      h[10]  = rearbumpersupport
+    }
+  if(taillamp != null){
+      h[11]  = taillamp
+    }
+
+    if(frontleftfender != null){
+      h[12]  = frontleftfender
+    }
+
+    if(leftfrontdoor != null){
+      h[13]  = leftfrontdoor
+    }
+
+
+    if(leftreardoor != null){
+      h[14]  = leftreardoor
+    }
+
+    if(leftrearfender != null){
+      h[15]  = leftrearfender
+    }
+
+    if(pillar != null){
+      h[16]  = pillar
+    }
+
+    if(roof != null){
+      h[17]  = roof
+    }
+
+    if(rightrearfender != null){
+      h[18]  = rightrearfender
+    }
+
+    if(rightreardoor != null){
+      h[20]  = rightreardoor
+    }
+    if(rightfrontdoor != null){
+      h[21]  = rightfrontdoor
+    }
+    if(frontrightfender != null){
+      h[22]  = frontrightfender
+    }
+    if(fronttyres != null){
+      h[23]  = fronttyres
+    }
+
+    // h[3]  = bonnet
+    // h[4]  = grill
+    // h[5]  = frontbumper
+    // h[6]  = frontheadlight
+    // h[7]  = rearwindshield
+    // h[8]  = trunkdoor
+    // h[9]  = rearbumper
+    // h[10] = rearbumpersupport
+    // h[11] = taillamp
+    // h[12] = frontleftfender
+    // h[13] = leftfrontdoor
+    // h[14] = leftreardoor
+    // h[15] = leftrearfender
+    // h[16] = pillar
+    // h[17] = roof
+    // h[18] = rightrearfender
+    // h[20] = rightreardoor
+    // h[21] = rightfrontdoor
+    // h[22] = frontrightfender
+    // h[23] = fronttyres
+  // }
 
 
       let array ={};
 
-      // array.hat_number= hatnumber;
-      // array.vehicle_type= vehicletype;
-      // array.year= year;
-      // array.color= color;
-      // array.model= model;
-      // array.make = make;
-      // array.vin= vin;
-      // array.weight = weight;
-      // array.lot_number = lotnumber;
-      // array.towed_amount= item.towed_amount;
-      // array.status_name= statusname;
-      // array.status= status;
-    
-      // array.customer_user_id= customeruserid;
-      // array.container_number = containernmber;
-      // array.key_note = keynote;
-      // array.load_status = loadstatus;
-      // array.auction_at = auctionat;
-      // array.towed_from = item.towed_from;
-      // array.note = note;
-      // array.location=  location;
-      // array.location_id = location_id
-      // array.customer_name = item.customer_name;
-      // array.title_number= titlenumber;
-      // array.towing_request_date=item.towing_request_date;
-      // array.deliver_date= deliverdate;
-      // array.pickup_date= pickupdate;
-      // array.condition = condition
-      // array.damaged = damaged;
-      // array.towed = item.towed;
-      // array.license_number= licensenumber;
-      // array.photos = images2
 
-      // array.auction_photos = item.auction_photos;
-      // array.pickup_photos = item.pickup_photos;
-      // array.arrived_photos = item.arrived_photos;
-      // array.vehicle_features = f;
-      // array.vehicle_conditions = h;
-      // array.vehicle_documents= item.vehicle_documents;
-      // array.invoice_photos = item.invoice_photos;
-
-
-
-
+  if(imagesurls.length > 0){
+    let photos = imagesurls
+    let img = {photos}
+    array.fileUrls=img
+  }
 array.hat_number = hatnumber,
 array.vehicle_type= vehicletype,
 array.year = year,
@@ -1344,218 +1397,64 @@ array.model= model,
 array.make= make,
 array.vin= vin,
 array.weight= weight,
+array.license_number = licensenumber,
 array.lot_number = lotnumber,
-array.towed_amount = item.towed_amount,
+array.loading_type = loadstatus,
+array.container_number= containernmber,
+
+array.customer_user_id=  customeruserid,
+array.customer_name=  customername,
+array.location_id = location_id,
+array.location = location,
+array.key_note =keynote,
+array.auction_at = auctionat,
+array.note = note,
+
 array.status_name= statusname,
 array.status=  status,
-array.location_id = location_id,
-array.customer_user_id=  customeruserid,
-array.towing_request_id = item.towing_request_id,
-array.container_number= containernmber,
-array.key_note =keynote,
-array.vcr= item.vcr,
-array.value=  item.value,
-  array.auction_at = auctionat,
-  array.towed_from=  item.towed_from,
-  array.note = note,
-  array.loading_type = loadstatus,
-  array.location = location,
-  array.customer_name=  customername,
-  array.title_number=  titlenumber,
-  array.title_received_date= item.title_received_date,
-  array.towing_request_date = item.towing_request_date,
-  array.deliver_date = deliverdate,
-  array.pickup_date=  pickupdate,
-  array.condition = condition,
-  array.damaged = damaged,
-  array.license_number = licensenumber,
-  array.photos= images2,
-  array.vehicle_features = f,
-  array.vehicle_conditions = h,
-  array.vehicle_documents = item.vehicle_documents,
-  array.invoice_photos= item.invoice_photos,
-  array.auction_photos = item.auction_photos,
-  array.pickup_photos = item.pickup_photos,
-  array.arrived_photos = item.arrived_photos,
-  // array.fileUrls { "photos": ["https://asl-shipping-line.s3.us-west-2.amazonaws.com/uploads/vehicles/images/32626/rsuEFeqEjPECLr8g0nxcEq5jc1o4D8Euj7l2PCSN.jpg"]}, 
 
+array.condition = condition,
+array.damaged = damaged,
 
+array.title_number=  titlenumber,
 
+array.deliver_date = deliverdate,
+array.pickup_date=  pickupdate,
 
+array.vehicle_features = f,
+array.vehicle_conditions = h,
+
+array.towing_request_id = 0,
+  array.towed_from=  0,
+  array.towing_request_date = 0,
+  array.towed_amount = 0,
+
+ 
   alert(JSON.stringify(array))
 
-
-
-//   "hat_number": null,
-//   "vehicle_type": "SUV",
-//   "year": "2021",
-//   "color": "WHITE",
-//   "model": "honda",
-//   "make": "civic",
-//   "vin": "15june2022",
-//   "weight": null,
-//   "lot_number": "15062021",
-//    "towed_amount": 200,
-//   "status_name": "ON HAND",
-//  "towing_request_date": "2021-06-13",
-//   "towed_from": "ca",
-//   "photos":[],
-//   "fileUrls" : { "photos": ["https://asl-shipping-line.s3.us-west-2.amazonaws.com/uploads/vehicles/images/32626/rsuEFeqEjPECLr8g0nxcEq5jc1o4D8Euj7l2PCSN.jpg"]},    
-
-//   "status": 1, 
-//   "location_id": 1,
-//   "customer_user_id": 7000760,
-//   "container_number": null,
-//   "key_note": "",
-//   "auction_at": null,
-//   "note": null,
-//   "location": "LA",
-//   "customer_name": "TEST15JUNE",        
-
-//   "title_number": null,
-//   "deliver_date": null,
-//   "pickup_date": null,
-//   "condition": null,
-//   "damaged": null,
-//   "license_number": null,
-//   "ar_number": null,
-//   "vehicle_features": [],
-//   "vehicle_conditions": [],
-//     "auction_photos":[],
-//   "pickup_photos":[],
-//   "arrived_photos":[],
-//   "invoice_photos":[],
-// "vehicle_documents": []
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      if(imagesurls.length > 0){
-        let photos = imagesurls
-        let img = {photos}
-        array.fileUrls=img
-      }
-    
-      //removeing images
-      // if(images2 != null){
-    
-      // array.photos = images2
-      // }
      
-      //   "lot_number": lotnumber,
-      //   "towed_amount": item.towed_amount,
-      //   "status_name": statusname,
-      //   "status": status,
-      //   "location_id": location_id,
-      //   "customer_user_id": customeruserid,
-      //   "towing_request_id": item.towing_request_id,
-      //   "container_number": containernmber,
-      //   "key_note": keynote,
-      //   "vcr": item.vcr,
-      //   "value": item.value,
-      //   "auction_at": auctionat,
-      //   "towed_from": item.towed_from,
-      //   "note": note,
-      //   "loading_type": item.loading_type,
-      //   "location": location,
-      //   "customer_name": customername,
-      //   "title_number": titlenumber,
-      //   "title_received_date": null,
-      //   "towing_request_date": item.towing_request_date,
-      //   "deliver_date": deliverdate,
-      //   "pickup_date": pickupdate,
-      //   "condition": condition,
-      //   "damaged": damaged,
-      //   "license_number": licensenumber,
-      //    "photos": images2,
-      //   "auction_photos": item.auction_photos,
-      //   "pickup_photos":item.pickup_photos,
-      //   "arrived_photos": item.arrived_photos,    
-      //   "vehicle_features": f,
-      //   "vehicle_conditions": h,
-      //   "vehicle_documents": item.vehicle_documents,
-      //   "invoice_photos": item.invoice_photos,
 
-     
-      // alert(imagesurls)
-      
-      
-        fetch(AppUrlCollection.VEHICLE_DETAIL + item.id, {
-          method: 'PUT',
+        fetch(AppUrlCollection.VEHILE_LIST, {
+          method: 'POST',
           headers: {
               'Content-Type': 'application/json',
+              'Accept': 'application/json',
               'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
           },
           
           body: JSON.stringify(array)
-
-      // //     body: JSON.stringify({
-      // //       // "total_photos": null,
-      // //   "hat_number": hatnumber,
-      // //   "vehicle_type": vehicletype,
-      // //   "year": year,
-      // //   "color": color,
-      // //   "model": model,
-      // //   "make": make,
-      // //   "vin": vin,
-      // //   "weight": weight,
-      // //   "lot_number": lotnumber,
-      // //   "towed_amount": item.towed_amount,
-      // //   "status_name": statusname,
-      // //   "status": status,
-      // //   "location_id": location_id,
-      // //   "customer_user_id": customeruserid,
-      // //   "towing_request_id": item.towing_request_id,
-      // //   "container_number": containernmber,
-      // //   "key_note": keynote,
-      // //   "vcr": item.vcr,
-      // //   "value": item.value,
-      // //   "auction_at": auctionat,
-      // //   "towed_from": item.towed_from,
-      // //   "note": note,
-      // //   "loading_type": item.loading_type,
-      // //   "location": location,
-      // //   "customer_name": customername,
-      // //   "title_number": titlenumber,
-      // //   "title_received_date": null,
-      // //   "towing_request_date": item.towing_request_date,
-      // //   "deliver_date": deliverdate,
-      // //   "pickup_date": pickupdate,
-      // //   "condition": condition,
-      // //   "damaged": damaged,
-      // //   "license_number": licensenumber,
-      // //    "photos": images2,
-      // //   "auction_photos": item.auction_photos,
-      // //   "pickup_photos":item.pickup_photos,
-      // //   "arrived_photos": item.arrived_photos,    
-      // //   "vehicle_features": f,
-      // //   "vehicle_conditions": h,
-      // //   "vehicle_documents": item.vehicle_documents,
-      // //   "invoice_photos": item.invoice_photos,
-      // //   "fileUrls" : { "photos": ["https://asl-shipping-line.s3.us-west-2.amazonaws.com/uploads/vehicles/images/32626/rsuEFeqEjPECLr8g0nxcEq5jc1o4D8Euj7l2PCSN.jpg"]}, 
-
-      // //     })
+      
          
       })
           .then((response) =>  response.json())
           .then((responseJson) => {
             setspinner(false)
-            AppConstance.showSnackbarMessage(responseJson.message)
-      
+            if(responseJson.message == 'The given data was invalid.'){
+              alert(JSON.stringify(responseJson.errors))
+            }else{
+              AppConstance.showSnackbarMessage(responseJson.message)
+
+            }
             ImageCropPicker.clean().then(() => {
               console.log('removed all tmp images from tmp directory');
             }).catch(e => {
@@ -1571,9 +1470,9 @@ array.value=  item.value,
               console.warn(error)
           });
       
-      
         }
 
+      }
 
 return (
    
@@ -1870,7 +1769,7 @@ onPress={()=> setcustmodal(false) }
             style={{
               flex: 1,
               justifyContent: 'center',
-              paddingVertical: 40,
+              paddingVertical: 10,
               height:deviceHeight,
               backgroundColor:'white',
               flexDirection: 'column',
@@ -1878,7 +1777,7 @@ onPress={()=> setcustmodal(false) }
               width:deviceWidth
             }}>
             
-            <View style={{width:'100%', paddingHorizontal:30, marginTop:30}}>
+            <View style={{width:'100%', paddingHorizontal:30, marginTop:Platform.OS == 'ios' ? 40:10}}>
 
             <TouchableOpacity
             onPress={()=> {setbarcodemodal(false)}}
@@ -1892,20 +1791,22 @@ onPress={()=> setcustmodal(false) }
         // flashMode={RNCamera.Constants.FlashMode.torch}
         topContent={
           <Text style={styles.centerText}>
-            Go to{' '}
-            <Text style={styles.textBold}>wikipedia.org/wiki/QR_code</Text> on
-            your computer and scan the QR code.
+          SCAN VEHICLE VIN NUMBER
           </Text>
         }
         bottomContent={
-          <TouchableOpacity style={styles.buttonTouchable}>
-            <Text style={styles.buttonText}>OK. Got it!</Text>
+          <TouchableOpacity
+        onPress={()=>  setbarcodemodal(false)} 
+          style={styles.buttonTouchable}>
+            <Text style={styles.buttonText}>CANCEL</Text>
           </TouchableOpacity>
         }
         />
         
             
             </View>
+        
+        
         </Modal>
 
         <Modal
@@ -1915,7 +1816,7 @@ onPress={()=> setcustmodal(false) }
             <View style={{ justifyContent:'center',backgroundColor:'black', height:deviceHeight}}>
                 <View style={{backgroundColor:'black'}}>
                 <SliderBox 
-          images={images}
+          images={images.length == 0 ?dummyimages:images}
           sliderBoxHeight={deviceHeight*0.5}
           
           dotColor="#FFEE58"
@@ -1986,7 +1887,7 @@ onPress={()=> setcustmodal(false) }
  
 
  <SliderBox 
-     images={images}
+          images={images.length == 0 ?dummyimages:images}
           sliderBoxHeight={260}
           dotColor="#FFEE58"
   inactiveDotColor="#90A4AE"
@@ -2024,8 +1925,6 @@ onPress={()=> setcustmodal(false) }
 
         />
         
-
-
         {close == true ?
 
 <View style={{marginTop:15,position:'absolute',alignSelf:'flex-end', paddingHorizontal:40, }}>
@@ -2085,7 +1984,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
                 style={{color:'white'}}
                 placeholderTextColor='#D0D3D4'
                 placeholder={'Enter VIN or scan'}
-                value={vin == null ? 'Enter VIN or scan':vin}
+                value={vin}
                 onChangeText={(text)=> {setvin(text)}}
                 />
               </View>
@@ -3373,22 +3272,29 @@ const styles = StyleSheet.create({
     alignSelf:'center',
     color:'white'
   },
-centerText: {
-    flex: 1,
-    fontSize: 18,
-    padding: 32,
-    color: '#777'
-  },
+
   textBold: {
     fontWeight: '500',
     color: '#000'
   },
   buttonText: {
     fontSize: 21,
-    color: 'rgb(0,122,255)'
+    color: 'red'
   },
   buttonTouchable: {
-    padding: 16
-  }
+    paddingVertical:10,
+    paddingHorizontal:22,
+    textAlign:'center',
+    marginTop:Platform.OS == 'ios' ? 5:80,
+    borderWidth:1,
+    borderRadius:8,
+    borderColor:'red'
+  },
+  centerText: {
+    
+    fontSize: 18,
+    marginTop:0,
+    color: '#777'
+  },
 
   })
