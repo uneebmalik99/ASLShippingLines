@@ -100,10 +100,10 @@ alignSelf:"center",
 marginTop:13
       }}
    >
-       <Image 
+       {/* <Image 
 style={{width:25,height:25}}
        source={require('../Images/home-icon-23.png')}
-       />
+       /> */}
    </View>
    <TouchableOpacity style={{paddingHorizontal:10,marginTop:10, position: 'absolute',alignSelf:"flex-end", alignContent:"flex-end", justifyContent:"flex-end",alignItems:"flex-end",
             }  
@@ -123,7 +123,7 @@ style={{width:25,height:25}}
  style={{ width:"105%", height:130}}>
 
 
-<Image source={ require('../Images/image.jpg')} 
+<Image source={ require('../Images/image.png')} 
             style={{ width: "105%", height:130,  }} 
            />
 <Left/>
@@ -208,13 +208,15 @@ onPress={() => this.props.navigation.navigate('ContactUsOne')} selected>
 <ListItem noBorder
 style={{height:40,
 }}
-onPress={() => this.props.navigation.navigate('WishListScreen')} selected>
+onPress={() => this.props.navigation.navigate('Notification')} selected>
 <Image source={ require('../Images/ann.jpeg')} 
             style={{ width: 27, height:27, alignSelf: 'center' }} resizeMode='contain'
            />
    
-<Text style={{fontSize:14, color:'black',marginLeft:10}}>ANNOUNCEMENT</Text>        
-
+<Text style={{fontSize:14, color:'black',marginLeft:10}}>ANNOUNCEMENT </Text>        
+<View style={{backgroundColor:'grey',padding:0,paddingHorizontal:8, borderRadius:10,}}>
+    <Text style={{color:'white', fontSize:12}}>{AppConstance.NOTIFICATIONCOUNTER}</Text>
+</View>
 </ListItem>
 
 

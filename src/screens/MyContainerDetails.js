@@ -692,6 +692,10 @@ const chooseFile = async() => {
 };
 
 const deleteimage = () =>{
+
+  if(AppConstance.USER_ROLE == 2 ){
+    alert('Admin have not permission to delete images')
+  }else{
   if(images.length == 1  ){
     setclose(false)
     images.push(require('../Images/noimage3.jpeg') )
@@ -720,7 +724,7 @@ for(var index = 0 ; index< images2.length ; index++){
   }
  }
  setimages2(img2)
-
+  }
 }
 
 const callingupdateApi = ()=>{

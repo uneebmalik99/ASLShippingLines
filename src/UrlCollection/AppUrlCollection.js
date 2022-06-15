@@ -12,13 +12,14 @@ class AppUrlCollection extends Component{
     static LOCATION = AppUrlCollection.BASE_URL + 'settings/locations';
     static LOCATION2 = AppUrlCollection.BASE_URL + 'search/location';
     static CONTACT_US = AppUrlCollection.BASE_URL + 'contact-us/create';
-    static INVOICE = AppUrlCollection.BASE_URL + 'invoices?';
+    static INVOICE = AppUrlCollection.BASE_URL + 'invoices/all';
     static INVOICE_PAID = AppUrlCollection.BASE_URL + 'invoices/paid?';
     static INVOICE_UNPAID = AppUrlCollection.BASE_URL + 'invoices/unpaid?';
+    static INVOICE_PARTIALLY_PAID = AppUrlCollection.BASE_URL + 'invoices/partially-paid?';
 
     
     //static CONTAINER_TRACKING = AppUrlCollection.BASE_URL + 'export/tracking?';
-    static CONTAINER_TRACKING = AppUrlCollection.BASE_URL + 'exports/search?';
+    static CONTAINER_TRACKING = AppUrlCollection.BASE_URL + 'exports';
     static CONTAINER_TRACKING_VIEW = AppUrlCollection . BASE_URL + 'search/export-view?';
 
     //static VEHICLE_CONTAINER = AppUrlCollection.BASE_URL + 'vehicle/vehicle-shipping-details'
@@ -41,7 +42,7 @@ class AppUrlCollection extends Component{
 
     static GET_YARD = 'https://gwwshipping.com/getYards.php';
 
-    static ANNOUCMENT = AppUrlCollection.BASE_URL + 'announcement';
+    static ANNOUCMENT = AppUrlCollection.BASE_URL + 'notifications';
 //     http://localhost/yii2_work/new_galaxy/webapi/export/billofladng-download?id=1
 // http://localhost/yii2_work/new_galaxy/webapi/export/manifest-download?id=1
 

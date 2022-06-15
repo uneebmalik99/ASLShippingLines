@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Modal , SafeAreaView, Text,FlatList, TouchableOpacity, StyleSheet, Image, ScrollView,  CameraRoll, BackHandler } from "react-native";
+import { View, Modal ,ImageBackground, SafeAreaView, Text,FlatList, TouchableOpacity, StyleSheet, Image, ScrollView,  CameraRoll, BackHandler } from "react-native";
 import Elavation from '../styles/Elavation';
 import AppColors from '../Colors/AppColors';
 import AppConstance, { deviceHeight, deviceWidth } from '../constance/AppConstance';
@@ -14,6 +14,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Slideshow from 'react-native-image-slider-show-razzium';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { SliderBox } from "react-native-image-slider-box";
+import DialogLoader from './DialogLoder';
 
 const { config, fs } = RNFetchBlob;
 
@@ -35,6 +37,7 @@ class ExportDetailsScreen extends Component {
             vehicleList: [],
             locationList: [],
             imageList: [],
+            isLoading: false,
             drawerview:false,
             showimagemodel:false,
 
@@ -55,6 +58,15 @@ class ExportDetailsScreen extends Component {
         AsyncStorage.setItem('user_role' , '')
         AppConstance.USER_ROLE = ''
       
+        AsyncStorage.setItem('username' , '')
+        AppConstance.USERNAME = ''
+      
+        AsyncStorage.setItem('rolename' , '')
+        AppConstance.ROLENAME = ''
+      
+        AsyncStorage.setItem('userprofilepic' , '')
+        AppConstance.USERPHOTO = ''
+        
       
         AsyncStorage.removeItem(AppConstance.USER_INFO_OBJ);
              this.setState({drawerview : false})
@@ -77,6 +89,7 @@ class ExportDetailsScreen extends Component {
     }
 
     callingExportDetailAPI = () =>{
+        this.setState({isLoading:true})
         fetch(AppUrlCollection.EXPORT_DETAIL + exportObj.id, {
             method: 'GET',
             headers: {
@@ -89,23 +102,28 @@ class ExportDetailsScreen extends Component {
                 console.log('export detail ', responseJson)
                 if (responseJson.status == 'SUCCESS') {
                  
-                    var a =[];
+                    // var a =[];
                  for (let index = 0; index < responseJson.data.export_details.container_images.length; index++) {
                         const element = responseJson.data.export_details.container_images[index].url;
-                        var b ={};
-                        b.url = element
-                        a.push(b)
+                        // var b ={};
+                        // b.url = element
+                        // a.push(b)
+                        this.state.imageList.push(element)
                     }
                     // this.setState({imageList:a})
                     //this.setState({ exportDetailObj: responseJson.data.export, vehicleList: responseJson.data.export.vehicleExports, imageList: this.state.imageList })
-                    this.setState({ exportDetailObj: responseJson.data.export_details, vehicleList: responseJson.data.vehicles, imageList: a })
+                    this.setState({ exportDetailObj: responseJson.data.export_details, vehicleList: responseJson.data.vehicles, })
                     // vehicleImageBAsePath = responseJson.other.vehicle_image;
                 } else {
                     AppConstance.showSnackbarMessage(responseJson.message)
                 }
+                this.setState({isLoading:false})
+
             })
             .catch((error) => {
                 console.warn(error)
+                this.setState({isLoading:false})
+
             });
     }
 
@@ -283,6 +301,7 @@ class ExportDetailsScreen extends Component {
     render() {
         return (
             <SafeAreaView style={styles.screen}>
+<DialogLoader loading={this.state.isLoading} />
 
             <Modal 
             visible={this.state.drawerview}
@@ -319,9 +338,9 @@ class ExportDetailsScreen extends Component {
                                 style={{width:60,height:60 ,alignContent:"center", alignItems:"center", justifyContent:'center'}}
                                             //   onPress={() => this.props.navigation.navigate('LoginScreen')}
                     >
-                                <Image  source={require('../Images/home-icon-23.png')}
+                                {/* <Image  source={require('../Images/home-icon-23.png')}
                                 style={{ width: 30, height:30, alignSelf: 'center' }} resizeMode='contain'
-                            />
+                            /> */}
                             </TouchableOpacity>
                             
                             
@@ -350,9 +369,22 @@ class ExportDetailsScreen extends Component {
              style={{ width:"105%", height:130}}>
             
             
-            <Image source={ require('../Images/image.jpg')} 
-                        style={{ width: "105%", height:130,  }} 
-                       />
+            <ImageBackground source={ require('../Images/image.png')} 
+            style={{ width: "104%", height:130,justifyContent:'center'  }} 
+           >
+               <Image 
+                           style={{ width: '50%',alignSelf:'center', height:'50%',  }}
+                        
+                           resizeMethod='resize'
+                           resizeMode='contain' 
+
+               source={{ uri:AppConstance.USERPHOTO }}
+
+           
+               />
+               <Text style={{alignSelf:'center',marginTop:5, fontSize:15, color:'white'}}>{AppConstance.USERNAME}</Text>
+               <Text style={{alignSelf:'center',fontSize:13, color:'white'}}>{AppConstance.ROLENAME}</Text>
+               </ImageBackground>
             <Left/>
             <Body>
             </Body>
@@ -435,13 +467,15 @@ class ExportDetailsScreen extends Component {
             <ListItem noBorder
             style={{height:40,
             }}
-            onPress={() => {this.setState({drawerview:false}); this.props.navigation.navigate('WishListScreen')}} selected>
+            onPress={() => {this.setState({drawerview:false}); this.props.navigation.navigate('Notification')}} selected>
             <Image source={ require('../Images/ann.jpeg')} 
                         style={{ width: 27, height:27, alignSelf: 'center' }} resizeMode='contain'
                        />
                
-            <Text style={{fontSize:14, color:'black',marginLeft:10}}>ANNOUNCEMENT</Text>        
-            
+            <Text style={{fontSize:14, color:'black',marginLeft:10}}>ANNOUNCEMENT </Text>        
+            <View style={{backgroundColor:'grey',padding:0,paddingHorizontal:8, borderRadius:10,}}>
+    <Text style={{color:'white', fontSize:12}}>{AppConstance.NOTIFICATIONCOUNTER}</Text>
+</View>
             </ListItem>
             
             
@@ -490,9 +524,38 @@ class ExportDetailsScreen extends Component {
         >
             <View style={{ justifyContent:'center',backgroundColor:'black', height:deviceHeight}}>
                 <View style={{backgroundColor:'black'}}>
-                <Slideshow 
+                {/* <Slideshow 
                 height={deviceHeight*0.65}
-                   dataSource={this.state.imageList}/>
+                   dataSource={this.state.imageList}/> */}
+                           <SliderBox 
+        //   images={this.state.images.length == 0 ?dummyimages:this.state.images}
+          images={this.state.imageList}
+
+          sliderBoxHeight={deviceHeight*0.65}
+          
+          dotColor="#FFEE58"
+  inactiveDotColor="#90A4AE"
+  dotStyle={{
+    width: 10,
+    height: 10,
+    marginHorizontal: -4,
+    padding: 0,
+    margin: 0
+  }}
+          resizeMethod={'resize'}  
+          resizeMode={'cover'}
+  circleLoop
+  currentImageEmitter={index => {
+   }} 
+ 
+  paginationBoxStyle={{
+    alignItems: "center",
+    alignSelf: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+  }}
+  ImageComponentStyle={{ width: '100%', marginTop: 0}}
+        />
         
             <TouchableOpacity 
             onPress={()=> { this.setState({showimagemodel: false})}}
@@ -562,10 +625,40 @@ class ExportDetailsScreen extends Component {
                         {this.state.imageList.length > 0 ? (
         <View style={{width:"100%"}}
 >
-<Slideshow 
+{/* <Slideshow 
                 height={deviceHeight*0.25}
                 onPress={( )=> {this.setState({showimagemodel:true})}}
-                   dataSource={this.state.imageList}/>
+                   dataSource={this.state.imageList}/> */}
+                   <SliderBox 
+          images={this.state.imageList}
+
+          sliderBoxHeight={deviceHeight*0.3}
+          
+          dotColor="#FFEE58"
+  inactiveDotColor="#90A4AE"
+  dotStyle={{
+    width: 10,
+    height: 10,
+    marginHorizontal: -4,
+    padding: 0,
+    margin: 0
+  }}
+          resizeMethod={'resize'}  
+          resizeMode={'cover'}
+  circleLoop
+  currentImageEmitter={index => {
+   }} 
+   onCurrentImagePressed={index =>
+    this.setState({showimagemodel:true})
+  }
+  paginationBoxStyle={{
+    alignItems: "center",
+    alignSelf: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+  }}
+  ImageComponentStyle={{ width: '100%', marginTop: 0}}
+        />
 
 </View>
 
@@ -659,13 +752,13 @@ class ExportDetailsScreen extends Component {
                                     <View style={styles.dividerStyleView} />
                                 </View>
                             } */}
-
+{/* 
 
                             <View style={styles.detailMainViewStyle}>
                                 <Text style={styles.detailHeadingTxtStyle}>Arrived Date : </Text>
                                 <Text style={styles.detailValueTxtStyle}>{exportObj.arrivalDate != null ? exportObj.arrivalDate : '-'}</Text>
                             </View>
-                            <View style={styles.dividerStyleView} />
+                            <View style={styles.dividerStyleView} /> */}
 
                             {/* // <View style={styles.detailMainViewStyle}>
                             //     <Text style={styles.detailHeadingTxtStyle}>Destination : </Text>

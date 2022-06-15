@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Dimensions, SafeAreaView, Modal, Text,ImageSlider, TouchableOpacity, StyleSheet, FlatList, Image, TextInput, ScrollView, Share, BackHandler } from 'react-native'
+import { View, Dimensions,ImageBackground, SafeAreaView, Modal, Text,ImageSlider, TouchableOpacity, StyleSheet, FlatList, Image, TextInput, ScrollView, Share, BackHandler } from 'react-native'
 import Elavation from '../styles/Elavation';
 import AppColors from '../Colors/AppColors';
 import AppConstance, { deviceHeight, deviceWidth } from '../constance/AppConstance';
@@ -97,6 +97,15 @@ class VehcilContainerDetailScreen extends Component {
         AppConstance.USER_ROLE = ''
       
       
+        AsyncStorage.setItem('username' , '')
+        AppConstance.USERNAME = ''
+      
+        AsyncStorage.setItem('rolename' , '')
+        AppConstance.ROLENAME = ''
+      
+        AsyncStorage.setItem('userprofilepic' , '')
+        AppConstance.USERPHOTO = ''
+        
         AsyncStorage.removeItem(AppConstance.USER_INFO_OBJ);
              this.setState({drawerview : false})
         this.props.navigation.navigate('AppDrawer1');
@@ -109,9 +118,6 @@ class VehcilContainerDetailScreen extends Component {
         
 
     }
-
-    
-
     //check internet connection
    
     componentWillUnmount() {
@@ -150,6 +156,7 @@ class VehcilContainerDetailScreen extends Component {
 
     callingVehicleDetailApi = () => {
        
+        this.setState({isLoading:true})
             fetch(AppUrlCollection.VEHICLE_DETAIL  + vehicleObj.id, {
                 method: 'GET',
                 headers: {
@@ -160,12 +167,14 @@ class VehcilContainerDetailScreen extends Component {
                 .then((response) => response.json())
                 .then((responseJson) => {
                     console.log(responseJson)
-                    this.setState({ isLoading: false })
                   
                     if (responseJson.status == 'SUCCESS') {
                         // alert(responseJson.data.vehicle_conditions[3])
                         this.setState({ vehicleDetail: responseJson.data , vehicle_conditions:responseJson.data.vehicle_conditions })
                        source.uri = '';
+
+
+                  
                        if(responseJson.data.invoice_photos.length > 0){
                         source.uri = responseJson.data.invoice_photos[0].url
                         this.setState({show: true})
@@ -180,26 +189,31 @@ class VehcilContainerDetailScreen extends Component {
                        
 
 
-                        var a =[];
+                        // var a =[];
             
-                        for (let index = 0; index < vehicleDetailObj.photos.length; index++) {
-                            const element = vehicleDetailObj.photos[index];
+                        for (let index = 0; index < responseJson.data.photos.length; index++) {
+                            const element = responseJson.data.photos[index].url;
                             // this.state.images.push(element.url)
-                            var b ={};
-                            b.url = element
-                            a.push(b)
+
+                            this.state.images.push(element)
+                            // var b ={};
+                            // b.url = element
+                            // a.push(b)
                         }
 
-                        this.setState({images:a})
+                        // this.setState({images:a})
+// alert(JSON.stringify(this.state.images))
+                        this.setState({ isLoading: false })
 
-
-                        this.setState({ images: this.state.images })
+                        // this.setState({ images: this.state.images })
                     } else {
                         AppConstance.showSnackbarMessage(responseJson.message)
                     }
                 })
                 .catch((error) => {
                     console.warn(error)
+                    this.setState({ isLoading: false })
+
                 });
         
 
@@ -472,7 +486,6 @@ class VehcilContainerDetailScreen extends Component {
         setTimeout(() => this.refs.flatList.scrollToIndex({ animated: true, index: scrollIndex }));
     }
 
-
     saveImageFromLocal = () => {
         Share.share({
             message: this.state.images[this.state.imageSLiderPos],
@@ -541,9 +554,9 @@ class VehcilContainerDetailScreen extends Component {
                                 style={{width:60,height:60 ,alignContent:"center", alignItems:"center", justifyContent:'center'}}
                                             //   onPress={() => this.props.navigation.navigate('LoginScreen')}
                     >
-                                <Image  source={require('../Images/home-icon-23.png')}
+                                {/* <Image  source={require('../Images/home-icon-23.png')}
                                 style={{ width: 30, height:30, alignSelf: 'center' }} resizeMode='contain'
-                            />
+                            /> */}
                             </TouchableOpacity>
                             
                             
@@ -572,9 +585,22 @@ class VehcilContainerDetailScreen extends Component {
              style={{ width:"105%", height:130}}>
             
             
-            <Image source={ require('../Images/image.jpg')} 
-                        style={{ width: "105%", height:130,  }} 
-                       />
+            <ImageBackground source={ require('../Images/image.png')} 
+            style={{ width: "104%", height:130,justifyContent:'center'  }} 
+           >
+               <Image 
+                           style={{ width: '50%',alignSelf:'center', height:'50%',  }}
+                        
+                           resizeMethod='resize'
+                           resizeMode='contain' 
+
+               source={{ uri:AppConstance.USERPHOTO }}
+
+           
+               />
+               <Text style={{alignSelf:'center',marginTop:5, fontSize:15, color:'white'}}>{AppConstance.USERNAME}</Text>
+               <Text style={{alignSelf:'center',fontSize:13, color:'white'}}>{AppConstance.ROLENAME}</Text>
+               </ImageBackground>
             <Left/>
             <Body>
             </Body>
@@ -657,13 +683,15 @@ class VehcilContainerDetailScreen extends Component {
             <ListItem noBorder
             style={{height:40,
             }}
-            onPress={() => {this.setState({drawerview:false}); this.props.navigation.navigate('WishListScreen')}} selected>
+            onPress={() => {this.setState({drawerview:false}); this.props.navigation.navigate('Notification')}} selected>
             <Image source={ require('../Images/ann.jpeg')} 
                         style={{ width: 27, height:27, alignSelf: 'center' }} resizeMode='contain'
                        />
                
-            <Text style={{fontSize:14, color:'black',marginLeft:10}}>ANNOUNCEMENT</Text>        
-            
+            <Text style={{fontSize:14, color:'black',marginLeft:10}}>ANNOUNCEMENT </Text>        
+            <View style={{backgroundColor:'grey',padding:0,paddingHorizontal:8, borderRadius:10,}}>
+    <Text style={{color:'white', fontSize:12}}>{AppConstance.NOTIFICATIONCOUNTER}</Text>
+</View>
             </ListItem>
             
             
@@ -707,17 +735,41 @@ class VehcilContainerDetailScreen extends Component {
             </Modal>
             
 
-
-
             <Modal
         visible={this.state.showimagemodel}
         animationType='fade'
         >
             <View style={{ justifyContent:'center',backgroundColor:'black', height:deviceHeight}}>
                 <View style={{backgroundColor:'black'}}>
-                <Slideshow 
+                {/* <Slideshow 
                 height={deviceHeight*0.65}
-                   dataSource={this.state.images}/>
+                   dataSource={this.state.images}/> */}
+                   <SliderBox 
+          images={this.state.images}
+          sliderBoxHeight={deviceHeight*0.3}
+          
+          dotColor="#FFEE58"
+  inactiveDotColor="#90A4AE"
+  dotStyle={{
+    width: 10,
+    height: 10,
+    marginHorizontal: -4,
+    padding: 0,
+    margin: 0
+  }}
+          resizeMethod={'resize'}  
+          resizeMode={'cover'}
+  circleLoop
+  currentImageEmitter={index => {
+   }} 
+  paginationBoxStyle={{
+    alignItems: "center",
+    alignSelf: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+  }}
+  ImageComponentStyle={{ width: '100%', marginTop: 0}}
+        />
         
             <TouchableOpacity 
             onPress={()=> { this.setState({showimagemodel: false})}}
@@ -839,10 +891,42 @@ class VehcilContainerDetailScreen extends Component {
     {this.state.images.length > 0 ? (
         <View style={{width:"100%"}}
 >
-<Slideshow 
+{/* <Slideshow 
                 height={deviceHeight*0.25}
                 onPress={()=> {this.setState({showimagemodel:true})}}
-                   dataSource={this.state.images}/>
+                   dataSource={this.state.images}/> */}
+
+<SliderBox 
+        //   images={this.state.images.length == 0 ?dummyimages:this.state.images}
+          images={this.state.images}
+
+          sliderBoxHeight={deviceHeight*0.3}
+          
+          dotColor="#FFEE58"
+  inactiveDotColor="#90A4AE"
+  dotStyle={{
+    width: 10,
+    height: 10,
+    marginHorizontal: -4,
+    padding: 0,
+    margin: 0
+  }}
+          resizeMethod={'resize'}  
+          resizeMode={'cover'}
+  circleLoop
+  currentImageEmitter={index => {
+   }} 
+   onCurrentImagePressed={index =>
+    this.setState({showimagemodel:true})
+  }
+  paginationBoxStyle={{
+    alignItems: "center",
+    alignSelf: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+  }}
+  ImageComponentStyle={{ width: '100%', marginTop: 0}}
+        />
 
 </View>
 

@@ -3,6 +3,7 @@ import { View, Alert, TouchableOpacity, TextInput, Linking, Platform, Animated, 
 import AsyncStorage from '@react-native-community/async-storage';
 import AppConstance, { deviceHeight, deviceWidth } from '../constance/AppConstance';
 // import { getAppstoreAppVersion } from "react-native-appstore-version-checker";
+import { StackActions } from '@react-navigation/native';
 
 
      
@@ -183,6 +184,7 @@ class SplashScreen extends Component {
                                     if (value == '1') {
                                         AsyncStorage.getItem('auth_key').then((auth) =>{
                                             AppConstance.USER_TOKEN_KEY = auth;
+                                            AppConstance.AUTH_KEY = auth;
                                             AsyncStorage.getItem('user_id').then((user_id) =>{
 
                                             AppConstance.USER_ID = user_id;
@@ -191,6 +193,8 @@ class SplashScreen extends Component {
                                                 console.warn('json value', value)
                                                 if (value != null) {
                                                     let data = JSON.parse(value);
+
+
 
                                                     
                                                     AppConstance.USER_INFO.USER_ID = data.id;
@@ -210,14 +214,36 @@ class SplashScreen extends Component {
                                                     AppConstance.USER_INFO.USER_IS_BLOCK = data.is_blocked;
                                                    // this.props.navigation.goBack();
 
+                                                   AsyncStorage.getItem('username').then((username)=>{
+                                                       AppConstance.USERNAME = username
+                                                   })
+                                                   AsyncStorage.getItem('rolename').then((rolename)=>{
+                                                    AppConstance.ROLENAME = rolename
+                                                })
+                                                AsyncStorage.getItem('userprofilepic').then((userpic)=>{
+                                                    AppConstance.USERPHOTO = userpic
+                                                })
+
                                                    AsyncStorage.getItem('user_role').then((role)=>{
                                                     if(role == "1"){
                                                         AppConstance.USER_ROLE = '1'
+
+
+                                                        // this.props.navigation.dispatch(
+                                                        //     StackActions.replace('TabScreen')
+                                                        //   );
+                                                        
+                                                        // this.props.navigation.navigate('DashboardScreen')
+
                                                         this.props.navigation.navigate('TabScreen')
 
 
                                                     }else{
                                                         AppConstance.USER_ROLE = '0'
+
+                                                        // this.props.navigation.dispatch(
+                                                        //     StackActions.replace('TabScreen')
+                                                        //   );
                                                         this.props.navigation.navigate('TabScreen')
 
 
@@ -230,6 +256,12 @@ class SplashScreen extends Component {
         
                                                     // this.props.navigation.navigate('NoInternetConnectionFoundScreen')
                                                 } else {
+
+
+                                                    // this.props.navigation.dispatch(
+                                                    //     StackActions.replace('AppDrawer1')
+                                                    //   );
+                                                    
                                                     this.props.navigation.navigate('AppDrawer1')
 
                                                     ///8888

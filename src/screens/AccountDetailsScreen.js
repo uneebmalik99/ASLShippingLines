@@ -1,5 +1,5 @@
 import React, { Component, useState, useEffect } from 'react';
-import { View,Dimensions, SafeAreaView , Modal,  Text, TouchableOpacity, StyleSheet, Image, ScrollView } from "react-native";
+import { View,Dimensions, SafeAreaView , Modal,  Text,ImageBackground, TouchableOpacity, StyleSheet, Image, ScrollView } from "react-native";
 import Elavation from '../styles/Elavation';
 import AppColors from '../Colors/AppColors';
 import AppConstance, { deviceHeight, deviceWidth } from '../constance/AppConstance';
@@ -21,8 +21,9 @@ const AccountDetailsScreen = ({route ,navigation}) => {
     const [drawerview, setdrawerview] = useState(false)
     const [show, setshow] = useState(false)
    
+    // const [source , setsource] = useState({uri:invoice, cache:true})
     const [source , setsource] = useState({uri:invoice, cache:true})
-   
+
 
     Logout =() => {
 
@@ -38,7 +39,15 @@ const AccountDetailsScreen = ({route ,navigation}) => {
         AsyncStorage.setItem('user_role' , '')
         AppConstance.USER_ROLE = ''
       
-      
+        AsyncStorage.setItem('username' , '')
+  AppConstance.USERNAME = ''
+
+  AsyncStorage.setItem('rolename' , '')
+  AppConstance.ROLENAME = ''
+
+  AsyncStorage.setItem('userprofilepic' , '')
+  AppConstance.USERPHOTO = ''
+  
         AsyncStorage.removeItem(AppConstance.USER_INFO_OBJ);
              this.setState({drawerview : false})
         this.props.navigation.navigate('AppDrawer1');
@@ -48,6 +57,7 @@ const AccountDetailsScreen = ({route ,navigation}) => {
 
     useEffect(() => {
 
+        
         if(invoice != '' || invoice != null){
             setshow(true)
         }else{
@@ -94,9 +104,9 @@ const AccountDetailsScreen = ({route ,navigation}) => {
                                 style={{width:60,height:60 ,alignContent:"center", alignItems:"center", justifyContent:'center'}}
                                             //   onPress={() => this.props.navigation.navigate('LoginScreen')}
                     >
-                                <Image  source={require('../Images/home-icon-23.png')}
+                                {/* <Image  source={require('../Images/home-icon-23.png')}
                                 style={{ width: 30, height:30, alignSelf: 'center' }} resizeMode='contain'
-                            />
+                            /> */}
                             </TouchableOpacity>
                             
                             
@@ -125,9 +135,22 @@ const AccountDetailsScreen = ({route ,navigation}) => {
              style={{ width:"105%", height:130}}>
             
             
-            <Image source={ require('../Images/image.jpg')} 
-                        style={{ width: "105%", height:130,  }} 
-                       />
+            <ImageBackground source={ require('../Images/image.png')} 
+            style={{ width: "104%", height:130,justifyContent:'center'  }} 
+           >
+               <Image 
+                           style={{ width: '50%',alignSelf:'center', height:'50%',  }}
+                        
+                           resizeMethod='resize'
+                           resizeMode='contain' 
+
+               source={{ uri:AppConstance.USERPHOTO }}
+
+           
+               />
+               <Text style={{alignSelf:'center',marginTop:5, fontSize:15, color:'white'}}>{AppConstance.USERNAME}</Text>
+               <Text style={{alignSelf:'center',fontSize:13, color:'white'}}>{AppConstance.ROLENAME}</Text>
+               </ImageBackground>
             <Left/>
             <Body>
             </Body>
@@ -210,13 +233,15 @@ const AccountDetailsScreen = ({route ,navigation}) => {
             <ListItem noBorder
             style={{height:40,
             }}
-            onPress={() => {setdrawerview(false); navigation.navigate('WishListScreen')}} selected>
+            onPress={() => {setdrawerview(false); navigation.navigate('Notification')}} selected>
             <Image source={ require('../Images/ann.jpeg')} 
                         style={{ width: 27, height:27, alignSelf: 'center' }} resizeMode='contain'
                        />
                
-            <Text style={{fontSize:14, color:'black',marginLeft:10}}>ANNOUNCEMENT</Text>        
-            
+            <Text style={{fontSize:14, color:'black',marginLeft:10}}>ANNOUNCEMENT </Text>        
+            <View style={{backgroundColor:'grey',padding:0,paddingHorizontal:8, borderRadius:10,}}>
+    <Text style={{color:'white', fontSize:12}}>{AppConstance.NOTIFICATIONCOUNTER}</Text>
+</View>
             </ListItem>
             
             
@@ -282,9 +307,11 @@ const AccountDetailsScreen = ({route ,navigation}) => {
             
             
                     <TouchableOpacity 
-                                style={{width:60,height:60 ,alignContent:"center", alignItems:"center", justifyContent:'center'}}
+                                style={{width:130,height:60 ,alignContent:"center", alignItems:"center", justifyContent:'center'}}
                                             //   onPress={() => this.props.navigation.navigate('LoginScreen')}
                     >
+                                                <Text style={{fontWeight:'600', fontSize:18}}>Invoice Detail</Text>
+
                                 {/* <Image  source={require('../Images/home-icon-23.png')}
                                 style={{ width: 30, height:30, alignSelf: 'center' }} resizeMode='contain'
                             /> */}
@@ -297,12 +324,12 @@ const AccountDetailsScreen = ({route ,navigation}) => {
                         }  
                         }
                         
-                        onPress={() => setdrawerview(true)}         
+                        // onPress={() => setdrawerview(true)}         
             
                         >
-                             <Image source={ require('../Images/d-2.png')}
+                             {/* <Image source={ require('../Images/d-2.png')}
                         style={{ width: 30, height:30,marginRight:10, alignSelf: 'center' }} resizeMode='contain'
-                       />
+                       /> */}
                          </TouchableOpacity>
                  
                   </Appbar>

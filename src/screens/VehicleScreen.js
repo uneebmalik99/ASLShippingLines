@@ -37,10 +37,13 @@ class VehicleScreen extends Component {
             drawerview:false,
             spinner:false,
             tabIndex: 0,
+            searchvehiclelist:[],
             selectFilterName: '',
+            searchtxt:'',
             isModalVisible: false,
             locationList: [],
             vehicleList: [],
+            search:0,
             vehicleList2: [],
             searchTxt: '',
             isStopCallingAPI: false,
@@ -57,9 +60,14 @@ class VehicleScreen extends Component {
         }
 
     }
-
+    handleBackButtonClick() {
+        //this.props.navigation.goBack(null);
+        BackHandler.exitApp();
+        return true;
+    }
     componentDidMount() {
         
+        // BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
 
                 // this.ccallingLocationApi();
                 // if (filterItemObj != null) {
@@ -98,7 +106,14 @@ Logout =() => {
   
     AsyncStorage.setItem('user_role' , '')
     AppConstance.USER_ROLE = ''
-  
+    AsyncStorage.setItem('username' , '')
+  AppConstance.USERNAME = ''
+
+  AsyncStorage.setItem('rolename' , '')
+  AppConstance.ROLENAME = ''
+
+  AsyncStorage.setItem('userprofilepic' , '')
+  AppConstance.USERPHOTO = ''
   
     AsyncStorage.removeItem(AppConstance.USER_INFO_OBJ);
          this.setState({drawerview : false})
@@ -219,7 +234,11 @@ Logout =() => {
         // uri:vehilceImageBasePath + item.image
         let locationName = this.state.locationList.find((location) => location.id == item.location)
 
-        return <Elavation
+        return  <TouchableOpacity
+        onPress={() => this.props.navigation.navigate('VehcilContainerDetailScreen', { 'vehicleObj': item, 'locationList': this.state.locationList, 'baseImagePath': baseImagePath })}
+
+        >
+          <Elavation
                   elevation={2}
 
           style={{   paddingHorizontal:10, borderRadius:20, width: deviceWidth * 0.95, height: 106, flexDirection:'column', marginBottom: 10, backgroundColor: 'white', marginRight: 10, marginLeft: 10, marginTop: 4 }}>
@@ -228,7 +247,7 @@ Logout =() => {
 style={{paddingLeft:10, flexDirection:'row'}}>
 
 
-<TouchableOpacity style={{  flex: 1, justifyContent: 'space-between',  }}
+<View style={{  flex: 1, justifyContent: 'space-between',  }}
                 onPress={() => this.props.navigation.navigate('VehcilContainerDetailScreen', { 'vehicleObj': item, 'locationList': this.state.locationList, 'baseImagePath': baseImagePath })}
             
             
@@ -247,16 +266,16 @@ source={require('../Images/year2.png')}
 
                 {/* <Text style={{ fontFamily: AppFonts.JosefinSansRegular, color: AppColors.textColor, fontSize: 12 }}>{item.location != undefined && item.location != null && item.location != '' && locationName != undefined && locationName.name != undefined && locationName.name != null ? locationName.name + ' | ' + item.lot_number : '-'}</Text> */}
                 {/* <Text style={{ fontFamily: AppFonts.JosefinSansRegular, color: AppColors.textColor, fontSize: 12 }}>{'Status : ' + item.status != undefined && item.status != null && item.status != '' ? AppConstance.gettingStatusNameFromId(item.status) : '-'}</Text> */}
-            </TouchableOpacity>
+            </View>
 
-            <TouchableOpacity style={{ borderRadius:5,  width: deviceWidth * 0.42, height:80 }}
+            <View style={{ borderRadius:5,  width: deviceWidth * 0.42, height:80 }}
                 // onPress={() => this.switchToImageGrid(item)}
             >
                 {item.photo.length > 0 ? <Image style={{ width: undefined, height: undefined, flex: 1 }}
                     source={{ uri:item.photo }} /> :
                     <Image style={{  width: undefined, height: undefined, flex: 1 }} source={require('../Images/logo_final.png')} />}
 
-            </TouchableOpacity>
+            </View>
 
 
 
@@ -271,20 +290,20 @@ source={require('../Images/year2.png')}
 style={{ flexDirection:'row'}}>
 
 
-<TouchableOpacity style={{  flex: 1, justifyContent: 'space-between',  paddingBottom: 5, paddingLeft: 10 }}
-                onPress={() => this.props.navigation.navigate('VehcilContainerDetailScreen', { 'vehicleObj': item, 'locationList': this.state.locationList, 'baseImagePath': baseImagePath })}
+<View style={{  flex: 1, justifyContent: 'space-between',  paddingBottom: 5, paddingLeft: 10 }}
+                // onPress={() => this.props.navigation.navigate('VehcilContainerDetailScreen', { 'vehicleObj': item, 'locationList': this.state.locationList, 'baseImagePath': baseImagePath })}
             
             
             >
 
 
-            </TouchableOpacity>
+            </View>
 
-            <TouchableOpacity style={{ borderRadius:5, paddingVertical:3, width: deviceWidth * 0.38, }}
+            <View style={{ borderRadius:5, paddingVertical:3, width: deviceWidth * 0.38, }}
             >
         <Text style={{   color: AppColors.Signincolor, fontSize: 12 }}>{item.vin != undefined && item.vin != null && item.vin != ''  ? item.vin : '-'}</Text>
 
-            </TouchableOpacity>
+            </View>
 
 
 
@@ -292,61 +311,11 @@ style={{ flexDirection:'row'}}>
 
 
 </Elavation>        
+</TouchableOpacity>
         
         
         
-        
-//         <Elavation
-//             elevation={2}
-//             style={{   paddingRight:5, borderRadius:20, width: deviceWidth * 0.95, height: 80, flexDirection: 'row', marginBottom: 5, backgroundColor: 'white', marginRight: 10, marginLeft: 10, marginTop: 4 }}
-//         >
 
-
-// <View 
-//             style={{   paddingRight:5, borderRadius:20, width: deviceWidth * 0.95, height: 80, flexDirection: 'column', marginBottom: 5, backgroundColor: 'white', marginRight: 10, marginLeft: 10, marginTop: 4 }}
-
-//  >
-
-
-// <View style={{flexDirection:'row'}}>
-
-
-
-//         {/* <Text>{item.year+item.make+item.model+item.name+item.allData}</Text> */}
-            
-
-//             {/* AppConstance.APP_PROPS.navigation.navigate('VehcilDetailScreen', { 'vehicleObj': item, 'locationList': this.state.locationList, 'baseImagePath': baseImagePath }) */}
-//             <TouchableOpacity style={{  flex: 1, justifyContent: 'space-between', paddingTop: 5, paddingBottom: 5, paddingLeft: 10 }}
-//                 onPress={() => this.props.navigation.navigate('VehcilContainerDetailScreen', { 'vehicleObj': item, 'locationList': this.state.locationList, 'baseImagePath': baseImagePath })}
-            
-            
-//             >
-
-            
-//                 <Text style={{ fontFamily: AppFonts.JosefinSansSemiBold, color: AppColors.textColor, fontSize: 13 }}>{item.model != undefined && item.model != null && item.model != '' ? item.model.toUpperCase() + ' ' + item.make.toUpperCase() : '-'}</Text>
-//                 <Text style={{ fontFamily: AppFonts.JosefinSansRegular, color: AppColors.textColor, fontSize: 12 }}>{item.year != undefined && item.year != null && item.year != '' && locationName != undefined && locationName.name != undefined && locationName.name != null ? item.year : '-'}</Text>
-
-//                 {/* <Text style={{ fontFamily: AppFonts.JosefinSansRegular, color: AppColors.textColor, fontSize: 12 }}>{item.location != undefined && item.location != null && item.location != '' && locationName != undefined && locationName.name != undefined && locationName.name != null ? locationName.name + ' | ' + item.lot_number : '-'}</Text> */}
-//                 {/* <Text style={{ fontFamily: AppFonts.JosefinSansRegular, color: AppColors.textColor, fontSize: 12 }}>{'Status : ' + item.status != undefined && item.status != null && item.status != '' ? AppConstance.gettingStatusNameFromId(item.status) : '-'}</Text> */}
-//             </TouchableOpacity>
-
-//             <TouchableOpacity style={{ borderRadius:5, paddingVertical:5, width: deviceWidth * 0.3, height: 80 }}
-//                 onPress={() => this.switchToImageGrid(item)}
-//             >
-//                 {item.images.length > 0 ? <Image style={{ width: undefined, height: undefined, flex: 1 }}
-//                     source={{ uri: baseImagePath + item.images[0].thumbnail }} /> :
-//                     <Image style={{  width: undefined, height: undefined, flex: 1 }} source={require('../Images/logo_final.png')} />}
-
-//             </TouchableOpacity>
-// </View>
-
-
-
-
-
-
-// </View>
-//         </Elavation>
     }
 
     onTabChange = (event) => {
@@ -501,6 +470,71 @@ style={{ flexDirection:'row'}}>
         }, 100)
     }
 
+    callingSearchAPI = () => {
+        // alert(text.nativeEvent.text)
+      this.setState({ isLoading: true, isFooterLoading: false })
+      if(this.state.searchtxt.length>0){
+        this.setState({search:1})
+
+        let url = AppUrlCollection.VEHILE_LIST +'vehicle_global_search='+this.state.searchtxt +'&status='+this.state.statusId ;
+        // fetch(AppUrlCollection.VEHILE_LIST + 'vehicle_global_search'+ text.nativeEvent.text + '&status=' + this.state.statusId ,{
+            fetch(url,{
+                method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+            },
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+
+                if (responseJson.data !=  '' || responseJson.data !=  null) {
+                    let data = responseJson.data;
+                    // alert(JSON.stringify(responseJson.data))
+                    this.setState({ isLoading: false, isFooterLoading: false })
+                    if (data.length > 0) {
+                       
+                        // this.setState({ vehicleList: [...this.state.vehicleList, ...data], noMoreDataFound: false })
+                        this.setState({ searchvehiclelist: data, noMoreDataFound: false })
+                    } else {
+                        
+                        this.setState({ noMoreDataFound: true, isFooterLoading: false,})
+                    }
+                   
+                    this.setState({ noMoreDataFound: false })
+                } else {
+                    this.setState({ isLoading: false, isFooterLoading: false })
+               
+                    // AppConstance.showSnackbarMessage(responseJson.message)
+                }
+            })
+            .catch((error) => {
+                console.warn(error)
+                this.setState({isLoading:false})
+            });
+    
+    
+    
+    
+    
+    
+    
+    }else{
+
+        this.setState({search:0})
+        this.setState({isLoading: false})
+
+        
+
+     }
+              
+                // this.ccallingLocationApi();
+                // this.setState({ isLoading: false })
+                // console.log('api calling ::', AppUrlCollection.CONTAINER_TRACKING + 'search=' + this.state.searchLotNumber + '&page=1')
+                // this.callingContainerApi(true)
+
+         
+        };
     //Render Footer
     renderFooter = () => {
         // if (this.state.paidServiceCallStop) {
@@ -620,11 +654,21 @@ style={{ flexDirection:'row'}}>
                                         placeholder='Search'
                                         placeholderTextColor={AppColors.toolbarColor}
                                         selectionColor={AppColors.toolbarColor}
-                                        onChangeText={(text) => this.setState({ searchTxt: text })}
-                                        onSubmitEditing={() => this.callingSearchAPI()}
+                                        // onChangeText={(text) => this.setState({ searchTxt: text })}
+                                        onChangeText={(text) => {if(text.length == 0){this.setState({search:0} ,this.setState({searchtxt:text}), this.setState({searchvehiclelist:[]}))}else{this.setState({search:1});this.setState({searchtxt:text})}  } }
+                                        onSubmitEditing={(text) => {if(text.nativeEvent.text.length>0){
+                                            // this.setState({search:1})
+                                            this.callingSearchapi(text)
+    
+                                        } else{
+                                            this.setState({search:0})
+                                            this.setState({isLoading:false})
+    
+                                        }  }}
+                                        // onSubmitEditing={() => this.callingSearchAPI()}
                                         returnKeyType='search'
                                     />
-                                    <AntDesign name='search1' color={AppColors.toolbarColor} size={20} />
+                                    <AntDesign name='search1' onPress={()=> {this.callingSearchapi()}} color={AppColors.toolbarColor} size={20} />
                                 </View>
                             </Elavation>
                             <TouchableOpacity
@@ -714,9 +758,9 @@ style={{ flexDirection:'row'}}>
                                 style={{width:60,height:60 ,alignContent:"center", alignItems:"center", justifyContent:'center'}}
                                             //   onPress={() => this.props.navigation.navigate('LoginScreen')}
                     >
-                                <Image  source={require('../Images/home-icon-23.png')}
+                                {/* <Image  source={require('../Images/home-icon-23.png')}
                                 style={{ width: 30, height:30, alignSelf: 'center' }} resizeMode='contain'
-                            />
+                            /> */}
                             </TouchableOpacity>
                             
                             
@@ -745,9 +789,22 @@ style={{ flexDirection:'row'}}>
              style={{ width:"105%", height:130}}>
             
             
-            <Image source={ require('../Images/image.jpg')} 
-                        style={{ width: "105%", height:130,  }} 
-                       />
+            <ImageBackground source={ require('../Images/image.png')} 
+            style={{ width: "104%", height:130,justifyContent:'center'  }} 
+           >
+               <Image 
+                           style={{ width: '50%',alignSelf:'center', height:'50%',  }}
+                        
+                           resizeMethod='resize'
+                           resizeMode='contain' 
+
+               source={{ uri:AppConstance.USERPHOTO }}
+
+           
+               />
+               <Text style={{alignSelf:'center',marginTop:5, fontSize:15, color:'white'}}>{AppConstance.USERNAME}</Text>
+               <Text style={{alignSelf:'center',fontSize:13, color:'white'}}>{AppConstance.ROLENAME}</Text>
+               </ImageBackground>
             <Left/>
             <Body>
             </Body>
@@ -830,13 +887,15 @@ style={{ flexDirection:'row'}}>
             <ListItem noBorder
             style={{height:40,
             }}
-            onPress={() => {this.setState({drawerview:false}); this.props.navigation.navigate('WishListScreen')}} selected>
+            onPress={() => {this.setState({drawerview:false}); this.props.navigation.navigate('Notification')}} selected>
             <Image source={ require('../Images/ann.jpeg')} 
                         style={{ width: 27, height:27, alignSelf: 'center' }} resizeMode='contain'
                        />
                
-            <Text style={{fontSize:14, color:'black',marginLeft:10}}>ANNOUNCEMENT</Text>        
-            
+            <Text style={{fontSize:14, color:'black',marginLeft:10}}>ANNOUCMENT </Text>        
+            <View style={{backgroundColor:'grey',padding:0,paddingHorizontal:8, borderRadius:10,}}>
+    <Text style={{color:'white', fontSize:12}}>{AppConstance.NOTIFICATIONCOUNTER}</Text>
+</View>
             </ListItem>
             
             
@@ -907,9 +966,9 @@ style={{ flexDirection:'row'}}>
                     style={{width:60,height:60 ,alignContent:"center", alignItems:"center", justifyContent:'center'}}
                                 //   onPress={() => this.props.navigation.navigate('LoginScreen')}
         >
-                    <Image  source={require('../Images/home-icon-23.png')}
+                    {/* <Image  source={require('../Images/home-icon-23.png')}
                     style={{ width: 30, height:30, alignSelf: 'center' }} resizeMode='contain'
-                />
+                /> */}
                 </TouchableOpacity>
                 
                 
@@ -942,7 +1001,7 @@ style={{ flexDirection:'row'}}>
 {/* <View style={{ width:deviceWidth, backgroundColor: AppColors.toolbarColor }}>
                 </View> */}
 <TouchableOpacity
-                                            onPress={() => this.props.navigation.navigate('WishListScreen')}
+                                            onPress={() => this.props.navigation.navigate('Notification')}
                                             >
                                                 <Image
                                                 style={{ resizeMode:'contain',marginVertical:13, height:25,width:25}}
@@ -986,15 +1045,115 @@ source={require('../Images/bell.png')}
                                         placeholder='Search'
                                         placeholderTextColor={AppColors.toolbarColor}
                                         selectionColor={AppColors.toolbarColor}
-                                        onChangeText={(text) =>{ this.setState({ searchTxt: text }); this.searchFilterFunction(text) } }
-                                        onSubmitEditing={() => this.callingSearchAPI()}
+                                        onChangeText={(text) => {
+
+                                            if(text.length == 0)
+                                            {
+                                                this.setState({search:0})
+                                                this.setState({searchtxt:text})
+                                                this.setState({searchvehiclelist:[]})
+                                            }
+                                            else{
+                                                this.setState({searchtxt:text})
+                                                // this.setState({search:1})
+                                            }
+    
+                                        }}
+                                        // onChangeText={(text) =>{ this.setState({ searchTxt: text }); this.searchFilterFunction(text) } }
+                                        onSubmitEditing={(text) => {if(text.nativeEvent.text.length>0){
+                                            // this.setState({search:1})
+                                            this.callingSearchAPI(text)
+    
+                                        } else{
+                                            this.setState({search:0})
+                                            this.setState({isLoading:false})
+    
+                                        }  }}                                        
+                                        // onSubmitEditing={() => this.callingSearchAPI()}
                                         returnKeyType='search'
                                     />
-                                    <AntDesign name='search1' color={AppColors.toolbarColor} size={20} />
+                                    <AntDesign name='search1'  onPress={()=> { if(this.state.searchtxt.length> 0){ this.callingSearchAPI()}}} color={AppColors.toolbarColor} size={20} />
                                 </View>
                             </Elavation>
                             
                         </View>
+
+
+                        {this.state.search == 0?
+                        
+                        <View style={{ flex: 1 }}>
+
+                           {this.state.vehicleList.length > 0 ?
+                               <FlatList
+                               style={{ paddingTop: 5 }}
+                               data={this.state.vehicleList}
+                               renderItem={this.renderVehicle}
+                               keyExtractor={(item, index) => index}
+                               extraData={this.state}
+                               ListFooterComponent={this.renderFooter}
+                               onEndReached={this.loadMoreData}
+                               onEndReachedThreshold={0.5}
+                           />
+
+                                :
+                                <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                                <Text style={{  fontSize: 15 }}>Vehicle Not Found.</Text>
+                            </View>
+                                }
+                                </View>
+                           
+
+                                :
+
+
+                                <View style={{ flex: 1 }}>
+                           {this.state.searchvehiclelist.length > 0 ?
+
+                                      <FlatList
+                                    style={{ paddingTop: 5 }}
+                                    data={this.state.searchvehiclelist}
+                                    renderItem={this.renderVehicle}
+                                    keyExtractor={(item, index) => index}
+                                    extraData={this.state}
+                                  
+                                />
+                                      :
+                                      <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                                      <Text style={{  fontSize: 15 }}>Vehicle Not Found.</Text>
+                                  </View>
+                                      }
+                                      </View>
+                                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{/* 
                         {this.state.vehicleList.length > 0 ?
                             <View style={{ flex: 1 }}>
                                 <FlatList
@@ -1009,7 +1168,7 @@ source={require('../Images/bell.png')}
                                 />
                             </View> : <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
                                 <Text style={{  fontSize: 15 }}>Vehicle Not Found.</Text>
-                            </View>}
+                            </View>} */}
                     </View>
 
 

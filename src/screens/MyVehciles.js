@@ -51,7 +51,9 @@ const MyVehicles = ({ navigation }) => {
   const[noMoreDataFound , setnoMoreDataFound] = useState(true)
   const [FilteredDataSource , setFilteredDataSource ] = useState([])
   const [vehicleList , setvehicleList] = useState([])
-  const [ Search , setSearch ] = useState()
+  const [ search , setsearch ] = useState(0)
+  const [searchtxt, setsearchtxt ]  = useState('')
+  const [searchvehiclelist, setsearchvehiclelist]=useState([])
   const toggleSwitch = (value) => {
     //To handle switch toggle
     console.warn(value);
@@ -158,8 +160,7 @@ const MyVehicles = ({ navigation }) => {
           setspinner(false)
             console.warn(error)
         });
-}
-
+  }
 
   const  renderVehicle = ({ item, index }) => {
 
@@ -302,6 +303,85 @@ const renderFooter = () =>{
   )
 }
 
+const callingSearchAPI = () => {
+  // alert(text.nativeEvent.text)
+  
+// this.setState({ isLoading: true, isFooterLoading: false })
+if(searchtxt.length>0){
+  setsearch(1)
+
+  // alert(searchtxt)
+  // this.setState({search:1})
+
+  let url = AppUrlCollection.VEHILE_LIST + 'vehicle_global_search='  + searchtxt 
+  // fetch(AppUrlCollection.VEHILE_LIST + 'vehicle_global_search'+ text.nativeEvent.text + '&status=' + this.state.statusId ,{
+      fetch(url,{
+          method: 'GET',
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+      },
+  })
+      .then((response) => response.json())
+      .then((responseJson) => {
+// alert(JSON.stringify(responseJson))
+          if (responseJson.data !=  '' || responseJson.data !=  null) {
+              let data = responseJson.data;
+              setspinner()
+              // alert(JSON.stringify(responseJson.data))
+              // this.setState({ isLoading: false, isFooterLoading: false })
+              if (data.length > 0) {
+                 setsearchvehiclelist(data)
+                 setnoMoreDataFound(false)
+                  // this.setState({ vehicleList: [...this.state.vehicleList, ...data], noMoreDataFound: false })
+                  // this.setState({ searchvehiclelist: data, noMoreDataFound: false })
+              } else {
+                setnoMoreDataFound(false)
+                setisFooterLoading(false)
+                  
+                  // this.setState({ noMoreDataFound: true, isFooterLoading: false,})
+              }
+             setnoMoreDataFound(false)
+              // this.setState({ noMoreDataFound: false })
+          } else {
+            setspinner(false)
+            setisFooterLoading(false)
+              // this.setState({ isLoading: false, isFooterLoading: false })
+         
+              // AppConstance.showSnackbarMessage(responseJson.message)
+          }
+      })
+      .catch((error) => {
+          console.warn(error)
+          setspinner(false)
+          // this.setState({isLoading:false})
+      });
+
+
+
+
+
+
+
+}else{
+
+  setsearch(0)
+  setspinner(false)
+
+  // this.setState({search:0})
+  // this.setState({isLoading: false})
+
+  
+
+}
+        
+          // this.ccallingLocationApi();
+          // this.setState({ isLoading: false })
+          // console.log('api calling ::', AppUrlCollection.CONTAINER_TRACKING + 'search=' + this.state.searchLotNumber + '&page=1')
+          // this.callingContainerApi(true)
+   
+  };
+
 
   useEffect(() => {
     callingVehicleApi(true)
@@ -376,16 +456,46 @@ shadowRadius: 3.84,
 
 elevation: 5, borderRadius:20,backgroundColor:'white',marginTop:20, flexDirection:'row'}}>
   <TextInput style={{backgroundColor:'white',width:'90%', height:40,paddingHorizontal:10, borderRadius:20}}
-  onChangeText={text => searchFilterFunction(text)}
-  onSubmitEditing={(Text) => searchFilterFunction(Text)}
+  // onChangeText={text => searchFilterFunction(text)}
+  // onSubmitEditing={(Text) => searchFilterFunction(Text)}
   // this.callingVehicleContainerService()
   placeholder="Enter vin or lot number"
   placeholderTextColor='grey'
-  
+  onChangeText={(text) => {
+
+    if(text.length == 0)
+    {
+      setsearch(0)
+      setsearchtxt(text)
+      setsearchvehiclelist([])
+
+        // this.setState({search:0})
+        // this.setState({searchtxt:text})
+        // this.setState({searchvehiclelist:[]})
+    }
+    else{
+      setsearchtxt(text)
+        // this.setState({searchtxt:text})
+        // this.setState({search:1})
+    }
+
+}}
+// onChangeText={(text) =>{ this.setState({ searchTxt: text }); this.searchFilterFunction(text) } }
+onSubmitEditing={(text) => {if(text.nativeEvent.text.length>0){
+    // this.setState({search:1})
+    callingSearchAPI(text)
+
+} else{
+  setsearch(0)
+  setspinner(false)
+    // this.setState({search:0})
+    // this.setState({isLoading:false})
+
+}  }} 
     underlineColorAndroid="transparent"
   ></TextInput>
   
-  <Feather style={{alignSelf:'center',}} size={18} color='grey'  name='search'/>
+  <Feather style={{alignSelf:'center',}} size={18} color='grey' onPress={()=> { if(searchtxt.length> 0){ callingSearchAPI()}}} name='search'/>
 
 </View>
 
@@ -403,7 +513,7 @@ elevation: 5, borderRadius:20,backgroundColor:'white',marginTop:20, flexDirectio
 
   
 </View>
-<FlatList
+{/* <FlatList
 
                         data={vehicleList}
                         contentContainerStyle={{marginHorizontal:10,alignSelf:'center',justifyContent:'center',paddingBottom:10,marginTop:10, paddingHorizontal:10, width:deviceWidth}}
@@ -414,7 +524,55 @@ elevation: 5, borderRadius:20,backgroundColor:'white',marginTop:20, flexDirectio
                         ListFooterComponent={renderFooter}
                       //  onEndReachedThreshold={0.01}
                       
-                    />
+                    /> */}
+
+
+{search == 0?
+                        
+                        <View >
+
+                           {vehicleList.length > 0 ?
+                               <FlatList
+                               contentContainerStyle={{marginHorizontal:10,alignSelf:'center',justifyContent:'center',paddingBottom:130,marginTop:10, paddingHorizontal:10, width:deviceWidth}}
+                               data={vehicleList}
+                               renderItem={renderVehicle}
+                               keyExtractor={(item, index) => index}
+                               extraData={vehicleList}
+                               ListFooterComponent={renderFooter}
+                              //  ListFooterComponent={this.renderFooter}
+                              //  onEndReached={this.loadMoreData}
+                              //  onEndReachedThreshold={0.5}
+                           />
+
+                                :
+                                <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                                <Text style={{  fontSize: 15 }}>Vehicle Not Found.</Text>
+                            </View>
+                                }
+                                </View>
+                           
+
+                                :
+
+
+                                <View >
+                           {searchvehiclelist.length > 0 ?
+
+                                      <FlatList
+                                      contentContainerStyle={{marginHorizontal:10,alignSelf:'center',justifyContent:'center',paddingBottom:10,marginTop:10, paddingHorizontal:10, width:deviceWidth}}
+                                      data={searchvehiclelist}
+                                    renderItem={renderVehicle}
+                                    keyExtractor={(item, index) => index}
+                                    extraData={searchvehiclelist}
+                                  
+                                />
+                                      :
+                                      <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                                      <Text style={{  fontSize: 15 }}>Vehicle Not Found.</Text>
+                                  </View>
+                                      }
+                                      </View>
+                                }
                 
 
 

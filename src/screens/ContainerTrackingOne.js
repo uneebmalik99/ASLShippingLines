@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View ,ScrollView, SafeAreaView, Modal, Text, TouchableOpacity, StyleSheet, FlatList, Image, TextInput, ActivityIndicator, BackHandler } from 'react-native'
+import { View ,ScrollView,ImageBackground, SafeAreaView, Modal, Text, TouchableOpacity, StyleSheet, FlatList, Image, TextInput, ActivityIndicator, BackHandler } from 'react-native'
 import Elavation from '../styles/Elavation';
 import AppColors from '../Colors/AppColors';
 import AppConstance, { deviceHeight, deviceWidth } from '../constance/AppConstance';
@@ -25,10 +25,11 @@ class ContainerTrackingOne extends Component {
             tabIndex: 0,
             selectFilterName: '',
             isModalVisible: false,
+            searchtxt:'',
             searchLotNumber: '',
             isLoading: false,
             drawerview:false,
-
+            search:0,
             locationList: [],
             vehicleList: [
 
@@ -36,6 +37,9 @@ class ContainerTrackingOne extends Component {
             vehicleList2: [
 
             ],
+            searchvehiclelist:[
+              
+        ],
             categoryList: [
                 'New Purchase', 'On Hand', 'Ready to Ship', 'Car on the way', 'Arrived', ''
             ],
@@ -49,6 +53,9 @@ class ContainerTrackingOne extends Component {
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
         this.callingContainerApi();
+
+
+       
     }
 
 
@@ -66,6 +73,15 @@ class ContainerTrackingOne extends Component {
         AsyncStorage.setItem('user_role' , '')
         AppConstance.USER_ROLE = ''
       
+        AsyncStorage.setItem('username' , '')
+        AppConstance.USERNAME = ''
+      
+        AsyncStorage.setItem('rolename' , '')
+        AppConstance.ROLENAME = ''
+      
+        AsyncStorage.setItem('userprofilepic' , '')
+        AppConstance.USERPHOTO = ''
+        
       
         AsyncStorage.removeItem(AppConstance.USER_INFO_OBJ);
              this.setState({drawerview : false})
@@ -78,7 +94,9 @@ class ContainerTrackingOne extends Component {
     }
 
     handleBackButtonClick() {
-        this.props.navigation.goBack();
+        // this.props.navigation.goBack();
+        BackHandler.exitApp();
+
         return true;
       }
 
@@ -124,16 +142,80 @@ class ContainerTrackingOne extends Component {
     //Check internet connection
    
 
-    callingVehicleContainerService = () => {
-                this.ccallingLocationApi();
+    callingSearchapi = () => {
+        // alert(text.nativeEvent.text)
+  let url;
+
+  
+                this.setState({ isLoading: true, isFooterLoading: false })
+                url = AppUrlCollection.CONTAINER_TRACKING + '?export_global_search=' + this.state.searchtxt
+     if(this.state.searchtxt.length>0){
+        this.setState({search:1})
+// alert(text.nativeEvent.text)
+        // this.setState({search:1})
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+            },
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+                console.log('Response data view :: ', responseJson)
+                // this.setState({vehicleList:[]})
+            // alert(JSON.stringify(responseJson.data))                                 
+                if (responseJson.data != '' || responseJson.data != null) {
+                    this.setState({ isLoading: false })
+                    if (responseJson.data.length > 0) {
+                            // let searchdata = []
+                            // searchdata.push(responseJson.data) 
+                            // console.log('-=========++++++++++++++=========', searchdata);
+                        // console.log(responseJson.data);
+                        this.setState({ searchvehiclelist: responseJson.data, noMoreDataFound: false, isFooterLoading: false })
+                    } else {
+                    //    alert("nkvjhvjhvj")
+                            this.setState({ searchvehiclelist: [], noMoreDataFound: true, isFooterLoading: false })
+                    }
+                    // alert(JSON.stringify(this.state.searchvehiclelist))
+                    // console.log(this.state.searchvehiclelist);
+                } else {
+                    this.setState({ isLoading: false })
+
+                    AppConstance.showSnackbarMessage(responseJson.message)
+                }
+                // alert(JSON.stringify(this.state.searchvehiclelist))
+                // console.log('------------------------------------'+JSON.stringify(responseJson.data));
+
+            })
+            .catch((error) => {
                 this.setState({ isLoading: false })
-                console.log('api calling ::', AppUrlCollection.CONTAINER_TRACKING + 'search=' + this.state.searchLotNumber + '&page=1')
-                this.callingContainerApi(true)
-            
+
+                console.warn(error)
+            });
+    
+    
+    
+    
+    
+    
+    
+    }else{
+
+        this.setState({search:0})
+        this.setState({isLoading: false})
+
+        
+
+     }
+              
+                // this.ccallingLocationApi();
+                // this.setState({ isLoading: false })
+                // console.log('api calling ::', AppUrlCollection.CONTAINER_TRACKING + 'search=' + this.state.searchLotNumber + '&page=1')
+                // this.callingContainerApi(true)
+
          
         };
-
-
 
     //calling location api
     ccallingLocationApi = () => {
@@ -170,6 +252,51 @@ class ContainerTrackingOne extends Component {
 
     //render Vehicle
     renderVehicle = ({ item, index }) => {
+
+        this.state
+        let locationName = this.state.locationList.find((location) => location.id == item.location)
+        return <TouchableOpacity
+                        onPress={() => this.props.navigation.push('ExportDetailsScreen', { 'itemObj': item, 'baseImagePath': imageBasePath, 'vehicleList': this.state.vehicleList, 'isCallingWithoutLogin': true })}
+>
+
+        <Elavation
+            elevation={2}
+            style={{ width: deviceWidth * 0.95, height: 80, flexDirection: 'row', marginBottom: 5, backgroundColor: 'white', marginRight: 10, marginLeft: 10, marginTop: 4 }}>
+            <View style={{ width: deviceWidth * 0.3, height: 80 }}
+                // onPress = {()=>this.callingVehicleDetailSCreen(item)}
+            >
+                {item.thumbnail.length > 0 ?
+                    <Image style={{ width: undefined, height: undefined, flex: 1 }} source={{ uri: item.thumbnail }} /> :
+                    <Image style={{ width: undefined, height: undefined, flex: 1 }} source={require('../Images/logo_final.png')} />}
+
+            </View>
+
+            <View style={{ flex: 1, justifyContent: 'space-between', paddingTop: 5, paddingBottom: 5, paddingLeft: 10 }}
+                // onPress={() => this.props.navigation.push('ExportDetailsScreen', { 'itemObj': item, 'baseImagePath': imageBasePath, 'vehicleList': this.state.vehicleList, 'isCallingWithoutLogin': true })}
+            >
+                <View style={{ flexDirection: 'row' }}>
+                    <Text style={{ color: AppColors.textColor, fontSize: 13, flex: 1.4 }}>Container NO : </Text>
+                    <Text style={{  color: AppColors.textColor, fontSize: 12, flex: 2 }}>{item.container_number}</Text>
+                </View>
+
+                <View style={{ flexDirection: 'row' }}>
+                    <Text style={{  color: AppColors.textColor, fontSize: 13, flex: 1.4 }}>Port of loading : </Text>
+                    <Text style={{  color: AppColors.textColor, fontSize: 13, flex: 2 }}>{item.port != undefined && item.port != null && item.port.port_name != null && item.port.port_name != '' ? item.port.port_name : '-'}</Text>
+                </View>
+
+                <View style={{ flexDirection: 'row' }}>
+                    <Text style={{ color: AppColors.textColor, fontSize: 13, flex: 1.4 }}>ETA : </Text>
+                    <Text style={{  color: AppColors.textColor, fontSize: 12, flex: 2 }}>{item.eta}</Text>
+                </View>
+
+            </View>
+        </Elavation>
+        </TouchableOpacity>
+
+    }
+
+    rendersearchdata = ({ item, index }) => {
+console.log(item.location);
         let locationName = this.state.locationList.find((location) => location.id == item.location)
         return <Elavation
             elevation={2}
@@ -209,7 +336,6 @@ class ContainerTrackingOne extends Component {
     onTabChange = (event) => {
         this.setState({ tabIndex: event.i })
     }
-
 
     //set filter name
     setFiltername = (text) => {
@@ -285,12 +411,12 @@ class ContainerTrackingOne extends Component {
     callingContainerApi = (isFirstTimeCaling) => {
         var url = ''
         if (isFirstTimeCaling) {
-            this.setState({isLoading: true})
-
-            this.setState({ isLoading: true, isFooterLoading: false })
+            // this.setState({isLoading: true})
+ 
+            this.setState({isLoading: true,  isFooterLoading: false })
             url = AppUrlCollection.EXPORT_LIST + '&page=' + this.state.page
         } else {
-            this.setState({ isLoading: false, isFooterLoading: true })
+            this.setState({ isLoading:false, isFooterLoading: true })
             url = AppUrlCollection.EXPORT_LIST  + '&page=' + this.state.page
         }
         fetch(url, {
@@ -304,7 +430,7 @@ class ContainerTrackingOne extends Component {
         })
             .then((response) => response.json())
             .then((responseJson) => {
-                console.log('Response data viw :: ', responseJson)
+                console.log('Response data view :: ', responseJson)
                 if (responseJson.data != '' || responseJson.data != null) {
                     this.setState({ isLoading: false })
 
@@ -328,6 +454,10 @@ class ContainerTrackingOne extends Component {
 
                     AppConstance.showSnackbarMessage(responseJson.message)
                 }
+                console.log('R--------------------------: ', responseJson)
+                this.setState({isLoading: false})
+
+
             })
             .catch((error) => {
                 this.setState({ isLoading: false })
@@ -428,9 +558,9 @@ animationType='fade'
                     style={{width:60,height:60 ,alignContent:"center", alignItems:"center", justifyContent:'center'}}
                                 //   onPress={() => this.props.navigation.navigate('LoginScreen')}
         >
-                    <Image  source={require('../Images/home-icon-23.png')}
+                    {/* <Image  source={require('../Images/home-icon-23.png')}
                     style={{ width: 30, height:30, alignSelf: 'center' }} resizeMode='contain'
-                />
+                /> */}
                 </TouchableOpacity>
                 
                 
@@ -458,10 +588,22 @@ animationType='fade'
 
  style={{ width:"105%", height:130}}>
 
+<ImageBackground source={ require('../Images/image.png')} 
+            style={{ width: "104%", height:130,justifyContent:'center'  }} 
+           >
+               <Image 
+                           style={{ width: '50%',alignSelf:'center', height:'50%',  }}
+                        
+                           resizeMethod='resize'
+                           resizeMode='contain' 
 
-<Image source={ require('../Images/image.jpg')} 
-            style={{ width: "105%", height:130,  }} 
-           />
+               source={{ uri:AppConstance.USERPHOTO }}
+
+           
+               />
+               <Text style={{alignSelf:'center',marginTop:5, fontSize:15, color:'white'}}>{AppConstance.USERNAME}</Text>
+               <Text style={{alignSelf:'center',fontSize:13, color:'white'}}>{AppConstance.ROLENAME}</Text>
+               </ImageBackground>
 <Left/>
 <Body>
 </Body>
@@ -544,13 +686,15 @@ onPress={() =>{this.setState({drawerview:false}); this.props.navigation.navigate
 <ListItem noBorder
 style={{height:40,
 }}
-onPress={() => {this.setState({drawerview:false}); this.props.navigation.navigate('WishListScreen')}} selected>
+onPress={() => {this.setState({drawerview:false}); this.props.navigation.navigate('Notification')}} selected>
 <Image source={ require('../Images/ann.jpeg')} 
             style={{ width: 27, height:27, alignSelf: 'center' }} resizeMode='contain'
            />
    
-<Text style={{fontSize:14, color:'black',marginLeft:10}}>ANNOUNCEMENT</Text>        
-
+<Text style={{fontSize:14, color:'black',marginLeft:10}}>ANNOUNCEMENT </Text>        
+<View style={{backgroundColor:'grey',padding:0,paddingHorizontal:8, borderRadius:10,}}>
+    <Text style={{color:'white', fontSize:12}}>{AppConstance.NOTIFICATIONCOUNTER}</Text>
+</View>
 </ListItem>
 
 
@@ -621,9 +765,9 @@ onPress={() => {this.setState({drawerview:false}); this.props.navigation.navigat
                     style={{width:60,height:60 ,alignContent:"center", alignItems:"center", justifyContent:'center'}}
                                 //   onPress={() => this.props.navigation.navigate('LoginScreen')}
         >
-                    <Image  source={require('../Images/home-icon-23.png')}
+                    {/* <Image  source={require('../Images/home-icon-23.png')}
                     style={{ width: 30, height:30, alignSelf: 'center' }} resizeMode='contain'
-                />
+                /> */}
                 </TouchableOpacity>
                 
                 
@@ -646,7 +790,7 @@ onPress={() => {this.setState({drawerview:false}); this.props.navigation.navigat
 
             
                 
-                    <View style={{ width: deviceWidth, height: heightPercentageToDP('24%'),  }}>
+                    <View style={{ width: deviceWidth,  }}>
                             
                 <Image
                         source={require('../Images/containn.png')}
@@ -661,22 +805,133 @@ onPress={() => {this.setState({drawerview:false}); this.props.navigation.navigat
                                 <TextInput style={styles.searchTxtInputStyle}
                                     placeholder='Search '
                                     placeholderTextColor='blue'
-                                    selectionColor="white"
-                                    autoFocus={true}
-                                    // onSubmitEditing={() => this.callingVehicleContainerService()}
-                                    // onSubmitEditing={(text) => { this.callingSearchContainerApi(false)}}
+                                    // selectionColor="white"
+                                    // autoFocus={true}
+                                    // onSubmitEditing={(text) => {if(text.nativeEvent.text.length>0){
+                                    //     this.setState({search:1})
+                                    //     this.callingSearchapi(text)
+
+                                    // } else{
+                                    //     this.setState({search:1})
+                                    //     this.setState({isLoading:false})
+
+                                    // }  }}
+                                    onSubmitEditing={(text) => {if(text.nativeEvent.text.length>0){
+                                        // this.setState({search:1})
+                                        this.callingSearchapi(text)
+
+                                    } else{
+                                        this.setState({search:0})
+                                        this.setState({isLoading:false})
+
+                                    }  }}
 
                                     returnKeyType='search'
-                                    onChangeText={(text) => {this.setState({ searchLotNumber: text }); this.searchFilterFunction(text)} }
+                                    onChangeText={(text) => {
+
+                                        if(text.length == 0)
+                                        {
+                                            this.setState({search:0})
+                                            this.setState({searchtxt:text})
+                                            this.setState({searchvehiclelist:[]})
+                                        }
+                                        else{
+                                            this.setState({searchtxt:text})
+                                            // this.setState({search:1})
+                                        }
+
+                                    }}
+
+
+                                    
+                                    // onChangeText={(text) => {if(text.length == 0){this.setState({search:0} ,this.setState({searchtxt:text}), this.setState({searchvehiclelist:[]} ))}                                  } }
                                 />
-                                <AntDesign name='search1'  size={20} />
+                                <AntDesign name='search1'  
+                                onPress={()=> { if(this.state.searchtxt.length> 0){ this.callingSearchapi()}}}
+                                 size={20} />
                             </View>
                         </Elavation>
+
+                        <View style={{height:15}}>
+                            </View>
                     </View>
 
 
+
+
+                    {this.state.search == 0?
+                        
+                        <View style={{ flex: 1, }}>
+
+                           {this.state.vehicleList.length > 0 ?
+                              <FlatList
+                              style={{ paddingTop: 2 }}
+                              data={this.state.vehicleList}
+                              renderItem={this.renderVehicle}
+                              keyExtractor={(item, index) => index}
+                              extraData={this.state.vehicleList}
+                              onEndReached={this.loadMoreData}
+                              onEndThreshold={0}
+                              ListFooterComponent={this.renderFooter}
+                          />
+
+                                :
+                                <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                                <Text style={{  fontSize: 15 }}>Container not found.</Text>
+                            </View>
+                                }
+                                </View>
+                           
+
+                                :
+
+                                <View style={{ flex: 1 }}>
+                           {this.state.searchvehiclelist.length > 0 ?
+                                     <FlatList
+                                     style={{ paddingTop: 5 }}
+                                     data={this.state.searchvehiclelist}
+                                     renderItem={this.renderVehicle}
+                                     keyExtractor={(item, index) => index}
+                                     extraData={this.state.searchvehiclelist}
+                                 />
+                                      :
+                                      <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                                      <Text style={{  fontSize: 15 }}>Container not found.</Text>
+                                  </View>
+                                      }
+                                      </View>
+                                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
               
-                {this.state.vehicleList.length > 0 ? <View style={{ flex: 1 }}>
+                {/* {this.state.vehicleList.length > 0 ? <View style={{ flex: 1 }}>
+                   {this.state.search == 0?
                     <FlatList
                         style={{ paddingTop: 5 }}
                         data={this.state.vehicleList}
@@ -687,12 +942,24 @@ onPress={() => {this.setState({drawerview:false}); this.props.navigation.navigat
                         onEndThreshold={0}
                         ListFooterComponent={this.renderFooter}
                     />
+                   
+                    :
+                   <FlatList
+                        style={{ paddingTop: 5 }}
+                        data={this.state.searchvehiclelist}
+                        renderItem={this.renderVehicle}
+                        keyExtractor={(item, index) => index}
+                        extraData={this.state.searchvehiclelist}
+                    />
+                   }
+                   
+                   
                 </View> : <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
                         <Text style={{
                            
                              fontSize: 15
                         }}>Container data not found</Text>
-                    </View>}
+                    </View>} */}
 
 
                 {/* <ModalDialog
@@ -776,15 +1043,16 @@ screen:{
         marginRight: 5
     },
     searchElavationStyle: {
-        width: deviceWidth * 0.91, height: 40,
-        borderRadius: 1,
+        width: deviceWidth * 0.91,
+         height: deviceHeight*0.05,
         borderColor:'grey',
-        marginTop: 8,
+        marginTop: 6,
         marginLeft: 5,
         borderWidth:0.5,
         backgroundColor:'white',
         marginRight: 5,
-        alignSelf: 'center', borderRadius: 10
+        alignSelf: 'center', 
+        borderRadius: 10
     },
     searchElvationViewStyle: {
         flexDirection: 'row', flex: 1,
@@ -796,7 +1064,11 @@ screen:{
     searchTxtInputStyle: {
         flex: 1,
         
-     fontSize: 15, paddingVertical: 0,
+   paddingVertical: 0,
+
+  
+  
+     color: AppColors.toolbarColor, fontSize: 18,
     },
     filterIconViewStyle: {
         marginLeft: 5, marginRight: 5,

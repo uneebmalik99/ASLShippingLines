@@ -45,9 +45,6 @@ const dummyimages = [
   require('../Images/noimage3.jpeg')      
  ];
 
-
-
-
 const EditVehicle = ({route, navigation }) => {
   const refRBSheet = useRef();
   const { item  } = route.params;
@@ -103,7 +100,7 @@ const picture = [
   const [ auctionat , setauctionat] = useState(item.auction_at)
   const [note , setnote ] = useState(item.note);
   const [checkoption , setcheckoption ] = useState();
-  const [vehicle_features , setvehicle_features]=(item.vehicle_features)
+  // const [vehicle_features , setvehicle_features]=(item.vehicle_features)
   const [keynote , setkeynote] = useState(item.key_note)
   const [ CDChanger,  setCDChanger]= useState()
   const [GPSNavigationSystem ,setGPSNavigationSystem]= useState()
@@ -568,6 +565,9 @@ const searchFilterFunction = (text) => {
 };
 
 const deleteimage = () =>{
+  if(AppConstance.USER_ROLE == 2 ){
+    alert('Admin have not permission to delete images')
+  }else{
   // setspinner(true)
   if(images.length == 1  ){
     setclose(false)
@@ -600,6 +600,7 @@ for(var index = 0 ; index< images2.length ; index++){
  if(images.length === 0 ){
   setclose(false)
 }
+  }
 
 }
 
@@ -734,7 +735,7 @@ const barcodeReceived =(e)=> {
 
 const callingCustomer =() =>{
   setspinner(true)
-  let url = AppUrlCollection.BASE_URL+'customers'
+  let url = AppUrlCollection.BASE_URL+'customers-item' + '?limit=-1' 
   fetch(url, {
     method: 'GET',
     headers: {
@@ -746,8 +747,9 @@ const callingCustomer =() =>{
     .then((responseJson) => {
         // this.setState({ isLoading: false })
       setspinner(false)
-      setCustomerlist(responseJson.data)
-      setFilteredcustomer(responseJson.data)
+      // alert(JSON.stringify(responseJson))
+      setCustomerlist(responseJson)
+      setFilteredcustomer(responseJson)
       // setlocationslist(responseJson.data)
         console.log('Response data viw :: ', responseJson)
         console.log('detail --------------'+details);
@@ -1043,54 +1045,62 @@ const callingContainerApi = () => {
 }
 
 useEffect(() => {
-
+// alert()
 
 console.log('===='+JSON.stringify());
+var myArray = {id1: 100, id2: 200, "tag with spaces": 300};
 
-
+// alert(JSON.stringify(item.vehicle_features))
 if(item.vehicle_features != null || item.vehicle_features != undefined || item.vehicle_features != ''){
+// alert(item.vehicle_features.length)
+// alert(item.vehicle_features[0])''
+for (var key in item.vehicle_features) {
+  console.log("key " + key + " has value " + item.vehicle_features[key]);
+let element = key
+
+  switch(element) {
+    case "3":
+      // alert('hj')
+      setCDChanger(3)
+        break;
+
+    case "4":
+      setGPSNavigationSystem(4)
+      break;
+    case "5":
+        setSpareTireJack(5)
+      break;
+      case "6":
+        setWheelCovers(6)
+      break;
+      case "7":
+        setRadio(7)
+      break;
+      case "8":
+        setCDPLAYER(8)
+      break; 
+       case "10":
+         setMIRROR(10)
+      break;
+      case "11":
+          setSPEAKER(11)
+        break;
+      case "12":
+        setOTHERS(12)
+      break;
+     
+
+    default:
+  
+    }
+}
+
   for(var i=0; i<item.vehicle_features.length; i++){
+    // alert('h')
     let element = item.vehicle_features[i];
     console.log('-----------'+element);
-
-    switch(element) {
-      case 3:
-        setCDChanger(3)
-          break;
- 
-      case 4:
-        setGPSNavigationSystem(4)
-        break;
- 
-      case 5:
-          setSpareTireJack(5)
-        break;
-
-        case 6:
-          setWheelCovers(6)
-        break;
-
-        case 7:
-          setRadio(7)
-        break;
-
-        case 8:
-          setCDPLAYER(8)
-        break; 
-         case 10:
-           setMIRROR(10)
-        break;
-        case 11:
-            setSPEAKER(11)
-          break;
-        case 12:
-          setOTHERS(12)
-        break;
-       
- 
-      default:
-    
-      }
+// alert(element)
+  
   }
 }
 
@@ -1127,10 +1137,11 @@ setclose(true)
 }, [])
 
 const renderlist = ({item}) =>{
+ console.log('location',item);
 
   return(
     <TouchableOpacity 
-    onPress={()=>{setlocation_id(item.status); setlocation_name(item.name); setlocmodal(false) }}
+    onPress={()=>{setlocation_id(item.id); setlocation(item.name); setlocation_name(item.name); setlocmodal(false) }}
     style={{marginVertical:5,justifyContent:'space-around', flexDirection:'row'}}>
       <Text>{item.id}</Text>
 <Text>{item.name}</Text>
@@ -1169,34 +1180,53 @@ style={{marginVertical:5,borderWidth:0.5,flexDirection:'row', borderColor:'grey'
      }  
 
  const callingupdateApi = ()=>{
+   setspinner(true)
 
-  let f = [];
+  let f = {};
   if(CDChanger == 3){
-    f.push(CDChanger)
+    f["3"] = 3;
+
+    // f.push(CDChanger)
   }
   if(GPSNavigationSystem == 4){
-    f.push(GPSNavigationSystem)
+    f["4"] = 4;
+
+    // f.push(GPSNavigationSystem)
   }
   if(SpareTireJack == 5){
-    f.push(SpareTireJack)
+    f["5"] = 5;
+
+    // f.push(SpareTireJack)
   }
   if(WheelCovers == 6){
-    f.push(WheelCovers)
+    f["6"] = 6;
+
+    // f.push(WheelCovers)
   }
   if(Radio == 7){
-    f.push(Radio)
+    f["7"] = 7;
+
+    // f.push(Radio)
   }
   if(CDPLAYER == 8){
-    f.push(CDPLAYER)
+    f["8"] = 8;
+
+    // f.push(CDPLAYER)
   }
   if(MIRROR == 10){
-    f.push(MIRROR)
+    f["10"] = 10;
+
+    // f.push(MIRROR)
   }
   if(SPEAKER == 11){
-    f.push(SPEAKER)
+    f["11"] = 11;
+
+    // f.push(SPEAKER)
   }
   if(OTHERS == 12){
-    f.push(OTHERS)
+    f["12"] = 12;
+
+    // f.push(OTHERS)
   }
         
 
@@ -1279,25 +1309,25 @@ style={{marginVertical:5,borderWidth:0.5,flexDirection:'row', borderColor:'grey'
 
 
 
-array.hat_number = hatnumber,
-array.vehicle_type= vehicletype,
-array.year = year,
-array.color=  color,
-array.model= model,
-array.make= make,
-array.vin= vin,
-array.weight= weight,
-array.lot_number = lotnumber,
-array.towed_amount = item.towed_amount,
-array.status_name= statusname,
-array.status=  status,
-array.location_id = location_id,
-array.customer_user_id=  customeruserid,
-array.towing_request_id = item.towing_request_id,
-array.container_number= containernmber,
-array.key_note =keynote,
-array.vcr= item.vcr,
-array.value=  item.value,
+  array.hat_number = hatnumber,
+  array.vehicle_type= vehicletype,
+  array.year = year,
+  array.color=  color,
+  array.model= model,
+  array.make= make,
+  array.vin= vin,
+  array.weight= weight,
+  array.lot_number = lotnumber,
+  array.towed_amount = item.towed_amount,
+  array.status_name= statusname,
+  array.status=  status,
+  array.location_id = location_id,
+  array.customer_user_id=  customeruserid,
+  array.towing_request_id = item.towing_request_id,
+  array.container_number= containernmber,
+  array.key_note =keynote,
+  array.vcr= item.vcr,
+  array.value=  item.value,
   array.auction_at = auctionat,
   array.towed_from=  item.towed_from,
   array.note = note,
@@ -1320,7 +1350,6 @@ array.value=  item.value,
   array.auction_photos = item.auction_photos,
   array.pickup_photos = item.pickup_photos,
   array.arrived_photos = item.arrived_photos
-  // array.fileUrls { "photos": ["https://asl-shipping-line.s3.us-west-2.amazonaws.com/uploads/vehicles/images/32626/rsuEFeqEjPECLr8g0nxcEq5jc1o4D8Euj7l2PCSN.jpg"]}, 
 
 
   if(imagesurls.length > 0){
@@ -1434,7 +1463,7 @@ array.value=  item.value,
       //   "invoice_photos": item.invoice_photos,
 
      
-      // alert(imagesurls)
+      // alert(JSON.stringify(array))
       
       
         fetch(AppUrlCollection.VEHICLE_DETAIL + item.id, {
@@ -1497,10 +1526,12 @@ array.value=  item.value,
           .then((response) =>  response.json())
           .then((responseJson) => {
             setspinner(false)
+            // alert(JSON.stringify(responseJson))
             if(responseJson.message == 'The given data was invalid.'){
               alert(JSON.stringify(responseJson.errors))
             }else{
               AppConstance.showSnackbarMessage(responseJson.message)
+              navigation.goBack();
 
             }
             ImageCropPicker.clean().then(() => {
@@ -2088,7 +2119,8 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
     <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>HAT NUMBER</Text>
     <TextInput  
-    placeholder={hatnumber}
+    // placeholder={hatnumber}
+    value={hatnumber}
     placeholderTextColor='grey'
     onChangeText={(text)=> {sethatnumber(text)}} 
     />
@@ -2098,7 +2130,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
     <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>VEHICLE TYPE</Text>
     <TextInput  
-    placeholder={vehicletype}
+    value={vehicletype}
     placeholderTextColor='grey'
     onChangeText = {(Text)=> {setvehicletype(Text)}}
     />
@@ -2107,7 +2139,8 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
     <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>YEAR </Text>
     <TextInput  
-    placeholder={year}
+    // placeholder={year}
+    value={year}
     placeholderTextColor='grey'
     onChangeText = {(Text)=> {setyear(Text)}}
 
@@ -2119,7 +2152,8 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
     <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>COLOR </Text>
     <TextInput  
-    placeholder={color}
+    // placeholder={color}
+    value={color}
     placeholderTextColor='grey'
     onChangeText = {(Text)=> {setcolor(Text)}}
 
@@ -2130,7 +2164,8 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5, borderColor:'#B3B6B7', justifyContent:'space-between'}}>
     <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>MODEL </Text>
     <TextInput  
-    placeholder={model}
+    // placeholder={model}
+    value={model}
     placeholderTextColor='grey'
     onChangeText = {(Text)=> {setmodel(Text)}}
 
@@ -2142,7 +2177,8 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
     <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>MAKE</Text>
     <TextInput  
-    placeholder={make}
+    // placeholder={make}
+    value={make}
     placeholderTextColor='grey'
     onChangeText = {(Text)=> {setmake(Text)}}
 
@@ -2156,7 +2192,8 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
     <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>WEIGHT</Text>
     <TextInput  
-    placeholder={weight}
+    // placeholder={weight}
+    value={weight}
     placeholderTextColor='grey'
     onChangeText = {(Text)=> {setweight(Text)}}
 
@@ -2168,7 +2205,8 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
     <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>LICENSE NUMBER</Text>
     <TextInput  
-    placeholder={licensenumber}
+    // placeholder={licensenumber}
+    value={licensenumber}
     placeholderTextColor='grey'
     onChangeText = {(Text)=> {setlicensenumber(Text)}}
 
@@ -2183,7 +2221,8 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
     <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>LOT NUMBER</Text>
     <TextInput  
-    placeholder={lotnumber}
+    // placeholder={lotnumber}
+    value={lotnumber}
     placeholderTextColor='grey'
     onChangeText = {(Text)=> {setlotnumber(Text)}}
 
@@ -2195,7 +2234,8 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
     <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>LOAD STATUS</Text>
     <TextInput  
-    placeholder={loadstatus}
+    // placeholder={loadstatus}
+    value={loadstatus}
     placeholderTextColor='grey'
     onChangeText={(text)=> {setloadstatus(text)}}
     />
@@ -2205,7 +2245,8 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
     <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>CONTAINER NUMBER</Text>
     <TextInput  
-    placeholder={containernmber}
+    // placeholder={containernmber}
+    value={containernmber}
     placeholderTextColor='grey'
     onChangeText={(text)=> {setcontainernmber(text)}}
 
@@ -2215,7 +2256,8 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
     <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>KEY NOTE</Text>
     <TextInput  
-    placeholder={keynote}
+    // placeholder={keynote}
+    value={keynote}
     placeholderTextColor='grey'
     onChangeText={(text)=> {setkeynote(text)}}
 
@@ -2237,7 +2279,8 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
     <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>AUCTION AT</Text>
     <TextInput  
-    placeholder={auctionat}
+    // placeholder={auctionat}
+    value={auctionat}
     placeholderTextColor='grey'
     onChangeText={(text)=> {setauctionat(text)}}
 
@@ -2257,7 +2300,8 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <View style={{width:'100%',flexDirection:'column',borderBottomWidth:0.3, paddingVertical:5,borderColor:'#B3B6B7',  justifyContent:'space-between'}}>
     <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>NOTE</Text>
     <TextInput  
-    placeholder={note}
+    // placeholder={note}
+    value={note}
     placeholderTextColor='grey'
     onChangeText={(text)=> {setnote(text)}}
     />
@@ -2818,7 +2862,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     </TouchableOpacity>
 
     <TouchableOpacity
-    style={{marginTop:Platform.OS == 'ios'? 5:10,}}
+    style={{marginTop:Platform.OS == 'ios'? 6:10,}}
 
     onPress={()=>{ GPSNavigationSystem == 4 ? setGPSNavigationSystem(''):setGPSNavigationSystem(4)}}
     >
@@ -2832,7 +2876,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
 
 
     <TouchableOpacity
-    style={{marginTop:Platform.OS == 'ios'? 5:10,}}
+    style={{marginTop:Platform.OS == 'ios'? 10:10,}}
 
     onPress={()=>{SpareTireJack == 5 ? setSpareTireJack(''):setSpareTireJack(5)}}
     >
@@ -2847,7 +2891,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
 
 
     <TouchableOpacity
-    style={{marginTop:Platform.OS == 'ios'? 5:10,}}
+    style={{marginTop:Platform.OS == 'ios'? 6:10,}}
 
     onPress={()=>{ WheelCovers == 6 ? setWheelCovers('') : setWheelCovers(6)}}
     >
@@ -2859,7 +2903,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     </TouchableOpacity>
 
     <TouchableOpacity
-    style={{marginTop:Platform.OS == 'ios'? 5:10,}}
+    style={{marginTop:Platform.OS == 'ios'? 8:10,}}
 
     onPress={()=>{Radio == 7 ? setRadio(''):setRadio(7) }}
     >
@@ -2874,7 +2918,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
 
 
     <TouchableOpacity
-    style={{marginTop:Platform.OS == 'ios'? 5:10,}}
+    style={{marginTop:Platform.OS == 'ios'? 9:10,}}
 
     onPress={()=>{CDPLAYER == 8 ? setCDPLAYER(''):setCDPLAYER(8) }}
     >
@@ -2886,7 +2930,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     </TouchableOpacity>
 
     <TouchableOpacity
-    style={{marginTop:Platform.OS == 'ios'? 5:10,}}
+    style={{marginTop:Platform.OS == 'ios'? 7:10,}}
 
     onPress={()=>{MIRROR == 10 ? setMIRROR(''):setMIRROR(10) }}
     >
@@ -2898,7 +2942,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     </TouchableOpacity>
 
     <TouchableOpacity
-    style={{marginTop:Platform.OS == 'ios'? 5:10,}}
+    style={{marginTop:Platform.OS == 'ios'? 7:10,}}
 
     onPress={()=>{SPEAKER == 11 ? setSPEAKER(''):setSPEAKER(11) }}
     >
@@ -2914,7 +2958,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
 
 
     <TouchableOpacity
-    style={{marginTop:Platform.OS == 'ios'? 5:10,}}
+    style={{marginTop:Platform.OS == 'ios'? 7:10,}}
 
     onPress={()=>{OTHERS == 12 ? setOTHERS(''):setOTHERS(12)}}
     >
@@ -2940,7 +2984,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
 
    
     <TouchableOpacity
-    style={{marginTop:10,}}
+    style={{marginTop:14,}}
       onPress={()=>{GPSNavigationSystem == 4 ? setGPSNavigationSystem(''):setGPSNavigationSystem(4)}}
     >
 
@@ -2954,7 +2998,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
 
 
     <TouchableOpacity
-    style={{marginTop:10,}}
+    style={{marginTop:13,}}
       onPress={()=>{SpareTireJack == 5 ? setSpareTireJack(''):setSpareTireJack(5)}}
     >
 
@@ -2965,7 +3009,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
 
 
     <TouchableOpacity
-    style={{marginTop:10,}}
+    style={{marginTop:13,}}
       onPress={()=>{WheelCovers == 6 ? setWheelCovers(''):setWheelCovers(6)}}
     >
 
@@ -2974,14 +3018,14 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
 
 
     <TouchableOpacity
-    style={{marginTop:10,}}
+    style={{marginTop:13,}}
       onPress={()=>{Radio ==7 ?  setRadio(''):setRadio(7)}}
     >
 
     <Text style={{fontWeight:'500'}}>Radio</Text>
     </TouchableOpacity>
     <TouchableOpacity
-    style={{marginTop:10,}}
+    style={{marginTop:12,}}
       onPress={()=>{CDPLAYER == 8 ? setCDPLAYER(''):setCDPLAYER(8)}}
     >
 
@@ -2990,7 +3034,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
 
 
     <TouchableOpacity
-    style={{marginTop:10,}}
+    style={{marginTop:11,}}
       onPress={()=>{MIRROR == 10 ? setMIRROR(''):setMIRROR(10) }}
     >
 
@@ -3003,7 +3047,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     
 
     <TouchableOpacity
-    style={{marginTop:10,}}
+    style={{marginTop:12,}}
       onPress={()=>{SPEAKER == 11 ? setSPEAKER(''):setSPEAKER(11)}}
     >
 
@@ -3011,7 +3055,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     </TouchableOpacity>
 
     <TouchableOpacity
-    style={{marginTop:10,}}
+    style={{marginTop:12,}}
       onPress={()=>{OTHERS == 12 ? setOTHERS(''):setOTHERS(12)}}
     >
 
@@ -3045,7 +3089,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <TextInput  
       onChangeText={text =>{setfrontwindshiled(text) }}
     // onSubmitEditing={(text)=> {setfrontwindshiled(text) }}
-    placeholder={frontwindshiled}
+    value={frontwindshiled}
     placeholderTextColor='grey'
     />
     </View>
@@ -3055,7 +3099,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <TextInput  
       onChangeText={text =>  setbonnet(text)}
 
-    placeholder={bonnet}
+      value={bonnet}
     placeholderTextColor='grey'
     />
     </View>
@@ -3066,7 +3110,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <TextInput  
       onChangeText={text =>  setgrill(text)}
 
-    placeholder={grill}
+      value={grill}
     placeholderTextColor='grey'
     />
     </View>
@@ -3078,7 +3122,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <TextInput  
       onChangeText={text => setfrontbumper(text) }
 
-    placeholder={frontbumper}
+      value={frontbumper}
     placeholderTextColor='grey'
     />
     </View>
@@ -3088,7 +3132,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <TextInput  
       onChangeText={text =>  setfrontheadlight(text)}
 
-    placeholder={frontheadlight}
+      value={frontheadlight}
     placeholderTextColor='grey'
     />
     </View>
@@ -3098,7 +3142,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <TextInput  
       onChangeText={text =>  setrearwindshield(text)}
 
-    placeholder={rearwindshield}
+      value={rearwindshield}
     placeholderTextColor='grey'
     />
     </View>
@@ -3108,7 +3152,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <TextInput  
       onChangeText={text =>settrunkdoor(text) }
 
-    placeholder={trunkdoor}
+      value={trunkdoor}
     placeholderTextColor='grey'
     />
     </View>
@@ -3118,7 +3162,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <TextInput  
       onChangeText={text => setrearbumper(text)}
 
-    placeholder={rearbumper}
+      value={rearbumper}
     placeholderTextColor='grey'
     />
     </View>
@@ -3128,7 +3172,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <TextInput  
       onChangeText={text => setrearbumpersupport(text) }
 
-    placeholder={rearbumpersupport}
+      value={rearbumpersupport}
     placeholderTextColor='grey'
     />
     </View>
@@ -3138,7 +3182,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <TextInput  
       onChangeText={text =>  settaillamp(text)}
 
-    placeholder={taillamp}
+      value={taillamp}
     placeholderTextColor='grey'
     />
     </View>
@@ -3149,7 +3193,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <TextInput  
       onChangeText={text =>  setfrontleftfender(text)}
 
-    placeholder={frontleftfender}
+      value={frontleftfender}
     placeholderTextColor='grey'
     />
     </View>
@@ -3159,7 +3203,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <TextInput  
       onChangeText={text =>setleftfrontdoor(text) }
 
-    placeholder={leftfrontdoor}
+      value={leftfrontdoor}
     placeholderTextColor='grey'
     />
     </View>
@@ -3172,7 +3216,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <TextInput  
       onChangeText={text => setleftreardoor(text) }
 
-    placeholder={leftreardoor}
+      value={leftreardoor}
     placeholderTextColor='grey'
     />
     </View>
@@ -3182,7 +3226,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <TextInput  
       onChangeText={text => setleftrearfender(text)}
 
-    placeholder={leftrearfender}
+      value={leftrearfender}
     placeholderTextColor='grey'
     />
     </View>
@@ -3193,7 +3237,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <TextInput  
       onChangeText={text => setpillar(text)}
 
-    placeholder={pillar}
+      value={pillar}
     placeholderTextColor='grey'
     />
     </View>
@@ -3203,7 +3247,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <TextInput  
       onChangeText={text => setroof(text) }
 
-    placeholder={roof}
+      value={roof}
     placeholderTextColor='grey'
     />
     </View>
@@ -3213,7 +3257,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <TextInput  
       onChangeText={text => setrightrearfender(text)}
 
-    placeholder={rightrearfender}
+      value={rightrearfender}
     placeholderTextColor='grey'
     />
     </View>
@@ -3223,7 +3267,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <TextInput  
       onChangeText={text => setrightreardoor(text)}
 
-    placeholder={rightreardoor}
+      value={rightreardoor}
     placeholderTextColor='grey'
     />
     </View>
@@ -3234,7 +3278,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <TextInput  
       onChangeText={text =>setrightfrontdoor(text) }
 
-    placeholder={rightfrontdoor}
+      value={rightfrontdoor}
     placeholderTextColor='grey'
     />
     </View>
@@ -3244,7 +3288,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <TextInput  
       onChangeText={text => setfrontrightfender(text)}
 
-    placeholder={frontrightfender}
+      value={frontrightfender}
     placeholderTextColor='grey'
     />
     </View>
@@ -3254,7 +3298,7 @@ style={{alignSelf:'center',borderRadius:5, borderWidth:1, borderColor:AppColors.
     <Text style={{color:'black',paddingVertical:2,fontWeight:'bold', fontSize:14,}}>FRONT TYRES</Text>
     <TextInput  
       onChangeText={text => setfronttyres(text)}
-    placeholder={fronttyres}
+      value={fronttyres}
     placeholderTextColor='grey'
     />
     </View>

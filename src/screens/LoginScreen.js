@@ -1,5 +1,5 @@
-import React, { Component, useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput, StyleSheet, Platform, BackHandler, Image, ScrollView,ImageBackground, SafeAreaView } from 'react-native';
+import React, { Component,useEffect, useState } from 'react';
+import { View, Text,Modal, TouchableOpacity, TextInput, StyleSheet, Platform, BackHandler, Image, ScrollView,ImageBackground, SafeAreaView } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage'
 // import DeviceInfo from 'react-native-device-info';
 import Elavation from '../styles/Elavation';
@@ -10,6 +10,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import DialogLoder from '../screens/DialogLoder'
 import AppUrlCollection from '../UrlCollection/AppUrlCollection';
 import { Appbar } from 'react-native-paper';
+import NetInfo from "@react-native-community/netinfo";
 
 
 
@@ -24,15 +25,38 @@ const LoginScreen = ({ navigation }) => {
     // const [email ,setemail] = useState('nooraljabal1133@gmail.com')
     // const [email ,setemail] = useState('uneeb@impulsiontechnologies.com')
     const [email ,setemail] = useState('')
+    const [modalVisible, setModalVisible] = useState(false);
 
     // const [pass ,setpass] =useState('info@asl1001')
     // const [pass ,setpass] =useState('Admin@123')
     const [pass ,setpass] =useState('')
   
     const [spinner , setspinner] =useState(false)
+
+    useEffect(() => {
+
+
+
+
+      const backAction = () => {
+        BackHandler.exitApp() 
+        
+        return true;
+      };
+  
+      const backHandler = BackHandler.addEventListener(
+        "hardwareBackPress",
+        backAction
+      );
+  
+      return () => backHandler.remove();
+    }, []);
+
+    
    
    const  callingLoginApi = () => {
-      
+    NetInfo.fetch().then((state) => {
+        if (state.isConnected == true) {
   setspinner(true)
       if (email.trim().length == 0) {
   
@@ -43,35 +67,96 @@ const LoginScreen = ({ navigation }) => {
           alert("password can not be blank"); 
           setspinner(false)
   
-      } else {
+      } 
+      
+      else {
        
                   var url = AppUrlCollection.LOGIN
+
+                 var  token =AppConstance.USER_TOKEN;
+                //  alert(AppConstance.USER_TOKEN)
   
-                  var value = new FormData();
+                  // var value = new FormData();
                   // value.append('username', 'info@impulsiontechnologies.com');
                   // value.append('password', '20190021');
-                  value.append('email',email);
-                  value.append('password', pass);
-                  value.append('source', 'asl_phone_app');
+                  // value.append('email',email);
+                  // value.append('password', pass);
+                  // value.append('source', 'asl_phone_app');
 
+                  let value = {};
+
+                  value.email = email,
+                  value.password = pass,
+                  value.source = 'asl_phone_app';
+                  value.device_id_token = token;
 
                   // value.append('token', this.state.fireBaseToken);
                   // value.append('device_id', deviceId);
-                  console.log('Login_key_vale ',value)
+                  console.log('Login_key_vale ',JSON.stringify(value))
                   fetch(url, {
                       method: 'POST',
                       headers: {
-                         
-                         'Content-Type': 'multipart/form-data',
+
+                        'Content-Type':   'application/json',
+                        //  'Content-Type': 'multipart/form-data',
                       },
-                      body: value,
+                      body: JSON.stringify(value),
                   })
-                      .then((response) => response.json())
+                      .then((response) => 
+                      
+                      response.json() 
+                     
+                      )
                       .then((responseJson) => {
-                        
+
+
+                          if(responseJson.status == 200){
+                            console.log('login data response',responseJson);
+                         loginServiceCall( responseJson , responseJson.user.role, responseJson.user.username, responseJson.user.role_name, responseJson.user.photo)
+
+                          }else if(responseJson.status == 422){
+                            alert(responseJson.errors.password)
+
+                          }else if(responseJson.status == 401){
+
+                            alert(responseJson.error)
+                            
+
+                          }
+
+                  //  alert(responseJson)
+                  //  console.log(responseJson);
+
+                  //  if(response.status == 401){
+                  //    alert('Wrong Username or Password')
+                  //    setspinner(false)
+
+                  //  }else if(response.status == 422){
+                  //    console.log('check',responseJson);   
+                  //     //  alert(response)       
+                  //    console.log(responseJson);
+                  //   //  alert(responseJson.password)
+                  //    setspinner(false)
+
+                  //  }else if(response.status == 200){
+
+                    
+                   
+                //  alert(responseJson)
+                      console.log('login data response',responseJson);
+                      setspinner(false)
+                      // loginServiceCall(responseJson , responseJson.user.role)
+                
+                  //  }
+
+
+
+
+
+
+                     
                         // setspinner(false)
-                       console.log(responseJson);
-                          loginServiceCall(responseJson , responseJson.user.role_name)
+
                         
                           // this.setState({ isLoading: false })
                          
@@ -91,10 +176,12 @@ const LoginScreen = ({ navigation }) => {
   
   
       }
+    } else setModalVisible(true);
+});
   }
   
   
-  const loginServiceCall = (responseJson, role) => {
+  const loginServiceCall = (responseJson, role, username, rolename, userprofilepic) => {
     console.warn(responseJson)
   
      if (responseJson != null || responseJson != '') {
@@ -103,19 +190,45 @@ const LoginScreen = ({ navigation }) => {
         // this.props.navigation.push('Dashboard');
         
         //AppConstance.showSnackbarMessage(responseJson.message)
-      callingUserService(responseJson.access_token, role)
+      callingUserService(responseJson.access_token, role, username, rolename, userprofilepic)
     } else {
          setspinner(false)
         alert(responseJson.message);
     }
   }
   
-  const GotoNextScreen  =async  (responseJson,auth_key, role) => {
+  const GotoNextScreen  =async  (responseJson,auth_key, role,username, rolename, userprofilepic) => {
     await AsyncStorage.setItem(AppConstance.USER_INFO_OBJ, JSON.stringify(responseJson))
    await  AsyncStorage.setItem('ISUSERLOGIN', '1')
    await  AsyncStorage.setItem('auth_key', auth_key)
+
+   AppConstance.AUTH_KEY = auth_key;
+
+
+   await AsyncStorage.setItem('username', username)
+   await AsyncStorage.setItem('rolename', rolename)
+   await AsyncStorage.setItem('userprofilepic',userprofilepic )
+
+   AppConstance.USERNAME = username;
+   AppConstance.ROLENAME = rolename;
+   AppConstance.USERPHOTO = userprofilepic;
    
-   if(role == "Admin" || role == 'MASTER_ADMIN' || role == 'SUPER_ADMIN'){
+//0 for Master Admin
+
+// 1 for Super Admin
+
+// 2  ADMIN
+
+// 3 CUSTOMER 
+
+// 4 EMPLOYYYE 
+
+// 5 ACCOUNT 
+
+   console.log();
+   if(role == "2" || role == '0' || role == '1'){
+    // if(role_name == "Admin" || role_name == 'MASTER ADMIN' || role_name == 'SUPER_ADMIN'){
+
     await AsyncStorage.setItem('user_role', '1')
     AppConstance.USER_ROLE = '1'
     // alert(role)
@@ -137,6 +250,7 @@ const LoginScreen = ({ navigation }) => {
   //  this._storeData();
   
     
+
     let data = responseJson
     console.warn('json value', data)
     AppConstance.USER_INFO.USER_ID = data.id;
@@ -157,11 +271,12 @@ const LoginScreen = ({ navigation }) => {
     setspinner(false)
 
     navigation.navigate('TabScreen')
-  
+    // navigation.navigate('DashboardScreen')
+
   
   }
   
-  const callingUserService = (authKey, role) => {
+  const callingUserService = (authKey, role, username,rolename,userprofilepic) => {
     var url = AppUrlCollection.USER;
     fetch(url, {
         method: 'GET',
@@ -175,7 +290,7 @@ const LoginScreen = ({ navigation }) => {
           
             console.warn('USER::: ', responseJson)
   
-            GotoNextScreen(responseJson,authKey, role);
+            GotoNextScreen(responseJson,authKey, role, username, rolename, userprofilepic);
   
             // //this.props.navigation.goBack();
             // this.props.navigation.navigate('NavigationSideScreen')
@@ -194,6 +309,42 @@ const LoginScreen = ({ navigation }) => {
     return (
         <SafeAreaView style={{flex:1, backgroundColor:'white', width:deviceWidth}}>
 
+<Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>
+              Connect to the Internet and Retry
+            </Text>
+            <View style={styles.modalBtn}>
+              <TouchableOpacity
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                }}
+              >
+                <Text style={styles.textStyle}>Close</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                  callingLoginApi();
+                }}
+              >
+                <Text style={styles.textStyle}>Retry</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
                 <DialogLoder loading={spinner} />
                     <Appbar
                                     style={{backgroundColor:AppColors.Headercolor,
@@ -282,7 +433,7 @@ const LoginScreen = ({ navigation }) => {
                                 <View style={{ flexDirection: 'row', justifyContent: 'center', alignContent: 'center', alignItems: 'center', height: 50, borderRadius: 20, paddingLeft: 10 }}>
                                     <TextInput
                                         style={{ width: deviceWidth * 0.8, height: 50, color: '#323232', paddingLeft: 10 }}
-                                        placeholder='Customer, username'
+                                        placeholder='Username or Email'
                                         placeholderTextColor={AppColors.signinplaceholdercolor}
                                         onChangeText={(text) => {setemail(text) }}
 
@@ -332,5 +483,52 @@ const LoginScreen = ({ navigation }) => {
                 </SafeAreaView>
     );
   };
+  
+  const styles = StyleSheet.create({
+    centeredView: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: 22,
+    },
+    modalView: {
+      margin: 20,
+      backgroundColor: "white",
+      borderRadius: 20,
+      padding: 35,
+      alignItems: "center",
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5,
+    },
+    button: {
+      borderRadius: 20,
+      padding: 10,
+      elevation: 2,
+      margin: 5,
+    },
+    buttonClose: {
+      backgroundColor: "#2196F3",
+    },
+    textStyle: {
+      color: "white",
+      fontWeight: "bold",
+      textAlign: "center",
+    },
+    modalText: {
+      marginBottom: 15,
+      textAlign: "center",
+    },
+    modalBtn: {
+      flexDirection: "row",
+      justifyContent: "center",
+    },
+  });
+
   
   export default LoginScreen;

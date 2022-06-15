@@ -1,3 +1,138 @@
+// import React,{useState,useEffect, useRef} from 'react';
+// import { View, Text, Modal,TouchableOpacity, TextInput, StyleSheet, Animated, Easing, Image, Alert, AppState, BackHandler, BackAndroid, ScrollView, FlatList,ImageBackground, SafeAreaView } from 'react-native';
+// import Elavation from '../styles/Elavation';
+// import AppColors from '../Colors/AppColors';
+// import AppConstance, { deviceHeight, deviceWidth } from '../constance/AppConstance';
+// import AppFonts from '../AppFont/AppFonts';
+// import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../styles/ResponsiveScreen';
+// import AppUrlCollection from '../UrlCollection/AppUrlCollection';
+// import { Appbar } from 'react-native-paper';
+// import { Content,List, Header, Body, Title,ListItem, Container, Left, Right, Icon,Badge} from "native-base";
+// import AsyncStorage from '@react-native-community/async-storage';
+// import DialogLoder from '../screens/DialogLoder'
+
+
+
+
+
+
+// const DashboardScreen = ({route, navigation }) => {
+
+
+
+
+// const [all , setall] =  useState('')
+// const [onHand , setonHand] =  useState('')
+// const [manifest , setmanifest] =  useState('')
+// const [pickUp , setpickUp] =  useState('')
+// const [carOnTheWay , setcarOnTheWay] =  useState('')
+// const [newPurchase , setnewPurchase] =  useState('')
+// const [shipped , setshipped] =  useState('')
+// const [arrived , setarrived] =  useState('')
+// const [allContainer , setallContainer] =  useState('')
+
+// const [isLoading , setisLoading] =  useState('')
+// const [drawerview , setdrawerview] =  useState('')
+
+// const [role , setrole] =  useState(AppConstance.USER_ROLE)
+
+// const [dashboardSection , setdashboardSection] =  useState('')
+
+
+
+// const Logout =() => {
+
+//     AsyncStorage.setItem('ISUSERLOGIN', '0');
+//     AppConstance.IS_USER_LOGIN = '0'
+  
+//     AsyncStorage.setItem('auth_key', ' ');
+//     AppConstance.USER_TOKEN_KEY = ' '
+//     AppConstance.USER_INFO.USER_TOKEN = '';
+//     AppConstance.AUTH_KEY = '';
+  
+//     AsyncStorage.setItem('user_id', '');
+//     AppConstance.USER_ID = ' '
+  
+//     AsyncStorage.setItem('user_role' , '')
+//     AppConstance.USER_ROLE = ''
+  
+  
+//     AsyncStorage.setItem('username' , '')
+//     AppConstance.USERNAME = ''
+  
+//     AsyncStorage.setItem('rolename' , '')
+//     AppConstance.ROLENAME = ''
+  
+//     AsyncStorage.setItem('userprofilepic' , '')
+//     AppConstance.USERPHOTO = ''
+  
+    
+  
+//     AsyncStorage.removeItem(AppConstance.USER_INFO_OBJ);
+
+//         setdrawerview(false)
+//         //  this.setState({drawerview : false})
+//     navigation.push('AppDrawer1');
+  
+//       }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import React, { Component } from 'react';
 import { View, Text, Modal,TouchableOpacity, TextInput, StyleSheet, Animated, Easing, Image, Alert, AppState, BackHandler, BackAndroid, ScrollView, FlatList,ImageBackground, SafeAreaView } from 'react-native';
 import Elavation from '../styles/Elavation';
@@ -9,8 +144,11 @@ import AppUrlCollection from '../UrlCollection/AppUrlCollection';
 import { Appbar } from 'react-native-paper';
 import { Content,List, Header, Body, Title,ListItem, Container, Left, Right, Icon,Badge} from "native-base";
 import AsyncStorage from '@react-native-community/async-storage';
+import DialogLoder from '../screens/DialogLoder'
 
 // import { Icon } from 'react-native-vector-icons/Icon';
+
+
 
 
 class DashboardScreen extends Component {
@@ -23,6 +161,7 @@ class DashboardScreen extends Component {
             manifest: 0,
             pickUp: 0,
             carOnTheWay: 0,
+            isLoading:false,
             newPurchase: 0,
             drawerview:false,
             shipped: 0,
@@ -79,6 +218,10 @@ class DashboardScreen extends Component {
                 }
             ]
         }
+        this.callingCounterAPI();
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+
+
     //   alert(AppConstance.USER_ROLE)
     }
 
@@ -97,10 +240,24 @@ class DashboardScreen extends Component {
   AsyncStorage.setItem('user_role' , '')
   AppConstance.USER_ROLE = ''
 
+  AppConstance.USER_INFO.USER_TOKEN = '';
+
+
+
+  AsyncStorage.setItem('username' , '')
+  AppConstance.USERNAME = ''
+
+  AsyncStorage.setItem('rolename' , '')
+  AppConstance.ROLENAME = ''
+
+  AsyncStorage.setItem('userprofilepic' , '')
+  AppConstance.USERPHOTO = ''
+
+  
 
   AsyncStorage.removeItem(AppConstance.USER_INFO_OBJ);
        this.setState({drawerview : false})
-  this.props.navigation.navigate('AppDrawer1');
+  this.props.navigation.push('AppDrawer1');
 
     }
     //render dashboard backicon 
@@ -145,10 +302,14 @@ class DashboardScreen extends Component {
             this.props.setProps.navigation.push('VehcileScreen', { 'itemObj': item, 'setProps': this.props.setProps })
         }
     }
+   
 
     componentDidMount() {
-
+// alert('u')
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+
+        // alert(AppConstance.USER_INFO.USER_TOKEN)
+
         // AppState.addEventListener('change', this._handleAppStateChange);
         if(AppConstance.USER_ROLE == '1'){
             this.setState({role :'1'})
@@ -158,14 +319,29 @@ class DashboardScreen extends Component {
 
         }
         this.callingCounterAPI();
-    }
 
+        this.focusListener = this.props.navigation.addListener('focus', () => {
+            // alert("j")
+            BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+
+            this.callingCounterAPI();
+            //Put your Data loading function here instead of my this.loadData()
+          });
+    }
+    componentDidUpdate(){
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+
+    }
     componentWillUnmount() {
         // AppState.removeEventListener('change', this._handleAppStateChange);
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
     }
 
     callingCounterAPI = () => {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+
+        this.setState({ isLoading: true })
+
         fetch(AppUrlCollection.GET_COUNTER, {
             method: 'GET',
             headers: {
@@ -176,8 +352,11 @@ class DashboardScreen extends Component {
         })
             .then((response) => response.json())
             .then((responseJson) => {
+                this.setState({ isLoading: false })
+
+                // alert(responseJson.status_overview[0].total)
                 //   this.setState({ vehicleList: responseJson.data.vehicle_details })
-                console.log('Load more data :: ', responseJson)
+                console.log('dashboard data ', responseJson)
                 if (responseJson != '' || responseJson != null) {
 
 
@@ -220,6 +399,9 @@ class DashboardScreen extends Component {
     
                     }
 
+
+                    AppConstance.NOTIFICATIONCOUNTER = responseJson.counter.notification
+                    // alert(responseJson.counter.notification)
                   
 
 
@@ -228,6 +410,7 @@ class DashboardScreen extends Component {
             })
             .catch((error) => {
                 console.warn(error)
+                this.setState({ isLoading: false })
             });
     }
 
@@ -242,13 +425,12 @@ class DashboardScreen extends Component {
         console.log('APPP STATE ::: ', this.state.appState)
     };
 
-
     handleBackButtonClick() {
         //this.props.navigation.goBack(null);
+// alert('knkk')
         BackHandler.exitApp();
         return true;
     }
-
 
     henlo=()=>{
         alert("henlo")
@@ -296,7 +478,6 @@ class DashboardScreen extends Component {
         </TouchableOpacity>
     }
 
-
     render() {
         return(
                 
@@ -304,6 +485,7 @@ class DashboardScreen extends Component {
 
 
 <SafeAreaView style={styles.screen}>
+<DialogLoder loading={this.state.isLoading} />
 
 <Modal 
 visible={this.state.drawerview}
@@ -340,9 +522,9 @@ animationType='fade'
                     style={{width:60,height:60 ,alignContent:"center", alignItems:"center", justifyContent:'center'}}
                                 //   onPress={() => this.props.navigation.navigate('LoginScreen')}
         >
-                    <Image  source={require('../Images/home-icon-23.png')}
+                    {/* <Image  source={require('../Images/home-icon-23.png')}
                     style={{ width: 30, height:30, alignSelf: 'center' }} resizeMode='contain'
-                />
+                /> */}
                 </TouchableOpacity>
                 
                 
@@ -371,9 +553,22 @@ animationType='fade'
  style={{ width:"105%", height:130}}>
 
 
-<Image source={ require('../Images/image.jpg')} 
-            style={{ width: "105%", height:130,  }} 
-           />
+<ImageBackground source={ require('../Images/image.png')} 
+            style={{ width: "104%", height:130,justifyContent:'center'  }} 
+           >
+               <Image 
+                           style={{ width: '50%',alignSelf:'center', height:'50%',  }}
+                        
+                           resizeMethod='resize'
+                           resizeMode='contain' 
+
+               source={{ uri:AppConstance.USERPHOTO }}
+
+           
+               />
+               <Text style={{alignSelf:'center',marginTop:5, fontSize:15, color:'white'}}>{AppConstance.USERNAME}</Text>
+               <Text style={{alignSelf:'center',fontSize:13, color:'white'}}>{AppConstance.ROLENAME}</Text>
+               </ImageBackground>
 <Left/>
 <Body>
 </Body>
@@ -456,13 +651,15 @@ onPress={() =>{this.setState({drawerview:false}); this.props.navigation.navigate
 <ListItem noBorder
 style={{height:40,
 }}
-onPress={() => {this.setState({drawerview:false}); this.props.navigation.navigate('WishListScreen')}} selected>
+onPress={() => {this.setState({drawerview:false}); this.props.navigation.navigate('Notification')}} selected>
 <Image source={ require('../Images/ann.jpeg')} 
             style={{ width: 27, height:27, alignSelf: 'center' }} resizeMode='contain'
            />
    
-<Text style={{fontSize:14, color:'black',marginLeft:10}}>ANNOUNCEMENT</Text>        
-
+<Text style={{fontSize:14, color:'black',marginLeft:10}}>ANNOUNCEMENT </Text>        
+<View style={{backgroundColor:'grey',padding:0,paddingHorizontal:8, borderRadius:10,}}>
+    <Text style={{color:'white', fontSize:12}}>{AppConstance.NOTIFICATIONCOUNTER}</Text>
+</View>
 </ListItem>
 
 
@@ -533,9 +730,9 @@ onPress={() => {this.setState({drawerview:false}); this.props.navigation.navigat
                     style={{width:60,height:60 ,alignContent:"center", alignItems:"center", justifyContent:'center'}}
                                 //   onPress={() => this.props.navigation.navigate('LoginScreen')}
         >
-                    <Image  source={require('../Images/home-icon-23.png')}
+                    {/* <Image  source={require('../Images/home-icon-23.png')}
                     style={{ width: 30, height:30, alignSelf: 'center' }} resizeMode='contain'
-                />
+                /> */}
                 </TouchableOpacity>
                 
                 
@@ -618,7 +815,7 @@ justifyContent:"center",
 </View>
 
 
-
+ 
             <View style={styles.main_item}>
 
             <TouchableOpacity 
@@ -758,11 +955,6 @@ justifyContent:"center",
              
             </TouchableOpacity>
 
-         
-
-
-            
-
             </View>
              : null
             } 
@@ -777,17 +969,12 @@ justifyContent:"center",
    )
        
 }
-   
-
-
-
 
 }
 
 export default DashboardScreen;
 
 const styles = StyleSheet.create({
-
 
 screen:{
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View,Modal,ScrollView, SafeAreaView, Text, TouchableOpacity, StyleSheet, FlatList, Image, TextInput,  BackHandler, ActivityIndicator, AppState } from 'react-native'
+import { View,Modal,ScrollView,ImageBackground, SafeAreaView, Text, TouchableOpacity, StyleSheet, FlatList, Image, TextInput,  BackHandler, ActivityIndicator, AppState } from 'react-native'
 
 import Elavation from '../styles/Elavation';
 import AppColors from '../Colors/AppColors';
@@ -62,6 +62,14 @@ class WishListScreen extends Component {
         AsyncStorage.setItem('user_role' , '')
         AppConstance.USER_ROLE = ''
       
+        AsyncStorage.setItem('username' , '')
+        AppConstance.USERNAME = ''
+      
+        AsyncStorage.setItem('rolename' , '')
+        AppConstance.ROLENAME = ''
+      
+        AsyncStorage.setItem('userprofilepic' , '')
+        AppConstance.USERPHOTO = ''
       
         AsyncStorage.removeItem(AppConstance.USER_INFO_OBJ);
              this.setState({drawerview : false})
@@ -70,7 +78,7 @@ class WishListScreen extends Component {
           }
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackPress);
-
+        this.callingnotificationsApi()
         // this.setState({ isLoading: true })
         // fetch(AppUrlCollection.ANNOUCMENT, {
         //     method: 'GET',
@@ -106,21 +114,61 @@ class WishListScreen extends Component {
     }
 
     renderOurServiceContent = ({ item, index }) => {
+        const regex = /(<([^>]+)>)/ig;
+const result = item.message.replace(regex, '');
         return (
-            <TouchableOpacity
-                onPress={() => this.props.navigation.push('AnnoucementDetailScren', { 'itemObj': item })}>
+            <View
+            style={{margin:5, backgroundColor:'#F5F5F5',borderWidth:0.5,borderColor:'#E8E8E8', borderRadius:10, padding:2}}
+                // onPress={() => this.props.navigation.push('AnnoucementDetailScren', { 'itemObj': item })}
+                >
                 <Elavation
                     elevation={1}
-                    style={{ flexDirection: 'row', width: deviceWidth * 0.95, height: 120, borderRadius: 10, marginBottom: 10 }}>
+                    style={{ flexDirection: 'row', width: deviceWidth * 0.95, borderRadius: 10, marginBottom: 10 }}>
                     <View style={{ flex: 1, padding: 5, marginLeft: 5, marginRight: 5 }}>
-                        <Text style={{ color: AppColors.textColor, fontSize: 15 }}>{item.subject}</Text>
-                        <Text style={{ color: AppColors.textColor, fontSize: 14, marginTop: 9 }} numberOfLines={3} ellipsizeMode='tail'>{item.message}</Text>
+                       
+                        <Text style={{ color: AppColors.textColor,fontStyle:'oblique', fontSize: 15 }}>{item.subject}</Text>
+                        <Text style={{ color: AppColors.textColor, fontSize: 14, marginTop: 9 }}   ellipsizeMode='tail'>{result}</Text>
+                        {/* <TouchableOpacity>
                         <Text style={{  fontSize: 14, color: AppColors.toolbarColor, textAlign: 'right' }}>View More...</Text>
+                        </TouchableOpacity> */}
                     </View>
                 </Elavation>
-            </TouchableOpacity>
+            </View>
         );
     }
+
+    callingnotificationsApi = () =>{
+
+        // this.setState({ isLoading: true })
+     fetch(AppUrlCollection.ANNOUCMENT, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+            },
+        })
+        .then((response) => response.json())
+            .then((responseJson) => {
+                this.setState({ isLoading: false })
+                console.log('sdsadada ', responseJson)
+                if (responseJson.data) {
+                    this.setState({ isLoading: false })
+
+                    this.setState({ ourServiceList: responseJson.data })
+                } else {
+                    this.setState({ isLoading: false })
+
+                    AppConstance.showSnackbarMessage(responseJson.message)
+                }
+            })
+            .catch((error) => {
+                console.warn(error)
+                this.setState({ isLoading: false })
+
+            });
+    
+    }
+
 
     render() {
         return (
@@ -130,6 +178,7 @@ class WishListScreen extends Component {
    height:deviceHeight,
    width:deviceWidth,
    backgroundColor:'white'}}>
+                <DialogLoader loading={this.state.isLoading} />
 
 <Modal 
 visible={this.state.drawerview}
@@ -196,10 +245,22 @@ animationType='fade'
 
  style={{ width:"105%", height:130}}>
 
+<ImageBackground source={ require('../Images/image.png')} 
+            style={{ width: "104%", height:130,justifyContent:'center'  }} 
+           >
+               <Image 
+                           style={{ width: '50%',alignSelf:'center', height:'50%',  }}
+                        
+                           resizeMethod='resize'
+                           resizeMode='contain' 
 
-<Image source={ require('../Images/image.jpg')} 
-            style={{ width: "105%", height:130,  }} 
-           />
+               source={{ uri:AppConstance.USERPHOTO }}
+
+           
+               />
+               <Text style={{alignSelf:'center',marginTop:5, fontSize:15, color:'white'}}>{AppConstance.USERNAME}</Text>
+               <Text style={{alignSelf:'center',fontSize:13, color:'white'}}>{AppConstance.ROLENAME}</Text>
+               </ImageBackground>
 <Left/>
 <Body>
 </Body>
@@ -282,13 +343,15 @@ onPress={() =>{this.setState({drawerview:false}); this.props.navigation.navigate
 <ListItem noBorder
 style={{height:40,
 }}
-onPress={() => {this.setState({drawerview:false}); this.props.navigation.navigate('WishListScreen')}} selected>
+onPress={() => {this.setState({drawerview:false}); this.props.navigation.navigate('Notification')}} selected>
 <Image source={ require('../Images/ann.jpeg')} 
             style={{ width: 27, height:27, alignSelf: 'center' }} resizeMode='contain'
            />
    
-<Text style={{fontSize:14, color:'black',marginLeft:10}}>ANNOUNCEMENT</Text>        
-
+<Text style={{fontSize:14, color:'black',marginLeft:10}}>ANNOUCMENT </Text>        
+<View style={{backgroundColor:'grey',padding:0,paddingHorizontal:8, borderRadius:10,}}>
+    <Text style={{color:'white', fontSize:12}}>{AppConstance.NOTIFICATIONCOUNTER}</Text>
+</View>
 </ListItem>
 
 
@@ -380,7 +443,6 @@ onPress={() => {this.setState({drawerview:false}); this.props.navigation.navigat
       </Appbar>
 
 
-                <DialogLoader loading={this.state.isLoading} />
                 {/* {this.props.isOuterCalling ?
                     
                     
@@ -406,12 +468,13 @@ onPress={() => {this.setState({drawerview:false}); this.props.navigation.navigat
                         </View>
                     <FlatList
                         data={this.state.ourServiceList}
-                        style={{ paddingTop: 10, paddingBottom: 15 }}
+                        style={{ paddingTop: 10, paddingBottom: 40, marginBottom:180 }}
                         renderItem={this.renderOurServiceContent}
                         keyExtractor={(item, index) => index}
                         extraData={this.state}
                         ListFooterComponent={() => <View style={{ width: 1, height: 10 }} />}
                     />
+                  
                 </View>
 
             </SafeAreaView>

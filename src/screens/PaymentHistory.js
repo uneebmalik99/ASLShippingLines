@@ -14,6 +14,7 @@ import { Appbar } from 'react-native-paper';
 import { Content,List, Header, Body, Title,ListItem, Container, Left, Right, Icon,Badge} from "native-base";
 import AsyncStorage from '@react-native-community/async-storage';
 import DialogLoder from '../screens/DialogLoder'
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 
 let v = []
@@ -27,10 +28,8 @@ class PaymentHistory extends Component {
    
         this.state = {
             user_id: props.route.params,
-
             tabIndex: 0,
             drawerview:false,
-
             item_id:0,
             allInvoiceList: [],
             unpaidInvoiceList: [],
@@ -38,21 +37,22 @@ class PaymentHistory extends Component {
             isLoading: false,
             paymentHistoryList: [],
             balancePrice: 0,
-
+            search:0,
+            searchtxt:'',
+            isStopCallingAPI:false,
+            currentpage:1,
+            lastpage:'',
             allPagination: 1,
+            searchinvoicelist:[],
             unPaidPage: 1,
             paidPage: 1,
             paymentHistorypage: 1,
-
             allPageServiceCallStop: false,
             allFooterCalling: false,
-
             unPaidServiceCallStop: false,
             unPaidFooterCalling: false,
-
             paidServiceCallStop: false,
             paidFooterCalling: false,
-
             paymentHisServiceCallStop: false,
             paymentHisFooterCalling: false
         }
@@ -72,6 +72,14 @@ class PaymentHistory extends Component {
         AsyncStorage.setItem('user_role' , '')
         AppConstance.USER_ROLE = ''
       
+        AsyncStorage.setItem('username' , '')
+        AppConstance.USERNAME = ''
+      
+        AsyncStorage.setItem('rolename' , '')
+        AppConstance.ROLENAME = ''
+      
+        AsyncStorage.setItem('userprofilepic' , '')
+        AppConstance.USERPHOTO = ''
       
         AsyncStorage.removeItem(AppConstance.USER_INFO_OBJ);
              this.setState({drawerview : false})
@@ -79,30 +87,28 @@ class PaymentHistory extends Component {
       
           }
 componentDidMount = () => {
-    this.callingInvoceAPI11()
+    this.callingPartaillyInvoceAPI(true)
 //   alert(AppConstance.USER_TOKEN_KEY)
 }
-
-
 renderInvoiceContent = ({ item }) => {
     
     
-    return <Elavation
-    onPress={()=> {navigation.navigate('AccountDetailsScreen')}}
+    return <TouchableOpacity
         elevation={2}
+        onPress={() => this.props.navigation.navigate('AccountDetailsScreen', { 'invoice': item.usa_invoice})}
+
         style={{  borderColor:'black',borderRadius:18, borderWidth:0.7, paddingHorizontal:10, width: '45%', flexDirection:'column', margin: 10, backgroundColor: 'white',  }}
     >
-        <TouchableOpacity style={{marginTop:5,  width: deviceWidth * 0.37, height: 100 }}
+        <View style={{marginTop:5,  width: deviceWidth * 0.37, height: 100 }}
         >
             {/* {item.vehicle.image != null && item.vehicle.image.length > 0 ? <Image style={{ width: undefined, height: undefined, flex: 1 }}
                 source={{ uri: item.vehicle.image[0].image }} /> : */}
                 <Image style={{ width: undefined, height: undefined, flex: 1 }} source={require('../Images/logo_final.png')} resizeMode='contain' />
                 {/* } */}
 
-        </TouchableOpacity>
+        </View>
 
-        <TouchableOpacity style={{ flex: 1, justifyContent: 'space-between', paddingTop: 5, paddingBottom: 5, paddingLeft: 10 }}
-            onPress={() => this.props.navigation.navigate('AccountDetailsScreen', { 'invoice': item.usa_invoice})}
+        <View style={{ flex: 1, justifyContent: 'space-between', paddingTop: 5, paddingBottom: 5, paddingLeft: 10 }}
         >
             <Text style={{
                 color: this.state.tabIndex == 0 ? 'grey' : this.state.tabIndex == 1 ? 'red' : 'green', fontSize: 12
@@ -115,93 +121,173 @@ renderInvoiceContent = ({ item }) => {
                 color: this.state.tabIndex == 0 ? 'grey' : this.state.tabIndex == 1 ? 'red' : 'green',
                 fontSize: 12
             }}>{item.total_amount != ' ' && item.total_amount != null ? 'Total Amount : ' + item.total_amount : 'Total Amount : - '}</Text>
-        </TouchableOpacity>
-    </Elavation>
+        </View>
+    </TouchableOpacity>
 }
 
-loadMoreDataAll = () => {
-    setTimeout(() => {
-        if (this.state.allPageServiceCallStop) {
-        } else {
-            if (this.state.noMoreDataFound) {
-            } else {
-                this.setState({ allPagination: this.state.allPagination + 1 }, () => this.callingAllInvoceAPI())
+
+callingPartaillyInvoceAPI = (isCallingFirsttime) => {
+ 
+    if(isCallingFirsttime){
+        this.setState({isLoading : true})
+    }
+    let url='';
+    if(AppConstance.USER_ROLE == '1'){
+        url = AppUrlCollection.INVOICE_PARTIALLY_PAID + 'page=' + this.state.currentpage
+
+    }else{
+        url = AppUrlCollection.INVOICE_PARTIALLY_PAID + 'customer_user_id=' + this.state.user_id + '&page=' + currentpage
+    }
+
+    fetch(url, {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + AppConstance.USER_TOKEN_KEY,
+    },
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+        // console.log('data', responseJson.data);
+
+        if (responseJson.data != null || responseJson.data != '') {
+            console.log(responseJson);
+            let data = responseJson.data
+            this.setState({isLoading : false})
+            if(isCallingFirsttime == true){
+                console.log('working if');
+
+                this.setState({currentpage:responseJson.current_page})
+                this.setState({lastpage:responseJson.last_page})
+                this.setState({isStopCallingAPI:true})
+                this.setState({isLoading:false})
+                this.setState({ allInvoiceList: data})
+
+            }else{
+                this.setState({currentpage:responseJson.current_page})
+                this.setState({lastpage:responseJson.last_page})
+                this.setState({isStopCallingAPI:false})
+                this.setState({isLoading:false})
+                console.log('working eklse');
+                this.setState({ allInvoiceList: this.state.allInvoiceList.concat(data) })
+
             }
+            // this.setState({ allInvoiceList: responseJson.invoices.data, isLoading: false })
+        } else {
+            this.setState({isStopCallingAPI:true})
+            AppConstance.showSnackbarMessage(responseJson.message)
+            this.setState({ isLoading: false })
         }
-    }, 100)
+    })
+    .catch((error) => {
+        this.setState({isLoading : false})
+
+        console.warn(error)
+    });
+  
+
+  
 }
 
-renderFooterUnpaid = () => {
-    if (this.state.unPaidServiceCallStop) {
+renderFooter = () => {
+       
+    if (this.state.isStopCallingAPI == true) {
         return null;
     } else {
         return <View><ActivityIndicator color={AppColors.toolbarColor} size='large' /></View>
     }
 }
 
+loadMoreData = () => {
+    // alert('dcn')
 
+    setTimeout(() => {
+        // if (this.state.isStopCallingAPI == true) {
+        //     // alert('yes1')
 
+        // } else {
 
+            if ( this.state.currentpage > this.state.lastpage ) {
+                this.setState({isStopCallingAPI: true})
+                console.log('kjjj');
+                // alert(this.state.lastpage , this.state.currentpage)
 
-generateFlatList = () => {
-    if (this.state.allInvoiceList.length > 0) {
-        if (this.state.allInvoiceList.length > 0) {
-        
-            return <View style={{ flex: 1 }}>
-                <FlatList
-                    style={{ paddingTop: 5 }}
-                    data={this.state.allInvoiceList}
-                    renderItem={this.renderInvoiceContent}
-                    numColumns={numColumns}
-                    keyExtractor={(item, index) => index}
-                    extraData={this.state}
-                //    ListFooterComponent={this.renderFooterUnpaid}
-                    ItemSeparatorComponent={() => <View style={styles.dividerViewStyle} />}
-        //            onEndReached={this.loadMoreDataAll}
-                    // onEndThreshold={0}
-                    onEndReachedThreshold={0.5}
-                />
-            </View>
-        } else {
-            return <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
-                <Text style={{  color: AppColors.textColor, fontSize: 15 }}>Invoice Not Found</Text>
-            </View>
-        }
+            }else {
+                console.log('jhbjhjhj');
+
+                console.log(this.state.currentpage , this.state.lastpage);
+                this.setState({ currentpage: this.state.currentpage + 1 })
+                this.callingPartaillyInvoceAPI(false)
+            }
+        // }
+    }, 100);
+}
+
+callingSearchAPI = () => {
+    // alert(text.nativeEvent.text)
+  this.setState({ isLoading: true, isFooterLoading: false })
+  if(this.state.searchtxt.length>0){
+    this.setState({search:1})
+
+    let url='';
+    if(AppConstance.USER_ROLE == '1'){
+          url = AppUrlCollection.INVOICE_PARTIALLY_PAID +  'invoice_global_search='+this.state.searchtxt
+
+    }else{
+          url = AppUrlCollection.INVOICE_PARTIALLY_PAID + 'customer_user_id=' + this.state.user_id + '&invoice_global_search='+this.state.searchtxt
+
     }
+ fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + AppConstance.USER_TOKEN_KEY,
+            },
+        })
+            .then((response) => response.json())
+            .then((responseJson) => {
+                // console.log('data', responseJson.data);      
+                if (responseJson.data != null || responseJson.data != '') {
+                    console.log(responseJson);
+                    let data = responseJson.data
+                    this.setState({isLoading : false})
+                    // alert(JSON.stringify(data))
+                        this.setState({ searchinvoicelist: data})
+                    
+                    // this.setState({ allInvoiceList: responseJson.invoices.data, isLoading: false })
+                } else {
+                    // this.setState({isStopCallingAPI:true})
+                    AppConstance.showSnackbarMessage(responseJson.message)
+                    this.setState({ isLoading: false })
+                }
+            })
+            .catch((error) => {
+                this.setState({isLoading : false})
+                console.warn(error)
+            });
+
+
+
+
+
+
+}else{
+
+    this.setState({search:0})
+    this.setState({isLoading: false})
+
     
-}
 
-callingInvoceAPI11 = () => {
-    this.setState({ isLoading: true })
+ }
+          
+            // this.ccallingLocationApi();
+            // this.setState({ isLoading: false })
+            // console.log('api calling ::', AppUrlCollection.CONTAINER_TRACKING + 'search=' + this.state.searchLotNumber + '&page=1')
+            // this.callingContainerApi(true)
 
-  let  url = AppUrlCollection.INVOICE + 'customer_user_id=' + this.state.user_id
-fetch(url, {
-    method: 'GET',
-    headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + AppConstance.USER_TOKEN_KEY,
-    },
-})
-    .then((response) => response.json())
-    .then((responseJson) => {
-       
-        if (responseJson.invoices != null || responseJson.invoices != '') {
-            console.log(responseJson);
-            this.setState({ isLoading: false })
+     
+    };
 
-            this.setState({ allInvoiceList: responseJson.invoices, isLoading: false })
-        } else {
-            AppConstance.showSnackbarMessage(responseJson.message)
-            this.setState({ isLoading: false })
-        }
-    })
-    .catch((error) => {
-        this.setState({ isLoading: false })
-
-        console.warn(error)
-    });
-  
-}
 render() {
     return (
         
@@ -245,9 +331,9 @@ animationType='fade'
                     style={{width:60,height:60 ,alignContent:"center", alignItems:"center", justifyContent:'center'}}
                                 //   onPress={() => this.props.navigation.navigate('LoginScreen')}
         >
-                    <Image  source={require('../Images/home-icon-23.png')}
+                    {/* <Image  source={require('../Images/home-icon-23.png')}
                     style={{ width: 30, height:30, alignSelf: 'center' }} resizeMode='contain'
-                />
+                /> */}
                 </TouchableOpacity>
                 
                 
@@ -276,9 +362,22 @@ animationType='fade'
  style={{ width:"105%", height:130}}>
 
 
-<Image source={ require('../Images/image.jpg')} 
-            style={{ width: "105%", height:130,  }} 
-           />
+<ImageBackground source={ require('../Images/image.png')} 
+            style={{ width: "104%", height:130,justifyContent:'center'  }} 
+           >
+               <Image 
+                           style={{ width: '50%',alignSelf:'center', height:'50%',  }}
+                        
+                           resizeMethod='resize'
+                           resizeMode='contain' 
+
+               source={{ uri:AppConstance.USERPHOTO }}
+
+           
+               />
+               <Text style={{alignSelf:'center',marginTop:5, fontSize:15, color:'white'}}>{AppConstance.USERNAME}</Text>
+               <Text style={{alignSelf:'center',fontSize:13, color:'white'}}>{AppConstance.ROLENAME}</Text>
+               </ImageBackground>
 <Left/>
 <Body>
 </Body>
@@ -361,13 +460,15 @@ onPress={() =>{this.setState({drawerview:false}); this.props.navigation.navigate
 <ListItem noBorder
 style={{height:40,
 }}
-onPress={() => {this.setState({drawerview:false}); this.props.navigation.navigate('WishListScreen')}} selected>
+onPress={() => {this.setState({drawerview:false}); this.props.navigation.navigate('Notification')}} selected>
 <Image source={ require('../Images/ann.jpeg')} 
             style={{ width: 27, height:27, alignSelf: 'center' }} resizeMode='contain'
            />
    
-<Text style={{fontSize:14, color:'black',marginLeft:10}}>ANNOUNCEMENT</Text>        
-
+<Text style={{fontSize:14, color:'black',marginLeft:10}}>ANNOUNCEMENT </Text>        
+<View style={{backgroundColor:'grey',padding:0,paddingHorizontal:8, borderRadius:10,}}>
+    <Text style={{color:'white', fontSize:12}}>{AppConstance.NOTIFICATIONCOUNTER}</Text>
+</View>
 </ListItem>
 
 
@@ -433,12 +534,14 @@ onPress={() => {this.setState({drawerview:false}); this.props.navigation.navigat
 
 
         <TouchableOpacity 
-                    style={{width:60,height:60 ,alignContent:"center", alignItems:"center", justifyContent:'center'}}
+                    style={{width:190,height:60 ,alignContent:"center", alignItems:"center", justifyContent:'center'}}
                                 //   onPress={() => this.props.navigation.navigate('LoginScreen')}
         >
-                    <Image  source={require('../Images/home-icon-23.png')}
+                                    <Text style={{fontWeight:'600', fontSize:18}}>Partially Paid Invoices</Text>
+
+                    {/* <Image  source={require('../Images/home-icon-23.png')}
                     style={{ width: 30, height:30, alignSelf: 'center' }} resizeMode='contain'
-                />
+                /> */}
                 </TouchableOpacity>
                 
                 
@@ -448,60 +551,110 @@ onPress={() => {this.setState({drawerview:false}); this.props.navigation.navigat
             }  
             }
             
-            onPress={() => this.setState({drawerview:true})}         
+            // onPress={() => this.setState({drawerview:true})}         
 
             >
-                 <Image source={ require('../Images/d-2.png')}
+                 {/* <Image source={ require('../Images/d-2.png')}
             style={{ width: 30, height:30,marginRight:10, alignSelf: 'center' }} resizeMode='contain'
-           />
+           /> */}
              </TouchableOpacity>
      
       </Appbar>
 
 
 
-                <Image
+                {/* <Image
                     source={require('../Images/account-1.jpg')}
                       style={{ alignSelf:'center', resizeMode:'contain',
                        height:76,}}
-                    />
+                    /> */}
     <View style={{width:deviceWidth}}> 
+    <View style={{height:40,marginTop:15, marginHorizontal:15 ,borderRadius:10,paddingHorizontal:10, flexDirection:'row', borderWidth:0.7, borderColor:'grey', justifyContent:'center'}}>
+                                    <TextInput style={styles.searchTxtInputStyle}
+                                        placeholder='Search'
+                                        placeholderTextColor={AppColors.toolbarColor}
+                                        selectionColor={AppColors.toolbarColor}
+                                        onChangeText={(text) => {
 
-            <FlatList
-                    contentContainerStyle={{alignSelf:'center', }}
-                    data={this.state.allInvoiceList}
-                    renderItem={this.renderInvoiceContent}
-                    numColumns={numColumns}
-                    keyExtractor={(item, index) => index}
-                    extraData={this.state}
-                    ItemSeparatorComponent={() => <View style={styles.dividerViewStyle} />}
-                    onEndReachedThreshold={0.5}
-                />
+                                            if(text.length == 0)
+                                            {
+                                                this.setState({search:0})
+                                                this.setState({searchtxt:text})
+                                                this.setState({searchvehiclelist:[]})
+                                            }
+                                            else{
+                                                this.setState({searchtxt:text})
+                                                // this.setState({search:1})
+                                            }
+    
+                                        }}
+                                        
+                                        // onChangeText={(text) =>{ this.setState({ searchTxt: text }); this.searchFilterFunction(text) } }
+                                        onSubmitEditing={(text) => {if(text.nativeEvent.text.length>0){
+                                            // this.setState({search:1})
+                                            this.callingSearchAPI(text)
+    
+                                        } else{
+                                            this.setState({search:0})
+                                            this.setState({isLoading:false})
+    
+                                        }  }}
+                                        // onSubmitEditing={(text) => I this.callingSearchAPI(text)}
+                                        returnKeyType='search'
+                                    />
+                                    <AntDesign name='search1' onPress={()=> { if(this.state.searchtxt.length> 0){  this.callingSearchAPI()}}} color={AppColors.toolbarColor} style={{alignSelf:'center'}} size={20} />
+                                </View>
+
+
+
+
+                                {this.state.search == 0?
+                        
+                        <View style={{width:'100%'}}>
+        
+                            {this.state.allInvoiceList.length > 0 ?
+                                  <FlatList
+                                  contentContainerStyle={{alignSelf:'center',paddingBottom:140 }}
+                                  data={this.state.allInvoiceList}
+                                  renderItem={this.renderInvoiceContent}
+                                  numColumns={numColumns}
+                                  keyExtractor={(item, index) => index}
+                                  extraData={this.state}
+                                  ItemSeparatorComponent={() => <View style={styles.dividerViewStyle} />}
+                                  onEndReachedThreshold={0.5}
+                                  ListFooterComponent={this.renderFooter}
+                                  onEndReached={this.loadMoreData}
+                              />
+                                :
+                                <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                                    <Text style={{  fontSize: 15 }}>Invoice Not Found.</Text>
+                                </View>
+                            }
+                        </View>
+                        :
+                        <View style={{width:'100%'}}>
+                            {this.state.searchinvoicelist.length > 0 ?
+        
+                                <FlatList
+                                    contentContainerStyle={{alignSelf:'center',width:deviceWidth,  paddingBottom:170 }}
+                                    data={this.state.searchinvoicelist}
+                                    renderItem={this.renderInvoiceContent}
+                                    numColumns={numColumns}
+                                    keyExtractor={(item, index) => index}
+                                    extraData={this.state}
+                            
+                                />
+                            :
+                              <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                                 <Text style={{  fontSize: 15 }}>Invoice Not Found.</Text>
+                               </View>
+                            }
+                        </View>
+                    }
+            
 
                 </View>
-                {/* {this.generateFlatList()} */}
-
-
-            {/* {this.generateFlatList()} */}
-
-
-            {/* <View style={{ flex: 1 }}>
-            <FlatList
-                    style={{ paddingTop: 5 }}
-                    data={this.state.allInvoiceList}
-                    renderItem={this.renderInvoiceContent}
-                    keyExtractor={(item, index) => index}
-                    extraData={this.state}
-                    ItemSeparatorComponent={() => <View style={styles.dividerViewStyle} />}
-                    extraData={this.state}
-                    ListFooterComponent={this.renderFooterAll}
-                    ItemSeparatorComponent={() => <View style={styles.dividerViewStyle} />}
-                    onEndReached={this.loadMoreDataAll}
-                    // onEndThreshold={0.1}
-                    onEndReachedThreshold={0.5}
-                />
-                                    {this.generateFlatList()}
-            </View> */}
+             
         </SafeAreaView>
     );
 }

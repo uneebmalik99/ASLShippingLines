@@ -454,21 +454,6 @@ const TakePhoto = async (type) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       }
 
 
@@ -737,7 +722,7 @@ const barcodeReceived =(e)=> {
 
 const callingCustomer =() =>{
   setspinner(true)
-  let url = AppUrlCollection.BASE_URL+'customers'
+  let url = AppUrlCollection.BASE_URL+'customers-item' + '?limit=-1' 
   fetch(url, {
     method: 'GET',
     headers: {
@@ -749,8 +734,9 @@ const callingCustomer =() =>{
     .then((responseJson) => {
         // this.setState({ isLoading: false })
       setspinner(false)
-      setCustomerlist(responseJson.data)
-      setFilteredcustomer(responseJson.data)
+      setCustomerlist(responseJson)
+      setFilteredcustomer(responseJson)
+      // alert(JSON.stringify(responseJson))
       // setlocationslist(responseJson.data)
         console.log('Response data viw :: ', responseJson)
         console.log('detail --------------'+details);
@@ -1131,7 +1117,7 @@ const renderlist = ({item}) =>{
 
   return(
     <TouchableOpacity 
-    onPress={()=>{setlocation_id(item.status); setlocation_name(item.name); setlocmodal(false) }}
+    onPress={()=>{setlocation_id(item.id); setlocation(item.name), setlocation_name(item.name); setlocmodal(false) }}
     style={{marginVertical:5,justifyContent:'space-around', flexDirection:'row'}}>
       <Text>{item.id}</Text>
 <Text>{item.name}</Text>
@@ -1170,7 +1156,7 @@ style={{marginVertical:5,borderWidth:0.5,flexDirection:'row', borderColor:'grey'
      }  
 
  const callingupdateApi = ()=>{
-// setspinner(true)
+setspinner(true)
 
 // form - validation 
 if (vin == null) {
@@ -1234,33 +1220,51 @@ if (vin == null) {
     }
     else {
 
-  let f = [];
+  let f ={};
   if(CDChanger == 3){
-    f.push(CDChanger)
+    // let v = "3"
+    f["3"] = 3;
+    // f.push(CDChanger)
   }
   if(GPSNavigationSystem == 4){
-    f.push(GPSNavigationSystem)
+    f["4"] = 4;
+
+    // f.push(GPSNavigationSystem)
   }
   if(SpareTireJack == 5){
-    f.push(SpareTireJack)
+    f["5"] = 5;
+
+    // f.push(SpareTireJack)
   }
   if(WheelCovers == 6){
-    f.push(WheelCovers)
+    f["6"] = 6;
+
+    // f.push(WheelCovers)
   }
   if(Radio == 7){
-    f.push(Radio)
+    f["7"] = 7;
+
+    // f.push(Radio)
   }
   if(CDPLAYER == 8){
-    f.push(CDPLAYER)
+    f["8"] = 8;
+
+    // f.push(CDPLAYER)
   }
   if(MIRROR == 10){
-    f.push(MIRROR)
+    f["10"] = 10;
+
+    // f.push(MIRROR)
   }
   if(SPEAKER == 11){
-    f.push(SPEAKER)
+    f["11"] = 11;
+
+    // f.push(SPEAKER)
   }
   if(OTHERS == 12){
-    f.push(OTHERS)
+    f["12"] = 12;
+
+    // f.push(OTHERS)
   }
         
 
@@ -1323,7 +1327,6 @@ if (vin == null) {
     if(leftfrontdoor != null){
       h[13]  = leftfrontdoor
     }
-
 
     if(leftreardoor != null){
       h[14]  = leftreardoor
@@ -1430,7 +1433,7 @@ array.towing_request_id = 0,
   array.towed_amount = 0,
 
  
-  alert(JSON.stringify(array))
+  // alert(JSON.stringify(array))
 
      
 
@@ -1452,14 +1455,17 @@ array.towing_request_id = 0,
             if(responseJson.message == 'The given data was invalid.'){
               alert(JSON.stringify(responseJson.errors))
             }else{
+              ImageCropPicker.clean().then(() => {
+                console.log('removed all tmp images from tmp directory');
+              }).catch(e => {
+                alert(e);
+              });
               AppConstance.showSnackbarMessage(responseJson.message)
+              navigation.navigate('MyVehicle')
+
 
             }
-            ImageCropPicker.clean().then(() => {
-              console.log('removed all tmp images from tmp directory');
-            }).catch(e => {
-              alert(e);
-            });
+           
             
               console.log('export detail ', responseJson)
              

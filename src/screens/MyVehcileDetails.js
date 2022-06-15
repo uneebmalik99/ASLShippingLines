@@ -120,11 +120,11 @@ useEffect(() => {
   //   }
   // }
 
-//   const willFocusSubscription = navigation.addListener('focus', () => {
-//     callingVehicledetailedApi();
-// });
+  const willFocusSubscription = navigation.addListener('focus', () => {
+    callingVehicledetailedApi();
+});
 
-// return willFocusSubscription;
+return willFocusSubscription;
 
 
 
