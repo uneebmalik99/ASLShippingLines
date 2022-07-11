@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>GalaxyWorldWide.ipa</key>
+	<array>
+		<dict>
+			<key>architectures</key>
+			<array>
+				<string>arm64</string>
+			</array>
+			<key>bitcode</key>
+			<true/>
+			<key>buildNumber</key>
+			<string>1</string>
+			<key>certificate</key>
+			<dict>
+				<key>SHA1</key>
+				<string>B459CF2098A36CDC4C57C2B1349F74F4995AA2F7</string>
+				<key>dateExpires</key>
+				<string>27/11/2022</string>
+				<key>type</key>
+				<string>Cloud Managed Apple Distribution</string>
+			</dict>
+			<key>entitlements</key>
+			<dict>
+				<key>application-identifier</key>
+				<string>879XD8H5XS.com.galaxyworldwide.shipping</string>
+				<key>aps-environment</key>
+				<string>production</string>
+				<key>beta-reports-active</key>
+				<true/>
+				<key>com.apple.developer.team-identifier</key>
+				<string>879XD8H5XS</string>
+				<key>get-task-allow</key>
+				<false/>
+			</dict>
+			<key>name</key>
+			<string>GalaxyWorldWide.app</string>
+			<key>profile</key>
+			<dict>
+				<key>UUID</key>
+				<string>ce0187b1-a3f6-4fba-bc62-5026d77d3da1</string>
+				<key>dateExpires</key>
+				<string>27/11/2022</string>
+				<key>name</key>
+				<string>iOS Team Store Provisioning Profile: com.galaxyworldwide.shipping</string>
+			</dict>
+			<key>symbols</key>
+			<true/>
+			<key>team</key>
+			<dict>
+				<key>id</key>
+				<string>879XD8H5XS</string>
+				<key>name</key>
+				<string>Shafee Muhammad</string>
+			</dict>
+			<key>versionNumber</key>
+			<string>0.2.2</string>
+		</dict>
+	</array>
+</dict>
+</plist>

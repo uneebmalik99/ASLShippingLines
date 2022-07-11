@@ -166,8 +166,7 @@ const [barcodemodal , setbarcodemodal] = useState(false)
 
 const captureImage = async (type) => {
   let options = {
-    
-    quality: 0.8,
+    quality: 0.6,
     videoQuality: 'low',
     durationLimit: 30, //Video max duration in seconds
     saveToPhotos: true,
@@ -240,30 +239,7 @@ const captureImage = async (type) => {
             setspinner(false)
               console.warn(error)
           });
-     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       }
-
-
-
-
       // console.log('base64 -> ', response.base64);
       // console.log('uri -> ', response.uri);
       // console.log('width -> ', response.width);
@@ -275,6 +251,7 @@ const captureImage = async (type) => {
     });
   }
 };
+
 // for android image pick from library
 const selectFile3 = async () => {
   
@@ -372,17 +349,15 @@ console.log('-----'+JSON.stringify(results));
 
 };
 
+// iOS Take photo 
 const TakePhoto = async (type) => {
   let options = {
-    
-    quality: 0.8,
+    quality: 0.6,
     videoQuality: 'low',
     durationLimit: 30, //Video max duration in seconds
     saveToPhotos: true,
   };
-  // let isCameraPermitted = await requestCameraPermission();
-  // let isStoragePermitted = await requestExternalWritePermission();
-  // if (isCameraPermitted && isStoragePermitted) {
+
     ImagePicker.launchCamera(options, (response) => {
       console.log('Response = ', response);
 
@@ -589,11 +564,12 @@ for(var index = 0 ; index< images2.length ; index++){
 
 }
 
+// Ios Image  Picker
 const chooseFile = async() => {
 
   ImageCropPicker.openPicker({
         multiple: true,
-        compressImageQuality:0.7
+        compressImageQuality:0.6
       }).then(images1 => {
         // if(images[0] == require('../Images/noimage3.jpeg')){
         //   images.pop();
@@ -625,7 +601,9 @@ const chooseFile = async() => {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'source' : 'asl_phone_app',
+
             },
             body: value,
                        
@@ -1443,6 +1421,8 @@ array.towing_request_id = 0,
               'Content-Type': 'application/json',
               'Accept': 'application/json',
               'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+              'source' : 'asl_phone_app',
+
           },
           
           body: JSON.stringify(array)

@@ -48,9 +48,7 @@ const MyVehcileDetails = ({route, navigation }) => {
 
   const [imgpos, setimgpos] = useState(0)
   const[showimagemodel , setshowimagemodel] = useState(false)
-  const [images , setimages] = useState([
-
-  ])
+  const [images , setimages] = useState([])
   const[spinner , setspinner ] = useState(false)
   const[SliderModel , setSliderModel] = useState(false)
   const[Details , setDetails] = useState({
@@ -64,27 +62,27 @@ const MyVehcileDetails = ({route, navigation }) => {
 const callingVehicledetailedApi =async () =>{
   
   // setDetails('')
+  // setimages([])
 setspinner(true)
   fetch(AppUrlCollection.VEHICLE_DETAIL  + item, {
     method: 'GET',
     headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+        'source' : 'asl_phone_app',
+
     },
 })
     .then((response) => response.json())
     .then((responseJson) => {
         console.log(responseJson)
-
-
-      
         if (responseJson.status == 'SUCCESS') {
+        
             setDetails(responseJson.data) 
             let data = responseJson.data
-            if (data.photos.length > 0) {
-              // setimg(responseJson.data.vehicle.images)
+            if (data.photos.length > 0 && images.length == 0) {
               for (let index = 0; index < data.photos.length; index++) {
-                  const element = data.photos[index].url;
+                  const element = data.photos[index].thumbnail;
                    images.push(element)
                   console.log(element);
               }
@@ -92,9 +90,7 @@ setspinner(true)
             }else{
               images.push(data.photo)
               setspinner(false)
-
-            }
-            
+            }   
            }
     })
     .catch((error) => {

@@ -134,7 +134,9 @@ class VehcilContainerDetailScreen extends Component {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'authkey': AppConstance.USER_INFO.USER_TOKEN
+            'authkey': AppConstance.USER_INFO.USER_TOKEN,
+            'source' : 'asl_phone_app',
+
         },
     })
         .then((response) => response.json())
@@ -162,6 +164,8 @@ class VehcilContainerDetailScreen extends Component {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+                    'source' : 'asl_phone_app',
+
                 },
             })
                 .then((response) => response.json())
@@ -192,7 +196,7 @@ class VehcilContainerDetailScreen extends Component {
                         // var a =[];
             
                         for (let index = 0; index < responseJson.data.photos.length; index++) {
-                            const element = responseJson.data.photos[index].url;
+                            const element = responseJson.data.photos[index].thumbnail;
                             // this.state.images.push(element.url)
 
                             this.state.images.push(element)

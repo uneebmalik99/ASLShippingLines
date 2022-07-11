@@ -72,109 +72,39 @@ const LoginScreen = ({ navigation }) => {
       else {
        
                   var url = AppUrlCollection.LOGIN
-
                  var  token =AppConstance.USER_TOKEN;
-                //  alert(AppConstance.USER_TOKEN)
-  
-                  // var value = new FormData();
-                  // value.append('username', 'info@impulsiontechnologies.com');
-                  // value.append('password', '20190021');
-                  // value.append('email',email);
-                  // value.append('password', pass);
-                  // value.append('source', 'asl_phone_app');
-
                   let value = {};
-
                   value.email = email,
                   value.password = pass,
                   value.source = 'asl_phone_app';
                   value.device_id_token = token;
-
-                  // value.append('token', this.state.fireBaseToken);
-                  // value.append('device_id', deviceId);
                   console.log('Login_key_vale ',JSON.stringify(value))
                   fetch(url, {
                       method: 'POST',
                       headers: {
-
                         'Content-Type':   'application/json',
-                        //  'Content-Type': 'multipart/form-data',
                       },
                       body: JSON.stringify(value),
                   })
-                      .then((response) => 
-                      
-                      response.json() 
-                     
-                      )
+                      .then((response) =>  response.json() )
                       .then((responseJson) => {
-
-
                           if(responseJson.status == 200){
                             console.log('login data response',responseJson);
                          loginServiceCall( responseJson , responseJson.user.role, responseJson.user.username, responseJson.user.role_name, responseJson.user.photo)
 
                           }else if(responseJson.status == 422){
                             alert(responseJson.errors.password)
-
                           }else if(responseJson.status == 401){
-
                             alert(responseJson.error)
-                            
-
                           }
-
-                  //  alert(responseJson)
-                  //  console.log(responseJson);
-
-                  //  if(response.status == 401){
-                  //    alert('Wrong Username or Password')
-                  //    setspinner(false)
-
-                  //  }else if(response.status == 422){
-                  //    console.log('check',responseJson);   
-                  //     //  alert(response)       
-                  //    console.log(responseJson);
-                  //   //  alert(responseJson.password)
-                  //    setspinner(false)
-
-                  //  }else if(response.status == 200){
-
-                    
-                   
-                //  alert(responseJson)
                       console.log('login data response',responseJson);
-                      setspinner(false)
-                      // loginServiceCall(responseJson , responseJson.user.role)
-                
-                  //  }
-
-
-
-
-
-
-                     
-                        // setspinner(false)
-
-                        
-                          // this.setState({ isLoading: false })
-                         
+                      setspinner(false)  
                       })
                       .catch((error) => {
                         setspinner(false)
                         alert(error)
-                          // this.setState({ isLoading: false })
                           console.warn(error)
                       });
-              // }
-              // else {
-              //          alert("Internet not found")
-              // }
-  
-          // });
-  
-  
       }
     } else setModalVisible(true);
 });

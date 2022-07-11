@@ -168,7 +168,7 @@ const [barcodemodal , setbarcodemodal] = useState(false)
 const captureImage = async (type) => {
   let options = {
     
-    quality: 0.8,
+    quality: 0.6,
     videoQuality: 'low',
     durationLimit: 30, //Video max duration in seconds
     saveToPhotos: true,
@@ -373,7 +373,7 @@ if(images[0] == require('../Images/noimage3.jpeg')){
 const TakePhoto = async (type) => {
   let options = {
     
-    quality: 0.8,
+    quality: 0.6,
     videoQuality: 'low',
     durationLimit: 30, //Video max duration in seconds
     saveToPhotos: true,
@@ -608,7 +608,7 @@ const chooseFile = async() => {
 
   ImageCropPicker.openPicker({
         multiple: true,
-        compressImageQuality:0.7
+        compressImageQuality:0.6
       }).then(images1 => {
         if(images[0] == require('../Images/noimage3.jpeg')){
           images.pop();
@@ -638,7 +638,9 @@ const chooseFile = async() => {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'source' : 'asl_phone_app',
+
             },
             body: value,
                        
@@ -708,6 +710,8 @@ let url = AppUrlCollection.LOCATION
     headers: {
         'Content-Type': 'multipart/form-data',
         'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+        'source' : 'asl_phone_app',
+
     },
 })
     .then((response) => response.json())
@@ -741,6 +745,8 @@ const callingCustomer =() =>{
     headers: {
         'Content-Type': 'multipart/form-data',
         'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+        'source' : 'asl_phone_app',
+
       },
 })
     .then((response) => response.json())
@@ -783,6 +789,8 @@ const callingContainerApi = () => {
       headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+          'source' : 'asl_phone_app',
+
         },
   })
       .then((response) => response.json())
@@ -1119,7 +1127,7 @@ setclose(true)
 
   // setimg(responseJson.data.vehicle.images)
   for (let index = 0; index < item.photos.length; index++) {
-      const element = item.photos[index].url;
+      const element = item.photos[index].thumbnail;
       images.push(element)
       console.log(element);
   }
@@ -1471,6 +1479,8 @@ style={{marginVertical:5,borderWidth:0.5,flexDirection:'row', borderColor:'grey'
           headers: {
               'Content-Type': 'application/json',
               'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+              'source' : 'asl_phone_app',
+
           },
           
           body: JSON.stringify(array)

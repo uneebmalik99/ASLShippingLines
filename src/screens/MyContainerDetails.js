@@ -289,7 +289,7 @@ const MyContainerDetails = ({route, navigation }) => {
   const TakePhoto = async (type) => {
     let options = {
       
-      quality: 0.8,
+      quality: 0.7,
       videoQuality: 'low',
       durationLimit: 30, //Video max duration in seconds
       saveToPhotos: true,
@@ -397,66 +397,7 @@ const MyContainerDetails = ({route, navigation }) => {
       });
     
   };
-const TakePhoto2 = async() => {
 
-  // ImageCropPicker.openCamera({
-   
-  //         compressImageQuality:0.7
-  //       }).then(images1 => {
-      
-  //         console.log(images1);
-        
-  
-  //           let temp = {} ;
-  //           temp.name = images1.filename;
-  //           temp.size = images1.size;
-  //           temp.type = images1.mime;
-  //           temp.url = images1.path;
-  
-  //           images.push(temp)
-  // alert(JSON.stringify(temp))
-  //       // var value = new FormData();
-  //       // value.append('file',{uri:images1.path ,
-  //       //      name:images1.filename,
-  //       //      type:images1.mime
-  //       //    });
-  
-  //       //    setspinner(true)
-  
-  //       //     fetch(AppUrlCollection.EXPORT_DETAIL + item.id +'/photos-upload', {
-  //       //       method: 'POST',
-  //       //       headers: {
-  //       //           'Content-Type': 'multipart/form-data',
-  //       //           'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
-  //       //           'Accept': 'application/json'
-  //       //       },
-  //       //       body: value,
-                         
-  //       //   })
-  //       //       .then((response) => response.json())
-  //       //       .then((responseJson) => {
-  //       //         // alert(JSON.stringify(responseJson))
-  //       //         // console.log(responseJson.data);
-  //       //         console.log(responseJson);
-  //       //         imagesurls.push(responseJson.data)
-  //       //         // alert(JSON.stringify(responseJson))
-  //       //         // alert(JSON.stringify(responseJson))
-  //       //         console.log(responseJson.data+'images urll is '+imagesurls);
-  
-  //       //         setspinner(false)
-                 
-  //       //       })
-  //       //       .catch((error) => {
-  //       //         alert(error)
-  //       //         setspinner(false)
-  //       //           console.warn(error)
-  //       //       });
-         
-              
-  
-  //       });
-  
-};
 
 const requestCameraPermission = async () => {
     
@@ -543,7 +484,10 @@ const chooseFile = async() => {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'source' : 'asl_phone_app',
+
+
             },
             body: value,
                        
@@ -760,6 +704,8 @@ array.container_images = images2
     headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+        'source' : 'asl_phone_app',
+
     },
     
     body: JSON.stringify(array)
@@ -797,6 +743,8 @@ array.container_images = images2
     headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+        'source' : 'asl_phone_app',
+
     }
    
 })
@@ -808,7 +756,7 @@ array.container_images = images2
         setclose(true)
        images.pop()
         for (let index = 0; index < responseJson.data.export_details.container_images.length; index++) {
-            const element = responseJson.data.export_details.container_images[index].url;
+            const element = responseJson.data.export_details.container_images[index].thumbnail;
             images.push(element)
             const element2 =  responseJson.data.export_details.container_images[index];
             console.log(element);

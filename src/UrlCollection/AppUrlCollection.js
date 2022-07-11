@@ -2,7 +2,9 @@ import React,{ Component } from "react";
 
 class AppUrlCollection extends Component{
     // static BASE_URL = 'https://manage.aslshippingline.com/webapi/';manage.aslshippingline.com
-    static BASE_URL = 'https://backend.aslshippingline.com/api/v1';
+    static BASE_URL = 'https://backend.aslshippingline.com/api/v1/';
+
+    // https://backend.aslshippingline.com/api/v1/auth/login
     static LOGIN = AppUrlCollection.BASE_URL+'auth/login';
     static USER = AppUrlCollection.BASE_URL+'user';
     static EXPORT_LIST = AppUrlCollection.BASE_URL+ 'exports?';

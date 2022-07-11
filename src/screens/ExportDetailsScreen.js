@@ -104,7 +104,7 @@ class ExportDetailsScreen extends Component {
                  
                     // var a =[];
                  for (let index = 0; index < responseJson.data.export_details.container_images.length; index++) {
-                        const element = responseJson.data.export_details.container_images[index].url;
+                        const element = responseJson.data.export_details.container_images[index].thumbnail;
                         // var b ={};
                         // b.url = element
                         // a.push(b)
@@ -210,7 +210,9 @@ class ExportDetailsScreen extends Component {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'authkey': AppConstance.USER_INFO.USER_TOKEN
+                    'authkey': AppConstance.USER_INFO.USER_TOKEN,
+                    'source' : 'asl_phone_app',
+
                 },
             })
                 .then((response) => response.json())
@@ -243,7 +245,9 @@ class ExportDetailsScreen extends Component {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'authkey': AppConstance.USER_INFO.USER_TOKEN
+                    'authkey': AppConstance.USER_INFO.USER_TOKEN,
+                    'source' : 'asl_phone_app',
+
                 },
             })
                 .then((response) => response.json())
