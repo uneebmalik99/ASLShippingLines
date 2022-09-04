@@ -10,6 +10,7 @@ import {
   Easing,
   SafeAreaView,
   ScrollView,
+  ImageBackground,
   Modal,
   Image,
 } from 'react-native';

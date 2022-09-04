@@ -168,7 +168,7 @@ const [barcodemodal , setbarcodemodal] = useState(false)
 const captureImage = async (type) => {
   let options = {
     
-    quality: 0.6,
+    quality: 0.3,
     videoQuality: 'low',
     durationLimit: 30, //Video max duration in seconds
     saveToPhotos: true,
@@ -373,7 +373,7 @@ if(images[0] == require('../Images/noimage3.jpeg')){
 const TakePhoto = async (type) => {
   let options = {
     
-    quality: 0.6,
+    quality: 0.3,
     videoQuality: 'low',
     durationLimit: 30, //Video max duration in seconds
     saveToPhotos: true,
@@ -608,7 +608,7 @@ const chooseFile = async() => {
 
   ImageCropPicker.openPicker({
         multiple: true,
-        compressImageQuality:0.6
+        compressImageQuality:0.3
       }).then(images1 => {
         if(images[0] == require('../Images/noimage3.jpeg')){
           images.pop();

@@ -40,6 +40,7 @@ import ImageCropPicker from 'react-native-image-crop-picker';
 import DocumentPicker from 'react-native-document-picker';
 import DatePicker from 'react-native-datepicker'
 import QRCodeScanner from 'react-native-qrcode-scanner';
+// import CompressImage from 'react-native-compress-image';
 
 const dummyimages = [
   require('../Images/noimage3.jpeg')      
@@ -166,7 +167,7 @@ const [barcodemodal , setbarcodemodal] = useState(false)
 
 const captureImage = async (type) => {
   let options = {
-    quality: 0.6,
+    quality: 0.3,
     videoQuality: 'low',
     durationLimit: 30, //Video max duration in seconds
     saveToPhotos: true,
@@ -189,6 +190,17 @@ const captureImage = async (type) => {
         alert(response.errorMessage);
         return;
       }else{
+
+
+//         compress = 10;
+// if(fileSize > 1.5MB ) {
+//  for(i=10; i<= 80; i++) {
+//     if(fileSize - ((fileSize / 100) - 60) < 1.5MB) {
+//         compress = i;
+//         break;
+//     }
+//  }
+// }
 
         // if(images[0] == require('../Images/noimage3.jpeg')){
         //   images.pop();
@@ -262,7 +274,7 @@ const selectFile3 = async () => {
       //There can me more options as well find above
     });
 
-console.log('-----'+JSON.stringify(results));
+// console.log('-----'+JSON.stringify(results));
 
 // if(images[0] == require('../Images/noimage3.jpeg')){
 //   images.pop();
@@ -281,10 +293,22 @@ console.log('-----'+JSON.stringify(results));
       console.log('File Size : ' + res.size);
   
 
+      // console.log('----result-'+result);
 
-      var i ;
-      // for( i =0; i< images1.length; i++){
 
+      // var i ;
+      // // for( i =0; i< images1.length; i++){
+      //   CompressImage.createCompressedImage(res.uri, 'Images/').then((response) => {
+      //     console.log('hff',response);
+      //     // response.uri is the URI of the new image that can now be displayed, uploaded...
+      //     // response.path is the path of the new image
+      //     // response.name is the name of the new image with the extension
+      //     // response.size is the size of the new image
+      //   }).catch((err) => {
+      //     console.log('errr'+err);
+      //     // Oops, something went wrong. Check that the filename is correct and
+      //     // inspect err to get more details.
+      //   });
         
         images.push(res)
         // alert(JSON.stringify(temp))
@@ -295,32 +319,32 @@ console.log('-----'+JSON.stringify(results));
 
        setspinner(true)
 
-        fetch(AppUrlCollection.VEHICLE_DETAIL + 0 +'/photos-upload', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'multipart/form-data',
-              'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
-              'Accept': 'application/json'
-          },
-          body: value,
+      //   fetch(AppUrlCollection.VEHICLE_DETAIL + 0 +'/photos-upload', {
+      //     method: 'POST',
+      //     headers: {
+      //         'Content-Type': 'multipart/form-data',
+      //         'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+      //         'Accept': 'application/json'
+      //     },
+      //     body: value,
                      
-      })
-          .then((response) => response.json())
-          .then((responseJson) => {
-            // alert(JSON.stringify(responseJson))
-            // console.log(responseJson.data);
-            console.log(responseJson);
-            imagesurls.push(responseJson.data)
-            console.log('images urll is '+imagesurls);
+      // })
+      //     .then((response) => response.json())
+      //     .then((responseJson) => {
+      //       // alert(JSON.stringify(responseJson))
+      //       // console.log(responseJson.data);
+      //       console.log(responseJson);
+      //       imagesurls.push(responseJson.data)
+      //       console.log('images urll is '+imagesurls);
 
-            setspinner(false)
+      //       setspinner(false)
              
-          })
-          .catch((error) => {
-            alert(error)
-            setspinner(false)
-              console.warn(error)
-          });
+      //     })
+      //     .catch((error) => {
+      //       alert(error)
+      //       setspinner(false)
+      //         console.warn(error)
+      //     });
      
       // }  
             // console.log(JSON.stringify(res));
@@ -352,7 +376,7 @@ console.log('-----'+JSON.stringify(results));
 // iOS Take photo 
 const TakePhoto = async (type) => {
   let options = {
-    quality: 0.6,
+    quality: 0.3,
     videoQuality: 'low',
     durationLimit: 30, //Video max duration in seconds
     saveToPhotos: true,
@@ -569,8 +593,9 @@ const chooseFile = async() => {
 
   ImageCropPicker.openPicker({
         multiple: true,
-        compressImageQuality:0.6
+        compressImageQuality:0.3
       }).then(images1 => {
+        
         // if(images[0] == require('../Images/noimage3.jpeg')){
         //   images.pop();
         //   setclose(true)
@@ -583,6 +608,7 @@ const chooseFile = async() => {
           let temp = {} ;
           temp.name = images1[i].filename;
           temp.size = images1[i].size;
+          console.log(images1[i].size);
           temp.type = images1[i].mime;
           temp.url = images1[i].path;
 

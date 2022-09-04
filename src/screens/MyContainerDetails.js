@@ -83,7 +83,7 @@ const MyContainerDetails = ({route, navigation }) => {
   const captureImage = async (type) => {
     let options = {
       
-      quality: 0.8,
+      quality: 0.3,
       videoQuality: 'low',
       durationLimit: 30, //Video max duration in seconds
       saveToPhotos: true,
@@ -289,7 +289,7 @@ const MyContainerDetails = ({route, navigation }) => {
   const TakePhoto = async (type) => {
     let options = {
       
-      quality: 0.7,
+      quality: 0.3,
       videoQuality: 'low',
       durationLimit: 30, //Video max duration in seconds
       saveToPhotos: true,
@@ -450,7 +450,7 @@ const chooseFile = async() => {
   
   ImageCropPicker.openPicker({
         multiple: true,
-        compressImageQuality:0.7
+        compressImageQuality:0.3
       }).then(images1 => {
         if(images[0] == require('../Images/noimage3.jpeg')){
           images.pop();

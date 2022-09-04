@@ -257,6 +257,8 @@ PODS:
     - React-Core
   - react-native-document-picker (6.1.1):
     - React-Core
+  - react-native-image-compressor (0.0.2):
+    - React
   - react-native-image-picker (4.1.1):
     - React-Core
   - react-native-netinfo (6.2.1):
@@ -418,6 +420,7 @@ DEPENDENCIES:
   - react-native-camera (from `../node_modules/react-native-camera`)
   - react-native-date-picker (from `../node_modules/react-native-date-picker`)
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
+  - "react-native-image-compressor (from `../node_modules/@nomi9995/react-native-image-compressor`)"
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
@@ -503,6 +506,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-date-picker"
   react-native-document-picker:
     :path: "../node_modules/react-native-document-picker"
+  react-native-image-compressor:
+    :path: "../node_modules/@nomi9995/react-native-image-compressor"
   react-native-image-picker:
     :path: "../node_modules/react-native-image-picker"
   react-native-netinfo:
@@ -595,6 +600,7 @@ SPEC CHECKSUMS:
   react-native-camera: 3eae183c1d111103963f3dd913b65d01aef8110f
   react-native-date-picker: 52937fb39322ee5f6c44a10117456b3fa4225d4c
   react-native-document-picker: b95a0f0a22fd37d56cea697f84bc3893b2141d15
+  react-native-image-compressor: 5b7ef0275cb203b3016de38f21395f35e92f2f99
   react-native-image-picker: 92f51a85a62c2d829dcbd0dda5af99e6f988a113
   react-native-netinfo: 3d3769f0d65de15c83a9bf1346f8be71de5a24bf
   react-native-pager-view: 5ab4d0b4b44d89f77310cb3eb8129745f274ce55
@@ -629,4 +635,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 5a638fb857c640ecc8eef5178d97af5bc4150b87
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.11.3
