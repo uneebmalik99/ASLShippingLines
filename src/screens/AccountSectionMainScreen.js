@@ -17,34 +17,12 @@ class AccountSectionMainScreen extends Component {
     constructor(props) {
         super(props)
 
-        // var time = new Date();
-        // time.setSeconds(1558265906)
-        // var formatted = time.format("dd.mm.yyyy hh:MM:ss");
-        // console.log('date and ime dad ',formatted)
-
-
         this.state = {
             tabIndex: 0,
             drawerview:false,
 
             allInvoiceList: [
-                // {
-                //     'customer_user_id': '#12345',
-                //     'total_amount': '$10,000',
-                //     'paid_amount': '$5000',
-                // }, {
-                //     'customer_user_id': '#11111',
-                //     'total_amount': '$10,000',
-                //     'paid_amount': '$5000',
-                // }, {
-                //     'customer_user_id': '#22222',
-                //     'total_amount': '$10,000',
-                //     'paid_amount': '$5000',
-                // }, {
-                //     'customer_user_id': '#33333',
-                //     'total_amount': '$10,000',
-                //     'paid_amount': '$5000',
-                // }
+               
             ],
             unpaidInvoiceList: 
                 {
@@ -274,8 +252,6 @@ class AccountSectionMainScreen extends Component {
     //Check internet connection
   
 
-
-
     //render invoice conetent
     renderInvoiceContent = ({ item, index }) => {
         var statusText = '-';
@@ -498,7 +474,6 @@ class AccountSectionMainScreen extends Component {
             }
         }, 100)
     }
-
 
     //load more unpaid data
     loadMoreDataUnpaid = () => {

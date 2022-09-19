@@ -186,7 +186,7 @@ callingUnpaidInvoceAPI = (isCallingFirsttime) => {
         url = AppUrlCollection.INVOICE_UNPAID + '?page=' + this.state.currentpage
 
     }else{
-        url = AppUrlCollection.INVOICE_UNPAID + '?customer_user_id=' + this.state.user_id + '&page=' + currentpage
+        url = AppUrlCollection.INVOICE_UNPAID + '?customer_user_id=' + this.state.user_id + '&page=' + this.state.currentpage
     }
 
     fetch(url, {

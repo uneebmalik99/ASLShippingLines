@@ -185,7 +185,7 @@ callingPaidInvoceAPI = (isCallingFirsttime) => {
         url = AppUrlCollection.INVOICE_PAID + '?page=' + this.state.currentpage
 
     }else{
-        url = AppUrlCollection.INVOICE_PAID + '?customer_user_id=' + this.state.user_id + '&page=' + currentpage
+        url = AppUrlCollection.INVOICE_PAID + '?customer_user_id=' + this.state.user_id + '&page=' + this.state.currentpage
     }
 
     fetch(url, {

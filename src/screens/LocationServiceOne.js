@@ -430,7 +430,7 @@ onPress={() => {this.setState({drawerview:false}); this.props.navigation.navigat
                     width: null,
                     height: null,
                     resizeMode:'contain',
-marginHorizontal:15                    
+marginHorizontal:10                  
                   
                 } }
 
@@ -441,377 +441,60 @@ marginHorizontal:15
 
 
 
-               <Text style={{fontSize:16, marginTop:18, marginBottom:5, marginLeft:20,color:AppColors.Signincolor}}>AMAYA WORLDWIDE DUBAI</Text>
+          
+<Text style={{fontSize:16, marginTop:18, fontWeight:'600',marginBottom:5, marginLeft:0,}}>{`\u2022 AMAYA SHIPPING LINE LLC,DUBAI`}</Text>
                
-<View style={{marginHorizontal:0,borderRadius:7,borderWidth:1,paddingHorizontal:10,paddingVertical:5}}>
-
-<View style={{flexDirection: 'row',marginTop: 10, marginBottom: 10}}>
-            <MaterialCommunityIcons
-              style={{alignSelf: 'center'}}
-              name="map-marker"
-              size={26}
-              color={AppColors.textColor}
-            />
-            <Text
-              style={{
-                color: AppColors.textColor,
-                fontSize: 15,
-                marginLeft: 4,
-                
-              }}>
-1207 12th Floor,Centurion Star Tower,Block A,Opp Deira City Center,Port Saeed,Po Box 172497,Dubai,United Arab Emirates</Text>
-          </View>
-          <View style={{flexDirection: 'row',marginLeft:8, marginTop: 2, paddingVertical:15, marginBottom: 2}}>
-           
-           <Image 
-           style={{ marginLeft:5, alignSelf:"center",width:18,height:18}}
-           source={require('../Images/wall-clock.png')}></Image>
-          <View style={{flexDirection:'column',marginLeft:3, marginTop: 2, marginBottom: 2}}>
-            <Text
-              style={{
-                color: AppColors.textColor,
-                fontSize: 15,
-                marginLeft: 15,
-              }}>
-Mon-Thur      9.00 am - 6.00 pm
-       </Text>
-
-       <Text
-              style={{
-                color: AppColors.textColor,
-                fontSize: 15,
-                marginLeft: 15,
-
-              }}>
-Sat:                9.00 am - 2.00 pm 
-       </Text>
-       </View>
-          </View>
-          <View style={{flexDirection: 'row',marginLeft:10, marginTop: 2, paddingVertical:15, marginBottom: 2}}>
-          <Image 
-           style={{marginLeft:5, alignSelf:"center",width:18,height:18}}
-           source={require('../Images/telephone.png')}></Image>
-
-          <View style={{flexDirection:'column',marginLeft:3, marginTop: 2, marginBottom: 2}}>
-            <Text
-              style={{
-                color: AppColors.textColor,
-                fontSize: 15,
-                marginLeft:15,
-              }}>
-+971-4-224-9714
-       </Text>
-
-       <Text
-              style={{
-                color: AppColors.textColor,
-                fontSize: 15,
-                marginLeft: 15,
-              }}>
-+971-4-224-9715
-       </Text>
-       </View>
-          </View>
-          <View style={{flexDirection: 'row',marginVertical:5,marginLeft:10,marginHorizontal:5,marginTop: 8, marginBottom: 13}}>
-            <MaterialCommunityIcons
-              style={{ marginLeft:5, alignSelf: 'center'}}
-              name="fax"
-              size={26}
-              color={AppColors.textColor}
-            />
-            <Text
-              style={{
-                color: AppColors.textColor,
-                fontSize: 15,
-                marginLeft:15,
-              }}>
-+971-4-224-9718
-</Text>
-          </View>
-          <View style={{flexDirection: 'row', marginLeft:10,marginTop: 5, marginBottom: 2}}>
-            <MaterialCommunityIcons
-              name="email-outline"
-              style={{marginLeft:5}}
-              size={26}
-              color={AppColors.textColor}
-            />
-            <Text
-              style={{
-                color: AppColors.textColor,
-                fontSize: 15,
-                marginLeft: 15,
-              }}>
-24seven@aslshippingline.com</Text>
-          </View>
-         
-        </View>
-
-
-</ImageBackground>
-        
-        <Text style={{fontSize:16,marginTop:15,marginBottom:5, marginLeft:30,color:AppColors.Signincolor}}>AMAYA WORLDWIDE CA</Text>
-
-        <View style={{marginHorizontal:15,borderRadius:7,borderWidth:1,paddingHorizontal:10,paddingVertical:5}}>
-
-<View style={{flexDirection: 'row',marginTop: 10, marginBottom: 10}}>
-            <MaterialCommunityIcons
-              style={{alignSelf: 'center'}}
-              name="map-marker"
-              size={26}
-              color={AppColors.textColor}
-            />
-            <Text
-              style={{
-                color: AppColors.textColor,
-                fontSize: 15,
-                marginLeft: 4,
-              }}>
-131 East Gardena,Boulevard Carson,                                CA 90247</Text>
-
-
-
-          </View>
-
-
-          <View style={{flexDirection: 'row',marginLeft:8, marginTop: 2, paddingVertical:15, marginBottom: 2}}>
-           
-           <Image 
-           style={{ marginLeft:5, alignSelf:"center",width:18,height:18}}
-           source={require('../Images/wall-clock.png')}></Image>
-
-           
-            
-          <View style={{flexDirection:'column',marginLeft:3, marginTop: 2, marginBottom: 2}}>
-            <Text
-              style={{
-                color: AppColors.textColor,
-                fontSize: 15,
-                marginLeft: 15,
-              }}>
-Mon-Fri 9.00 am - 4.30 pm
-       </Text>
-
-      
-       </View>
-          </View>
-
-
-
-          <View style={{flexDirection: 'row',marginLeft:10, marginTop: 2, paddingVertical:15, marginBottom: 2}}>
-          <Image 
-           style={{marginLeft:5, alignSelf:"center",width:18,height:18}}
-           source={require('../Images/telephone.png')}></Image>
-
-          <View style={{flexDirection:'column',marginLeft:3, marginTop: 2, marginBottom: 2}}>
-            <Text
-              style={{
-                color: AppColors.textColor,
-                fontSize: 15,
-                marginLeft:15,
-              }}>
-+1-310-593-9604
-       </Text>
-
-      
-       </View>
-          </View>
-
-
-
-          <View style={{flexDirection: 'row',marginVertical:5,marginLeft:10,marginHorizontal:5,marginTop: 8, marginBottom: 13}}>
-            <MaterialCommunityIcons
-              style={{ marginLeft:5, alignSelf: 'center'}}
-              name="fax"
-              size={26}
-              color={AppColors.textColor}
-            />
-            <Text
-              style={{
-                color: AppColors.textColor,
-                fontSize: 15,
-                marginLeft:15,
-              }}>
-+1-424-203-3640
-</Text>
-          </View>
-
-
-
-          <View style={{flexDirection: 'row', marginLeft:10,marginTop: 5, marginBottom: 2}}>
-            <MaterialCommunityIcons
-              name="email-outline"
-              style={{marginLeft:5}}
-              size={26}
-              color={AppColors.textColor}
-            />
-            <Text
-              style={{
-                color: AppColors.textColor,
-                fontSize: 15,
-                marginLeft: 15,
-              }}>
-flor@amayaworldwide.com            </Text>
-          </View>
-         
-        </View>
-
-            <Text
-              style={{
-                fontSize: 16,
-                marginTop: 18,
-                marginBottom: 5,
-                marginLeft: 30,
-                color: AppColors.Signincolor,
-              }}>
-              AMAYA WORLDWIDE NY
-            </Text>
-
-               
-               <View style={{marginHorizontal:15,borderRadius:7,borderWidth:1,paddingHorizontal:10,paddingVertical:5}}>
+               <View style={{marginHorizontal:0,borderRadius:7,borderWidth:0.7, marginHorizontal:5, borderColor:'grey', paddingHorizontal:7,paddingVertical:5}}>
                
                <View style={{flexDirection: 'row',marginTop: 10, marginBottom: 10}}>
-                           <MaterialCommunityIcons
-                             style={{alignSelf: 'center'}}
-                             name="map-marker"
-                             size={26}
-                             color={AppColors.textColor}
-                           />
-                           <Text
-                             style={{
-                               color: AppColors.textColor,
-                               fontSize: 15,
-                               marginLeft: 4,
-                             }}>
-      290 Nye Avenue, Irvington New Jersey                                      Zip code 07111     </Text>
-                         </View>
-                         <View style={{flexDirection: 'row',marginLeft:8, marginTop: 2, paddingVertical:15, marginBottom: 2}}>
-                          
-                          <Image 
-                          style={{ marginLeft:5, alignSelf:"center",width:18,height:18}}
-                          source={require('../Images/wall-clock.png')}></Image>
-                         <View style={{flexDirection:'column',marginLeft:3, marginTop: 2, marginBottom: 2}}>
-                           <Text
-                             style={{
-                               color: AppColors.textColor,
-                               fontSize: 15,
-                               marginLeft: 15,
-                             }}>
-               Mon-Fri 9.00 am - 4.30 pm
-                      </Text>
-               
-                      
-                      </View>
-                         </View>
-                         <View style={{flexDirection: 'row',marginLeft:10, marginTop: 2, paddingVertical:15, marginBottom: 2}}>
-                         <Image 
-                          style={{marginLeft:5, alignSelf:"center",width:18,height:18}}
-                          source={require('../Images/telephone.png')}></Image>
-               
-                         <View style={{flexDirection:'column',marginLeft:3, marginTop: 2, marginBottom: 2}}>
-                           <Text
-                             style={{
-                               color: AppColors.textColor,
-                               fontSize: 15,
-                               marginLeft:15,
-                             }}>
-               +1-862-237-7067
-                      </Text>
-               
-                      
-                      </View>
-                         </View>
-                         <View style={{flexDirection: 'row',marginVertical:5,marginLeft:10,marginHorizontal:5,marginTop: 8, marginBottom: 13}}>
-                           <MaterialCommunityIcons
-                             style={{ marginLeft:5, alignSelf: 'center'}}
-                             name="fax"
-                             size={26}
-                             color={AppColors.textColor}
-                           />
-                       <Text
-                             style={{
-                               color: AppColors.textColor,
-                               fontSize: 15,
-                               marginLeft: 14,
-                             }}>+1-862-237-7068           </Text>
-                         </View>
-                         <View style={{flexDirection: 'row', marginLeft:10,marginTop: 5, marginBottom: 2}}>
-                           <MaterialCommunityIcons
-                             name="email-outline"
-                             style={{marginLeft:5}}
-                             size={26}
-                             color={AppColors.textColor}
-                           />
-                           <Text
-                             style={{
-                               color: AppColors.textColor,
-                               fontSize: 15,
-                               marginLeft: 15,
-                             }}>
-               abdul@amayaworldwide.com            </Text>
-                         </View>
-                        
-                       </View>
-               
-               
-               
-               
-
-
-
-
-
-
-
-                       <Text style={{fontSize:16,marginBottom:5,marginTop:15, marginLeft:30,color:AppColors.Signincolor}}>AMAYA WORLDWIDE GA</Text>
-               
-                       <View style={{marginHorizontal:15,borderRadius:7,borderWidth:1,paddingHorizontal:10,paddingVertical:5}}>
-               
-               <View style={{flexDirection: 'row',marginTop: 10, marginBottom: 10}}>
-                           <MaterialCommunityIcons
-                             style={{alignSelf: 'center'}}
-                             name="map-marker"
-                             size={26}
-                             color={AppColors.textColor}
-                           />
-                           <Text
-                             style={{
-                               color: AppColors.textColor,
-                               fontSize: 15,
-                               marginLeft: 4,
-                             }}>
-               146 Commerence Court, Rincon, GA                                   31326, USA</Text>
-                         </View>
-               
-               
-                         <View style={{flexDirection: 'row',marginLeft:8, marginTop: 2, paddingVertical:15, marginBottom: 2}}>
-                          
-                          <Image 
-                          style={{ marginLeft:5, alignSelf:"center",width:18,height:18}}
-                          source={require('../Images/wall-clock.png')}></Image>
-               
-                          
                            
-                         <View style={{flexDirection:'column',marginLeft:3, marginTop: 2, marginBottom: 2}}>
+                                 <Image 
+                          style={{ marginLeft:5, alignSelf:"center",width:30,height:30}}
+                          source={require('../Images/phonelocation2.png')}></Image>
                            <Text
                              style={{
                                color: AppColors.textColor,
                                fontSize: 15,
-                               marginLeft: 15,
+                               width:'85%',
+                               marginLeft: 5,
+                               
                              }}>
-               Mon-Fri 9.00 am - 4.30 pm
-                      </Text>
-               
-                      
-                      </View>
+Office No: 1207, Block – A, Centurion Star, Port Saeed, Opp. Deira City Center, Near Flora Creek Hotel, Deira, P.O. Box: 172497, Dubai               </Text>
                          </View>
-               
-               
-               
-                         <View style={{flexDirection: 'row',marginLeft:10, marginTop: 2, paddingVertical:15, marginBottom: 2}}>
+                         <View style={{flexDirection: 'row',marginLeft:0, marginTop: 2, paddingVertical:15, marginBottom: 2}}>
+                          
                          <Image 
-                          style={{marginLeft:5, alignSelf:"center",width:18,height:18}}
-                          source={require('../Images/telephone.png')}></Image>
+                          style={{ marginLeft:5, alignSelf:"center",width:37,height:37}}
+                          source={require('../Images/timelocation2.png')}></Image>
+                         <View style={{flexDirection:'column',marginLeft:3, marginTop: 2, marginBottom: 2}}>
+                           <Text
+                             style={{
+                               color: AppColors.textColor,
+                               fontSize: 15,
+                               marginLeft: 15,
+                             }}>
+              MON – FRI     9:00 AM - 6:00 PM
+                      </Text>
                
+                      <Text
+                             style={{
+                               color: AppColors.textColor,
+                               fontSize: 15,
+                               marginLeft: 15,
+               
+                             }}>
+                  Sat:                 9:00 AM - 2:00 PM
+                        </Text>
+                      </View>
+                         </View>
+
+
+                         
+                         <View style={{flexDirection: 'row',marginLeft:3, marginTop: 2, paddingVertical:15, marginBottom: 2}}>
+              
+                       <Image 
+                          style={{ marginLeft:5, alignSelf:"center",width:35,height:35}}
+                          source={require('../Images/phonelocation3.png')}></Image>
                          <View style={{flexDirection:'column',marginLeft:3, marginTop: 2, marginBottom: 2}}>
                            <Text
                              style={{
@@ -819,315 +502,66 @@ flor@amayaworldwide.com            </Text>
                                fontSize: 15,
                                marginLeft:15,
                              }}>
-               +1-912-826-0265
+               +971-4-224-9714
                       </Text>
                
-                      
-                      </View>
-                         </View>
-               
-               
-               
-                         <View style={{flexDirection: 'row',marginVertical:5,marginLeft:10,marginHorizontal:5,marginTop: 8, marginBottom: 13}}>
-                           <MaterialCommunityIcons
-                             style={{ marginLeft:5, alignSelf: 'center'}}
-                             name="fax"
-                             size={26}
-                             color={AppColors.textColor}
-                           />
-                           <Text
-                             style={{
-                               color: AppColors.textColor,
-                               fontSize: 15,
-                               marginLeft:15,
-                             }}>
-               shabir@amayaworldwide.com
-               </Text>
-                         </View>
-               
-               
-               
-                         <View style={{flexDirection: 'row', marginLeft:10,marginTop: 5, marginBottom: 2}}>
-                           <MaterialCommunityIcons
-                             name="email-outline"
-                             style={{marginLeft:5}}
-                             size={26}
-                             color={AppColors.textColor}
-                           />
-                           <Text
+                      <Text
                              style={{
                                color: AppColors.textColor,
                                fontSize: 15,
                                marginLeft: 15,
+                               marginTop:2,
+
                              }}>
-               abdullah@amayaworldwide.com            </Text>
+               +971-4-224-1592
+                      </Text>
+                      </View>
                          </View>
+
+                         <View style={{flexDirection: 'row',marginLeft:6, marginTop: 2, paddingVertical:15, marginBottom: 2}}>
                         
-                       </View>
-               
-               
-
-
-
-
-
-
-
-
-
-                       <Text style={{fontSize:16,marginBottom:5,marginTop:15, marginLeft:30,color:AppColors.Signincolor}}>AMAYA WORLDWIDE TX</Text>
-               
-                       <View style={{marginHorizontal:15,borderRadius:7,borderWidth:1,paddingHorizontal:10,paddingVertical:5}}>
-               
-               <View style={{flexDirection: 'row',marginTop: 10, marginBottom: 10}}>
-                           <MaterialCommunityIcons
-                             style={{alignSelf: 'center'}}
-                             name="map-marker"
-                             size={26}
-                             color={AppColors.textColor}
-                           />
-                           <Text
-                             style={{
-                               color: AppColors.textColor,
-                               fontSize: 15,
-                               marginLeft: 4,
-                             }}>
-               7801 Parkhurst Dr. Houston,                                                   TX 77028</Text>
-                         </View>
-               
-               
-                         <View style={{flexDirection: 'row',marginLeft:8, marginTop: 2, paddingVertical:15, marginBottom: 2}}>
-                          
-                          <Image 
-                          style={{ marginLeft:5, alignSelf:"center",width:18,height:18}}
-                          source={require('../Images/wall-clock.png')}></Image>
-               
-                          
-                           
-                         <View style={{flexDirection:'column',marginLeft:3, marginTop: 2, marginBottom: 2}}>
-                           <Text
-                             style={{
-                               color: AppColors.textColor,
-                               fontSize: 15,
-                               marginLeft: 15,
-                             }}>
-               Mon-Fri 9.00 am - 4.30 pm
-                      </Text>
-               
-                      
-                      </View>
-                         </View>
-               
-               
-               
-                         <View style={{flexDirection: 'row',marginLeft:10, marginTop: 2, paddingVertical:15, marginBottom: 2}}>
-                         <Image 
-                          style={{marginLeft:5, alignSelf:"center",width:18,height:18}}
-                          source={require('../Images/telephone.png')}></Image>
-               
-                         <View style={{flexDirection:'column',marginLeft:3, marginTop: 2, marginBottom: 2}}>
+                        <Image 
+                          style={{ marginLeft:5, alignSelf:"center",width:30,height:30}}
+                          source={require('../Images/emaillocation2.png')}></Image>
+                         <View style={{flexDirection:'column',marginLeft:0, marginTop: 2, marginBottom: 2}}>
                            <Text
                              style={{
                                color: AppColors.textColor,
                                fontSize: 15,
                                marginLeft:15,
+                               marginTop:2,
                              }}>
-               +1-818-606-8433
+               Cservice @aslshippingline.com
                       </Text>
                
-                      
-                      </View>
-                         </View>
-               
-               
-               
-               
-               
-               
-                         <View style={{flexDirection: 'row', marginLeft:10,marginTop: 5, marginBottom: 2}}>
-                           <MaterialCommunityIcons
-                             name="email-outline"
-                             style={{marginLeft:5}}
-                             size={26}
-                             color={AppColors.textColor}
-                           />
-                           <Text
-                             style={{
-                               color: AppColors.textColor,
-                               fontSize: 15,
-                               marginLeft: 15,
-                             }}>
-               sophia@amayaworldwide.com            </Text>
-                         </View>
-                        
-                       </View>
-               
-               
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                       <Text style={{fontSize:16,marginTop:15,marginBottom:5, marginLeft:30,color:AppColors.Signincolor}}>AMAYA WORLDWIDE SHARJAH</Text>
-               
-                       <View style={{marginBottom:20, marginHorizontal:15,borderRadius:7,borderWidth:1,paddingHorizontal:10,paddingVertical:5}}>
-               
-               <View style={{flexDirection: 'row',marginTop: 10, marginBottom: 10}}>
-                           <MaterialCommunityIcons
-                             style={{alignSelf: 'center'}}
-                             name="map-marker"
-                             size={26}
-                             color={AppColors.textColor}
-                           />
-                           <Text
-                             style={{
-                               color: AppColors.textColor,
-                               fontSize: 15,
-                               marginLeft: 4,
-                             }}>
-            Industrial area #2, behind the first Ind, SharjahPS 172497, UAE</Text>
-                         </View>
-               
-               
-                         <View style={{flexDirection: 'row',marginLeft:8, marginTop: 2, paddingVertical:15, marginBottom: 2}}>
-                          
-                          <Image 
-                          style={{ marginLeft:5, alignSelf:"center",width:18,height:18}}
-                          source={require('../Images/wall-clock.png')}></Image>
-               
-                          
-                           
-                         <View style={{flexDirection:'column',marginLeft:3, marginTop: 2, marginBottom: 2}}>
-                           <Text
-                             style={{
-                               color: AppColors.textColor,
-                               fontSize: 15,
-                               marginLeft: 15,
-                             }}>
-               Mon-Thrus       9.00 am - 1.00 pm
-                      </Text>
-
                       <Text
                              style={{
                                color: AppColors.textColor,
                                fontSize: 15,
                                marginLeft: 15,
                              }}>
-               Mon-Thrus       4.00 am - 9.00 pm
+              Sales @aslshippingline.com
                       </Text>
-               
-                      
                       </View>
                          </View>
-               
-               
-               
-                         <View style={{flexDirection: 'row',marginLeft:10, marginTop: 2, paddingVertical:15, marginBottom: 2}}>
-                         <Image 
-                          style={{marginLeft:5, alignSelf:"center",width:18,height:18}}
-                          source={require('../Images/telephone.png')}></Image>
-               
-                         <View style={{flexDirection:'column',marginLeft:3, marginTop: 2, marginBottom: 2}}>
-                           <Text
-                             style={{
-                               color: AppColors.textColor,
-                               fontSize: 15,
-                               marginLeft:15,
-                             }}>
-               +1-912-826-0265
-                      </Text>
-               
+                        
                       
-                      </View>
-                         </View>
-               
-               
-               
-               
-               
-               
-                         <View style={{flexDirection: 'row', marginLeft:10,marginTop: 5, marginBottom: 2}}>
-                           <MaterialCommunityIcons
-                             name="email-outline"
-                             style={{marginLeft:5}}
-                             size={26}
-                             color={AppColors.textColor}
-                           />
-                           <Text
-                             style={{
-                               color: AppColors.textColor,
-                               fontSize: 15,
-                               marginLeft: 15,
-                             }}>
-               salim@amayaworldwide.com            </Text>
-                         </View>
                         
                        </View>
                
+               
+               </ImageBackground>
+                       
+                       
 
-
-
-
-
-
-
-
-
-
-
-                <View style={{ flex: 1, alignContent: 'center', alignItems: 'center' }}>
-                    {/* <Text style={styles.addressTxtHeader}>OUR LOCATION</Text>
-                    <View style={{ marginTop: 25 }} />
-                    {this.state.saveYadData.length > 0 ?
-                        <FlatList
-                            data={this.state.saveYadData}
-                            renderItem={this.renderYardCell}
-                            keyExtractor={(item, index) => index}
-                            extraData={this.state}
-                        /> : <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
-                            <Text style={{ fontFamily: AppFonts.SourceSansProSemiBold,fontSize: 15 }}>Data Not Found</Text>
-                        </View>
-                    } */}
-
-
-                     {/* <Text style={styles.addressTxtHeader}></Text>  
-                     <Elavation
-                        elevation={3}
-                        style={styles.appHeaderElavationStyle}
-                    >
-                        <View style={styles.appHeaderEmailmainViewStyle}>
-                            <MaterialCommunityIcons name='map-marker-circle' color={AppColors.textColor} size={21} />
-                            <Text style={styles.addressTextStyle}>UAE, Sharjah, Sharjah 83864, UAE.</Text>
-                        </View>
-                        <View style={styles.addressDividerStyle} />
-                        <View style={styles.appHeaderEmailmainViewStyle}>
-                            <MaterialCommunityIcons name='email-outline' color={AppColors.textColor} size={21} />
-                            <Text style={styles.addressTextStyle}>info@gwwshipping.com</Text>
-                        </View>
-                        <View style={styles.addressDividerStyle} />
-                        <View style={styles.appHeaderEmailmainViewStyle}>
-                            <MaterialCommunityIcons name='phone' color={AppColors.textColor} size={21} />
-                            <Text style={styles.addressTextStyle}>065328580</Text>
-                        </View>
-                    </Elavation>  */}
-
-
-
-                </View>
+                       <Text style={{ fontSize:14,marginTop:15,fontWeight:'600', marginBottom:5, marginLeft:10,}}>{`\u2022 New Jersey (NJ), USA`}</Text>
+                       <Text style={{ fontSize:14,marginTop:5,marginBottom:5,fontWeight:'600', marginLeft:10,}}>{`\u2022 Houston (TX), USA`}</Text>
+                       <Text style={{ fontSize:14,marginTop:5,marginBottom:5,fontWeight:'600', marginLeft:10,}}>{`\u2022 Savannah (GA), USA`}</Text>
+                       <Text style={{ fontSize:14,marginTop:5,marginBottom:5,fontWeight:'600', marginLeft:10,}}>{`\u2022 BALTIMORE, USA`}</Text>
+                       <Text style={{ fontSize:14,marginTop:5,marginBottom:5,fontWeight:'600', marginLeft:10,}}>{`\u2022 California (CA), USA`}</Text>
+                       <Text style={{ fontSize:14,marginTop:5,marginBottom:5,fontWeight:'600', marginLeft:10,}}>{`\u2022 Amaya used cars TR, Sharjah-UAE`}</Text>
+        
+  
 
                 </ScrollView>
 
