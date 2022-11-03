@@ -13,6 +13,7 @@ import {
   ImageBackground,
   Modal,
   Image,
+  Platform,
 } from 'react-native';
 import AppConstance, {
   deviceHeight,
@@ -106,6 +107,8 @@ class ContactUsOne extends Component {
             method: 'POST',
             headers: {
               'Content-Type': 'multipart/form-data',
+              'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+ 
               // 'authkey': AppConstance.USER_INFO.USER_TOKEN
             },
             body: formData,

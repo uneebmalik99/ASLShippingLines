@@ -11,6 +11,7 @@ import {
   Image,
   SafeAreaView,
   ScrollView,
+  Platform,
 } from 'react-native';
 import AppColors from '../constance/AppConstance';
 import AppFonts from '../AppFont/AppFonts';
@@ -76,6 +77,8 @@ class ContactUsScreen extends Component {
             method: 'POST',
             headers: {
               'Content-Type': 'multipart/form-data',
+              'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
               // 'authkey': AppConstance.USER_INFO.USER_TOKEN
             },
             body: formData,

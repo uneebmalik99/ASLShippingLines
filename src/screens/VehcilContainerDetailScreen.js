@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Dimensions,ImageBackground, SafeAreaView, Modal, Text,ImageSlider, TouchableOpacity, StyleSheet, FlatList, Image, TextInput, ScrollView, Share, BackHandler } from 'react-native'
+import { View, Dimensions,ImageBackground, SafeAreaView, Modal, Text,ImageSlider, TouchableOpacity, StyleSheet, FlatList, Image, TextInput, ScrollView, Share, BackHandler, Platform } from 'react-native'
 import Elavation from '../styles/Elavation';
 import AppColors from '../Colors/AppColors';
 import AppConstance, { deviceHeight, deviceWidth } from '../constance/AppConstance';
@@ -136,6 +136,8 @@ class VehcilContainerDetailScreen extends Component {
             'Content-Type': 'application/json',
             'authkey': AppConstance.USER_INFO.USER_TOKEN,
             'source' : 'asl_phone_app',
+            'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
 
         },
     })
@@ -165,6 +167,8 @@ class VehcilContainerDetailScreen extends Component {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
                     'source' : 'asl_phone_app',
+                    'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
 
                 },
             })

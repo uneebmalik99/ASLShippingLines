@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View,Modal,ScrollView,ImageBackground, SafeAreaView, Text, TouchableOpacity, StyleSheet, FlatList, Image, TextInput,  BackHandler, ActivityIndicator, AppState } from 'react-native'
+import { View,Modal,ScrollView,ImageBackground, SafeAreaView, Text, TouchableOpacity, StyleSheet, FlatList, Image, TextInput,  BackHandler, ActivityIndicator, AppState, Platform } from 'react-native'
 
 import Elavation from '../styles/Elavation';
 import AppColors from '../Colors/AppColors';
@@ -147,6 +147,8 @@ const result = item.message.replace(regex, '');
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
                 'source' : 'asl_phone_app',
+                'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
 
             },
         })

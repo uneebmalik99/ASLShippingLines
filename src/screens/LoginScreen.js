@@ -83,6 +83,8 @@ const LoginScreen = ({ navigation }) => {
                       method: 'POST',
                       headers: {
                         'Content-Type':   'application/json',
+                        'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
                       },
                       body: JSON.stringify(value),
                   })
@@ -213,6 +215,8 @@ const LoginScreen = ({ navigation }) => {
         headers: {
             'Content-Type': 'application/json',
            'Authorization': 'Bearer ' + authKey,
+           'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
         },
     })
         .then((response) => response.json())

@@ -124,6 +124,7 @@ android {
  dexOptions {
        javaMaxHeapSize "3g"
     }
+    
        packagingOptions {
       pickFirst 'lib/x86/libc++_shared.so'
        pickFirst 'lib/x86_64/libjsc.so'
@@ -144,8 +145,8 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         missingDimensionStrategy 'react-native-camera', 'general'
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 8
-        versionName "7.5"
+        versionCode 9
+        versionName "8.5"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
 

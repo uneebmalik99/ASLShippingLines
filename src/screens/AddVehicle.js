@@ -160,9 +160,6 @@ const [cameraType ,setcameraType] = useState('back')
 const [barcodemodal , setbarcodemodal] = useState(false)
 
 
-
-
-
 // for android camera
 
 const captureImage = async (type) => {
@@ -192,20 +189,6 @@ const captureImage = async (type) => {
       }else{
 
 
-//         compress = 10;
-// if(fileSize > 1.5MB ) {
-//  for(i=10; i<= 80; i++) {
-//     if(fileSize - ((fileSize / 100) - 60) < 1.5MB) {
-//         compress = i;
-//         break;
-//     }
-//  }
-// }
-
-        // if(images[0] == require('../Images/noimage3.jpeg')){
-        //   images.pop();
-        //   setclose(true)
-        // }
         let temp = {} ;
         temp.name = response.assets[0].fileName;
         temp.size = response.assets[0].fileSize;
@@ -228,7 +211,9 @@ const captureImage = async (type) => {
           headers: {
               'Content-Type': 'multipart/form-data',
               'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
-              'Accept': 'application/json'
+              'Accept': 'application/json',
+              'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
           },
           body: value,
                      
@@ -426,7 +411,10 @@ const TakePhoto = async (type) => {
           headers: {
               'Content-Type': 'multipart/form-data',
               'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
-              'Accept': 'application/json'
+              'Accept': 'application/json',
+              'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
+
           },
           body: value,
                      
@@ -629,6 +617,8 @@ const chooseFile = async() => {
                 'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
                 'Accept': 'application/json',
                 'source' : 'asl_phone_app',
+                'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
 
             },
             body: value,
@@ -699,6 +689,8 @@ let url = AppUrlCollection.LOCATION
     headers: {
         'Content-Type': 'multipart/form-data',
         'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+        'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
     },
 })
     .then((response) => response.json())
@@ -732,6 +724,8 @@ const callingCustomer =() =>{
     headers: {
         'Content-Type': 'multipart/form-data',
         'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+        'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
       },
 })
     .then((response) => response.json())
@@ -774,6 +768,8 @@ const callingContainerApi = () => {
       headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+          'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
         },
   })
       .then((response) => response.json())
@@ -1178,26 +1174,13 @@ if (vin == null) {
         setspinner(false)
 
     }
-    // else if (hatnumber  {
-    //   alert("Please Enter Hat Number"); 
-    //   setspinner(false)
-
-    // }
-    // else if (vehicletype.trim().length == 0 ) {
-    //   alert("Please Enter Vehicle Type"); 
-    //   setspinner(false)
-
-    //   }
+   
       else if (year == null ) {
         alert("Please Enter Vehicle year"); 
         setspinner(false)
 
       }
-      // else if (color.trim().length  == 0) {
-      //   alert("Please Enter Vehicle color"); 
-      //   setspinner(false)
-
-      // }
+     
       else if (model == null) {
         alert("Please Enter Vehicle model"); 
         setspinner(false)
@@ -1207,11 +1190,7 @@ if (vin == null) {
         setspinner(false)
 
       }
-    //   else if (weight.trim().length == 0) {
-    //     alert("Please Enter Vehicle weight"); 
-    //     setspinner(false)
-
-    // } 
+    
     else if (lotnumber == null) {
       alert("Please Select lot Number"); 
       setspinner(false)
@@ -1448,6 +1427,7 @@ array.towing_request_id = 0,
               'Accept': 'application/json',
               'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
               'source' : 'asl_phone_app',
+              'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
 
           },
           
@@ -1467,6 +1447,8 @@ array.towing_request_id = 0,
                 alert(e);
               });
               AppConstance.showSnackbarMessage(responseJson.message)
+
+              
               navigation.navigate('MyVehicle')
 
 

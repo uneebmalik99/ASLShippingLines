@@ -9,7 +9,8 @@ import {
   StatusBar,
   TouchableOpacity,
   Image,
-  Dimensions
+  Dimensions,
+  Platform
 } from 'react-native';
 import AppColors from '../Colors/AppColors';
 import AppConstance, { deviceHeight, deviceWidth } from '../constance/AppConstance';
@@ -113,6 +114,8 @@ const MyVehicles = ({ navigation }) => {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+            'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
         },
     })
         .then((response) => response.json())
@@ -321,6 +324,8 @@ if(searchtxt.length>0){
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
           'source' : 'asl_phone_app',
+          'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
 
       },
   })

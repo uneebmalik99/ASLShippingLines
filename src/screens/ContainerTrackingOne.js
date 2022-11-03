@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View ,ScrollView,ImageBackground, SafeAreaView, Modal, Text, TouchableOpacity, StyleSheet, FlatList, Image, TextInput, ActivityIndicator, BackHandler } from 'react-native'
+import { View ,ScrollView,ImageBackground, SafeAreaView, Modal, Text, TouchableOpacity, StyleSheet, FlatList, Image, TextInput, ActivityIndicator, BackHandler, Platform } from 'react-native'
 import Elavation from '../styles/Elavation';
 import AppColors from '../Colors/AppColors';
 import AppConstance, { deviceHeight, deviceWidth } from '../constance/AppConstance';
@@ -159,6 +159,8 @@ class ContainerTrackingOne extends Component {
                 'Content-Type': 'multipart/form-data',
                 'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
                 'source' : 'asl_phone_app',
+                'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
 
             },
         })
@@ -225,6 +227,10 @@ class ContainerTrackingOne extends Component {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+
+                'asl-platform':Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
                 //'authkey': AppConstance.USER_INFO.USER_TOKEN
             },
         })
@@ -427,6 +433,8 @@ console.log(item.location);
                 'Content-Type': 'multipart/form-data',
                 //  'authkey': AppConstance.USER_INFO.USER_TOKEN
                 'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+                'asl-platform':Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
 
             },
         })
@@ -484,6 +492,8 @@ console.log(item.location);
                     'Content-Type': 'multipart/form-data',
                     'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
                     'source' : 'asl_phone_app',
+                    'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
 
                     //  'authkey': AppConstance.USER_INFO.USER_TOKEN
                 },

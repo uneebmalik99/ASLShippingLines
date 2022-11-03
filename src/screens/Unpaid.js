@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {  SafeAreaView, Modal, View, Text,ImageBackground, TouchableOpacity, StyleSheet, FlatList, Image, BackHandler,  ScrollView, TextInput, ActivityIndicator } from 'react-native'
+import {  SafeAreaView, Modal, View, Text,ImageBackground, TouchableOpacity, StyleSheet, FlatList, Image, BackHandler,  ScrollView, TextInput, ActivityIndicator, Platform } from 'react-native'
 
 import Elavation from '../styles/Elavation';
 import AppColors from '../Colors/AppColors';
@@ -195,6 +195,8 @@ callingUnpaidInvoceAPI = (isCallingFirsttime) => {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + AppConstance.USER_TOKEN_KEY,
         'source' : 'asl_phone_app',
+        'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
 
     },
     })
@@ -299,6 +301,8 @@ callingSearchAPI = () => {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + AppConstance.USER_TOKEN_KEY,
                 'source' : 'asl_phone_app',
+                'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
 
             },
         })

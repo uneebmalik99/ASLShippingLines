@@ -44,6 +44,7 @@ import DocumentPicker from 'react-native-document-picker'
 // import ImagePicker from 'react-native-image-picker';
 
 
+import RNHeicConverter from 'react-native-heic-converter';
 
 
 const dummyimages = [
@@ -62,6 +63,7 @@ const MyContainerDetails = ({route, navigation }) => {
   const [ export_details ,setexport_details] = useState()
   const [deletemodalshow ,setdeletemodalshow] =useState(false)
   const [add , setadd] = useState(true)
+
   const [imgposition, setimgposition] = useState(0)
   const [images , setimages] = useState([
     require('../Images/noimage3.jpeg') 
@@ -133,7 +135,8 @@ const MyContainerDetails = ({route, navigation }) => {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
             },
             body: value,
                        
@@ -236,7 +239,9 @@ const MyContainerDetails = ({route, navigation }) => {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
             },
             body: value,
                        
@@ -318,6 +323,8 @@ const MyContainerDetails = ({route, navigation }) => {
             setclose(true)
           }
 
+
+        
           let temp = {} ;
           temp.name = response.assets[0].fileName;
           temp.size = response.assets[0].fileSize;
@@ -339,7 +346,9 @@ const MyContainerDetails = ({route, navigation }) => {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
             },
             body: value,
                        
@@ -446,6 +455,44 @@ const requestExternalWritePermission = async () => {
   }
 };
 
+const uploadheicimage = async (path) => {
+
+  let namet = new Date(); 
+  namet.toLocaleTimeString()
+  var value = new FormData();
+  value.append('file',{uri:path ,
+       name: namet+'.jpg',
+       type:'image/jpg'
+     });
+
+    console.log('value formadata is  1 -=--- '+JSON.stringify(value));
+      fetch(AppUrlCollection.EXPORT_DETAIL + item.id +'/photos-upload', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'multipart/form-data',
+              'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+              'Accept': 'application/json',
+              'source' : 'asl_phone_app',
+              'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+          },
+          body: value,                 
+      })
+          .then((response) => response.json())
+          .then((responseJson) => {
+            // alert(JSON.stringify(responseJson))
+            // console.log(responseJson.data);
+            console.log(responseJson);
+            imagesurls.push(responseJson.data)
+            console.log('images urll is '+imagesurls);
+            setspinner(false)       
+          })
+          .catch((error) => {
+            alert(error)
+            setspinner(false)
+              console.warn(error)
+          });
+
+}
 const chooseFile = async() => {
   
   ImageCropPicker.openPicker({
@@ -460,55 +507,110 @@ const chooseFile = async() => {
         var i ;
         for( i =0; i< images1.length; i++){
 
+            console.log('format == '+images1[i]);
+
+            let path = 0;
+
+          if(images1[i].filename.includes('.HEIC')){
+            let temp = {};
+            temp.name = images1[i].filename;
+          temp.size = images1[i].size;
+          temp.type = images1[i].mime;
+          temp.url = images1[i].path;
+            console.log('fgfggfgfgfgfgf'+images1[i]);
+            images.push(temp)
+        
+            let fileName = "";
+            RNHeicConverter
+	          .convert({ // options
+          		path: images1[i].sourceURL,
+              	})
+	            .then((result) => {
+	      	console.log('result is here'+JSON.stringify(result)); 
+          // path = result.path;
+          uploadheicimage(result.path)
+          
+          // alert(path)
+          // fileName = 'temp.jpg';
+          // { success: true, path: "path/to/jpg", error, base64, }
+        
+        });
+
+     
+       
+
+   
+
+       setspinner(true)
+
+
+          }
+          
+          else{
+
+        
+
           let temp = {} ;
-         
           temp.name = images1[i].filename;
           temp.size = images1[i].size;
           temp.type = images1[i].mime;
           temp.url = images1[i].path;
-          console.log(images1[i].size);
-          images.push(temp)
 
-      var value = new FormData();
-      value.append('file',{uri:images1[i].path ,
-           name:images1[i].filename,
-           type:images1[i].mime
-         });
 
         
-
-         setspinner(true)
-
-          fetch(AppUrlCollection.EXPORT_DETAIL + item.id +'/photos-upload', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'multipart/form-data',
-                'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
-                'Accept': 'application/json',
-                'source' : 'asl_phone_app',
-
-
-            },
-            body: value,
-                       
-        })
-            .then((response) => response.json())
-            .then((responseJson) => {
-              // alert(JSON.stringify(responseJson))
-              // console.log(responseJson.data);
-              console.log(responseJson);
-              imagesurls.push(responseJson.data)
-              console.log('images urll is '+imagesurls);
-
-              setspinner(false)
-               
-            })
-            .catch((error) => {
-              alert(error)
-              setspinner(false)
-                console.warn(error)
-            });
+            console.log('fgfggfgfgfgfgf'+images1[i]);
+            images.push(temp)
+  
+        var value = new FormData();
+        value.append('file',{uri:images1[i].path ,
+             name:images1[i].filename,
+             type:images1[i].mime
+           });
+  
+          console.log('value formadata is2 -=--- '+JSON.stringify(value));
+  
+           setspinner(true)
+  
+            fetch(AppUrlCollection.EXPORT_DETAIL + item.id +'/photos-upload', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'multipart/form-data',
+                  'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+                  'Accept': 'application/json',
+                  'source' : 'asl_phone_app',
+                  'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+  
+  
+  
+              },
+              body: value,
+                         
+          })
+              .then((response) => response.json())
+              .then((responseJson) => {
+                // alert(JSON.stringify(responseJson))
+                // console.log(responseJson.data);
+                console.log(responseJson);
+                imagesurls.push(responseJson.data)
+                console.log('images urll is '+imagesurls);
+  
+                setspinner(false)
+                 
+              })
+              .catch((error) => {
+                alert(error)
+                setspinner(false)
+                  console.warn(error)
+              });
        
+          
+        
+          }
+
+          // alert(path)
+         
+          // temp.name = images1[i].filename;
+    
         }      
 
       });
@@ -675,6 +777,7 @@ const callingupdateApi = ()=>{
 
 let array ={};
 array.customer_user_id = export_details.customer_user_id
+array.version_id = item.version_id
 array.booking_number = item.booking_number
 array.ar_number = item.ar_number;
 array.vessel = item.vessel;
@@ -705,18 +808,19 @@ array.container_images = images2
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
         'source' : 'asl_phone_app',
-
-    },
-    
-    body: JSON.stringify(array)
-    
-   
+        'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+    },  
+    body: JSON.stringify(array) 
 })
     .then((response) =>  response.json())
     .then((responseJson) => {
       setspinner(false)
       AppConstance.showSnackbarMessage(responseJson.message)
-
+      if(imagesurls.length> 0){
+        callinguploadimagesAPI()
+      }else{
+        // navigation.goBack();
+      }
       ImageCropPicker.clean().then(() => {
         console.log('removed all tmp images from tmp directory');
       }).catch(e => {
@@ -735,6 +839,55 @@ array.container_images = images2
 
   }
 
+  const callinguploadimagesAPI = () =>{
+
+    let array2 ={}
+if(imagesurls.length > 0){
+  let container_images = imagesurls
+  // let img = {container_images}
+  array2.fileUrls=container_images
+}
+console.log(JSON.stringify(array2));
+
+    fetch(AppUrlCollection.EXPORT_DETAIL + item.id +'/add-more-images', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+          'source' : 'asl_phone_app',
+          'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+      },
+      body: JSON.stringify(array2)
+  })
+      .then((response) =>  response.json())
+      .then((responseJson) => {
+        setspinner(false)
+        if(responseJson.code == 1){
+          AppConstance.showSnackbarMessage(responseJson.data)
+
+        }else{
+          AppConstance.showSnackbarMessage(responseJson.data)
+
+        }
+  
+        ImageCropPicker.clean().then(() => {
+          console.log('removed all tmp images from tmp directory');
+        }).catch(e => {
+          alert(e);
+        });
+        
+          console.log('export detail ', responseJson)
+         
+      })
+      .catch((error) => {
+        alert(error)
+        setspinner(false)
+          console.warn(error)
+      });
+
+  }
+
+
   const callingContainerDetailsApi = () =>{
 
     setspinner(true)
@@ -744,6 +897,8 @@ array.container_images = images2
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
         'source' : 'asl_phone_app',
+        'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
 
     }
    

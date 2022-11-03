@@ -13,7 +13,8 @@ import {
   StatusBar,
   TouchableOpacity,
   Image,
-  Dimensions
+  Dimensions,
+  Platform
 } from 'react-native';
 import AppColors from '../Colors/AppColors';
 import AppConstance, { deviceHeight, deviceWidth } from '../constance/AppConstance';
@@ -127,6 +128,8 @@ const [ loadMoreData , setloadMoreData] = useState(false)
             'Content-Type': 'multipart/form-data',
             'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
             'source' : 'asl_phone_app',
+            'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
 
         },
     })
@@ -267,6 +270,8 @@ const [ loadMoreData , setloadMoreData] = useState(false)
             'Content-Type': 'multipart/form-data',
             'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
             'source' : 'asl_phone_app',
+            'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
 
         },
     })

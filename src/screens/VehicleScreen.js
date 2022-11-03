@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View,ScrollView, SafeAreaView,Modal, Text,ImageBackground, TouchableOpacity, StyleSheet, FlatList, Image, TextInput, BackHandler, ActivityIndicator } from 'react-native'
+import { View,ScrollView, SafeAreaView,Modal, Text,ImageBackground, TouchableOpacity, StyleSheet, FlatList, Image, TextInput, BackHandler, ActivityIndicator, Platform } from 'react-native'
 import Elavation from '../styles/Elavation';
 import AppColors from '../Colors/AppColors';
 import AppConstance, { deviceHeight, deviceWidth } from '../constance/AppConstance';
@@ -142,6 +142,8 @@ Logout =() => {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
                 'source' : 'asl_phone_app',
+                'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
 
             },
         })
@@ -179,6 +181,8 @@ Logout =() => {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
                 'source' : 'asl_phone_app',
+                'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
 
             },
         })
@@ -367,6 +371,8 @@ style={{ flexDirection:'row'}}>
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
                 'source' : 'asl_phone_app',
+                'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
 
             },
         })
@@ -490,6 +496,8 @@ style={{ flexDirection:'row'}}>
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
                 'source' : 'asl_phone_app',
+                'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
 
             },
         })

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View,Modal, SafeAreaView, Text,ImageBackground, TouchableOpacity, StyleSheet, FlatList, Image, BackHandler,  ScrollView, TextInput, ActivityIndicator } from 'react-native'
+import { View,Modal, SafeAreaView, Text,ImageBackground, TouchableOpacity, StyleSheet, FlatList, Image, BackHandler,  ScrollView, TextInput, ActivityIndicator, Platform } from 'react-native'
 
 import Elavation from '../styles/Elavation';
 import AppColors from '../Colors/AppColors';
@@ -89,6 +89,8 @@ class AccountSectionMainScreen extends Component {
                         'Content-Type': 'application/json',
                         'authkey': AppConstance.USER_INFO.USER_TOKEN,
                         'source' : 'asl_phone_app',
+                        'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
 
                     },
                 })
@@ -132,7 +134,9 @@ class AccountSectionMainScreen extends Component {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-                        'authkey': AppConstance.USER_INFO.USER_TOKEN
+                        'authkey': AppConstance.USER_INFO.USER_TOKEN,
+                        'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
                     },
                 })
                     .then((response) => response.json())
@@ -177,7 +181,9 @@ class AccountSectionMainScreen extends Component {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-                        'authkey': AppConstance.USER_INFO.USER_TOKEN
+                        'authkey': AppConstance.USER_INFO.USER_TOKEN,
+                        'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
                     },
                 })
                     .then((response) => response.json())
@@ -226,7 +232,9 @@ class AccountSectionMainScreen extends Component {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'authkey': AppConstance.USER_INFO.USER_TOKEN
+                'authkey': AppConstance.USER_INFO.USER_TOKEN,
+                'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
             },
         })
             .then((response) => response.json())
@@ -523,7 +531,9 @@ class AccountSectionMainScreen extends Component {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'authkey': AppConstance.USER_INFO.USER_TOKEN
+                'authkey': AppConstance.USER_INFO.USER_TOKEN,
+                'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
             },
         })
             .then((response) => response.json())
@@ -559,7 +569,9 @@ class AccountSectionMainScreen extends Component {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'authkey': AppConstance.USER_INFO.USER_TOKEN
+                'authkey': AppConstance.USER_INFO.USER_TOKEN,
+                'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
             },
         })
             .then((response) => response.json())
@@ -596,7 +608,9 @@ class AccountSectionMainScreen extends Component {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'authkey': AppConstance.USER_INFO.USER_TOKEN
+                'authkey': AppConstance.USER_INFO.USER_TOKEN,
+                'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
             },
         })
             .then((response) => response.json())
@@ -631,7 +645,9 @@ class AccountSectionMainScreen extends Component {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'authkey': AppConstance.USER_INFO.USER_TOKEN
+                'authkey': AppConstance.USER_INFO.USER_TOKEN,
+                'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
             },
         })
             .then((response) => response.json())

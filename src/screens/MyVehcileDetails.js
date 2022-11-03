@@ -13,7 +13,8 @@ import {
   TouchableOpacity,
   Modal,
   Image,
-  Dimensions
+  Dimensions,
+  Platform
 } from 'react-native';
 import AppColors from '../Colors/AppColors';
 import AppConstance, { deviceHeight, deviceWidth } from '../constance/AppConstance';
@@ -70,6 +71,8 @@ setspinner(true)
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
         'source' : 'asl_phone_app',
+        'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
 
     },
 })
@@ -103,7 +106,6 @@ setspinner(true)
 
 
 useEffect(() => {
-
   callingVehicledetailedApi()
 
   // if (Details.photos.length>0 ) {

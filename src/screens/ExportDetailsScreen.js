@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Modal ,ImageBackground, SafeAreaView, Text,FlatList, TouchableOpacity, StyleSheet, Image, ScrollView,  CameraRoll, BackHandler } from "react-native";
+import { View, Modal ,ImageBackground, SafeAreaView, Text,FlatList, TouchableOpacity, StyleSheet, Image, ScrollView,  CameraRoll, BackHandler, Platform } from "react-native";
 import Elavation from '../styles/Elavation';
 import AppColors from '../Colors/AppColors';
 import AppConstance, { deviceHeight, deviceWidth } from '../constance/AppConstance';
@@ -95,6 +95,8 @@ class ExportDetailsScreen extends Component {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+                'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
             },
         })
             .then((response) => response.json())
@@ -132,6 +134,10 @@ class ExportDetailsScreen extends Component {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+
+                'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
                 //    'authkey': AppConstance.USER_INFO.USER_TOKEN
             },
         })
@@ -212,6 +218,8 @@ class ExportDetailsScreen extends Component {
                     'Content-Type': 'application/json',
                     'authkey': AppConstance.USER_INFO.USER_TOKEN,
                     'source' : 'asl_phone_app',
+                    'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
 
                 },
             })
@@ -247,6 +255,8 @@ class ExportDetailsScreen extends Component {
                     'Content-Type': 'application/json',
                     'authkey': AppConstance.USER_INFO.USER_TOKEN,
                     'source' : 'asl_phone_app',
+                    'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
 
                 },
             })

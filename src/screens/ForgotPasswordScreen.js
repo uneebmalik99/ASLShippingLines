@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // import { View, Text, TouchableOpacity, TextInput, StyleSheet, BackHandler, Easing, Image, ScrollView, AsyncStorage, NetInfo } from 'react-native';
-import { View,ImageBackground, Text, TouchableOpacity, TextInput, StyleSheet, BackHandler, Easing, Image, ScrollView } from 'react-native';
+import { View,ImageBackground, Text, TouchableOpacity, TextInput, StyleSheet, BackHandler, Easing, Image, ScrollView, Platform,  } from 'react-native';
 import Elavation from '../styles/Elavation';
 import AppColors from '../Colors/AppColors';
 import AppConstance, { deviceHeight, deviceWidth } from '../constance/AppConstance';
@@ -52,6 +52,8 @@ class ForgotPasswordScreen extends Component {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'multipart/form-data',
+                            'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
                             // 'Client-Service': AppConst.CLIENT_SERVICE,
                             // 'Auth-Key': AppConst.AUTH_KEY
                         },
@@ -95,6 +97,8 @@ class ForgotPasswordScreen extends Component {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'multipart/form-data',
+                            'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
                             // 'Client-Service': AppConst.CLIENT_SERVICE,
                             // 'Auth-Key': AppConst.AUTH_KEY
                         },

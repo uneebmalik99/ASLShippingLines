@@ -41,6 +41,9 @@ import DocumentPicker from 'react-native-document-picker';
 import DatePicker from 'react-native-datepicker'
 import QRCodeScanner from 'react-native-qrcode-scanner';
 
+
+import RNHeicConverter from 'react-native-heic-converter';
+
 const dummyimages = [
   require('../Images/noimage3.jpeg')      
  ];
@@ -72,6 +75,7 @@ const picture = [
   const [Filteredcustomer , setFilteredcustomer ] = useState([])
   const[Search , setSearch]= useState()
   const [customername , setcustomername] = useState(item.customer_name)
+  const [version_id , setversion_id ] = useState(item.version_id);
   const [customeruserid , setcustomeruserid] = useState(item.customer_user_id)
   const [location_id ,setlocation_id ] = useState(item.location_id)
   const [location_name, setlocation_name] = useState()
@@ -218,7 +222,9 @@ const captureImage = async (type) => {
           headers: {
               'Content-Type': 'multipart/form-data',
               'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
-              'Accept': 'application/json'
+              'Accept': 'application/json',
+              'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
           },
           body: value,
                      
@@ -321,7 +327,9 @@ if(images[0] == require('../Images/noimage3.jpeg')){
           headers: {
               'Content-Type': 'multipart/form-data',
               'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
-              'Accept': 'application/json'
+              'Accept': 'application/json',
+              'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
           },
           body: value,
                      
@@ -424,7 +432,9 @@ const TakePhoto = async (type) => {
           headers: {
               'Content-Type': 'multipart/form-data',
               'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
-              'Accept': 'application/json'
+              'Accept': 'application/json',
+              'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
           },
           body: value,
                      
@@ -604,6 +614,45 @@ for(var index = 0 ; index< images2.length ; index++){
 
 }
 
+const uploadheicimage = async (path) => {
+
+  let namet = new Date(); 
+  namet.toLocaleTimeString()
+  var value = new FormData();
+  value.append('file',{uri:path ,
+       name: namet+'.jpg',
+       type:'image/jpg'
+     });
+
+    console.log('value formadata is  1 -=--- '+JSON.stringify(value));
+      fetch(AppUrlCollection.EXPORT_DETAIL + item.id +'/photos-upload', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'multipart/form-data',
+              'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+              'Accept': 'application/json',
+              'source' : 'asl_phone_app',
+              'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+          },
+          body: value,                 
+      })
+          .then((response) => response.json())
+          .then((responseJson) => {
+            // alert(JSON.stringify(responseJson))
+            // console.log(responseJson.data);
+            console.log(responseJson);
+            imagesurls.push(responseJson.data)
+            console.log('images urll is '+imagesurls);
+            setspinner(false)       
+          })
+          .catch((error) => {
+            alert(error)
+            setspinner(false)
+              console.warn(error)
+          });
+
+}
+
 const chooseFile = async() => {
 
   ImageCropPicker.openPicker({
@@ -616,6 +665,43 @@ const chooseFile = async() => {
         }
         var i ;
         for( i =0; i< images1.length; i++){
+
+
+          if(images1[i].filename.includes('.HEIC')){
+            let temp = {};
+            temp.name = images1[i].filename;
+          temp.size = images1[i].size;
+          temp.type = images1[i].mime;
+          temp.url = images1[i].path;
+            console.log('fgfggfgfgfgfgf'+images1[i]);
+            images.push(temp)
+        
+            let fileName = "";
+            RNHeicConverter
+	          .convert({ // options
+          		path: images1[i].sourceURL,
+              	})
+	            .then((result) => {
+	      	console.log('result is here'+JSON.stringify(result)); 
+          // path = result.path;
+          uploadheicimage(result.path)
+          
+          // alert(path)
+          // fileName = 'temp.jpg';
+          // { success: true, path: "path/to/jpg", error, base64, }
+        
+        });
+
+     
+       
+
+   
+
+       setspinner(true)
+
+
+          }
+          else {
 
           let temp = {} ;
           temp.name = images1[i].filename;
@@ -640,7 +726,7 @@ const chooseFile = async() => {
                 'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
                 'Accept': 'application/json',
                 'source' : 'asl_phone_app',
-
+                'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
             },
             body: value,
                        
@@ -665,6 +751,7 @@ const chooseFile = async() => {
        
         }      
 
+        }
       });
 
 };
@@ -711,6 +798,8 @@ let url = AppUrlCollection.LOCATION
         'Content-Type': 'multipart/form-data',
         'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
         'source' : 'asl_phone_app',
+        'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
 
     },
 })
@@ -746,6 +835,8 @@ const callingCustomer =() =>{
         'Content-Type': 'multipart/form-data',
         'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
         'source' : 'asl_phone_app',
+        'asl-platform': Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
 
       },
 })
@@ -790,6 +881,8 @@ const callingContainerApi = () => {
           'Content-Type': 'multipart/form-data',
           'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
           'source' : 'asl_phone_app',
+          'asl-platform':Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+
 
         },
   })
@@ -1237,10 +1330,7 @@ style={{marginVertical:5,borderWidth:0.5,flexDirection:'row', borderColor:'grey'
     // f.push(OTHERS)
   }
         
-
-
   let h = [] ;
-  
   // for(var i =0; i < vehicleconditions.length ; i++){
     h[0]  = null
     h[1]  = null
@@ -1268,55 +1358,9 @@ style={{marginVertical:5,borderWidth:0.5,flexDirection:'row', borderColor:'grey'
   // }
 
   //add images
-  
-
 
       let array ={};
-
-      // array.hat_number= hatnumber;
-      // array.vehicle_type= vehicletype;
-      // array.year= year;
-      // array.color= color;
-      // array.model= model;
-      // array.make = make;
-      // array.vin= vin;
-      // array.weight = weight;
-      // array.lot_number = lotnumber;
-      // array.towed_amount= item.towed_amount;
-      // array.status_name= statusname;
-      // array.status= status;
-    
-      // array.customer_user_id= customeruserid;
-      // array.container_number = containernmber;
-      // array.key_note = keynote;
-      // array.load_status = loadstatus;
-      // array.auction_at = auctionat;
-      // array.towed_from = item.towed_from;
-      // array.note = note;
-      // array.location=  location;
-      // array.location_id = location_id
-      // array.customer_name = item.customer_name;
-      // array.title_number= titlenumber;
-      // array.towing_request_date=item.towing_request_date;
-      // array.deliver_date= deliverdate;
-      // array.pickup_date= pickupdate;
-      // array.condition = condition
-      // array.damaged = damaged;
-      // array.towed = item.towed;
-      // array.license_number= licensenumber;
-      // array.photos = images2
-
-      // array.auction_photos = item.auction_photos;
-      // array.pickup_photos = item.pickup_photos;
-      // array.arrived_photos = item.arrived_photos;
-      // array.vehicle_features = f;
-      // array.vehicle_conditions = h;
-      // array.vehicle_documents= item.vehicle_documents;
-      // array.invoice_photos = item.invoice_photos;
-
-
-
-
+  array.version_id = version_id,
   array.hat_number = hatnumber,
   array.vehicle_type= vehicletype,
   array.year = year,
@@ -1359,179 +1403,20 @@ style={{marginVertical:5,borderWidth:0.5,flexDirection:'row', borderColor:'grey'
   array.pickup_photos = item.pickup_photos,
   array.arrived_photos = item.arrived_photos
 
-
-  if(imagesurls.length > 0){
-    let photos = imagesurls
-    let img = {photos}
-    array.fileUrls=img
-  }
-
-  // alert(JSON.stringify(array))
-
-
-
-//   "hat_number": null,
-//   "vehicle_type": "SUV",
-//   "year": "2021",
-//   "color": "WHITE",
-//   "model": "honda",
-//   "make": "civic",
-//   "vin": "15june2022",
-//   "weight": null,
-//   "lot_number": "15062021",
-//    "towed_amount": 200,
-//   "status_name": "ON HAND",
-//  "towing_request_date": "2021-06-13",
-//   "towed_from": "ca",
-//   "photos":[],
-//   "fileUrls" : { "photos": ["https://asl-shipping-line.s3.us-west-2.amazonaws.com/uploads/vehicles/images/32626/rsuEFeqEjPECLr8g0nxcEq5jc1o4D8Euj7l2PCSN.jpg"]},    
-
-//   "status": 1, 
-//   "location_id": 1,
-//   "customer_user_id": 7000760,
-//   "container_number": null,
-//   "key_note": "",
-//   "auction_at": null,
-//   "note": null,
-//   "location": "LA",
-//   "customer_name": "TEST15JUNE",        
-
-//   "title_number": null,
-//   "deliver_date": null,
-//   "pickup_date": null,
-//   "condition": null,
-//   "damaged": null,
-//   "license_number": null,
-//   "ar_number": null,
-//   "vehicle_features": [],
-//   "vehicle_conditions": [],
-//     "auction_photos":[],
-//   "pickup_photos":[],
-//   "arrived_photos":[],
-//   "invoice_photos":[],
-// "vehicle_documents": []
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   
-    
-      //removeing images
-      // if(images2 != null){
-    
-      // array.photos = images2
-      // }
-     
-      //   "lot_number": lotnumber,
-      //   "towed_amount": item.towed_amount,
-      //   "status_name": statusname,
-      //   "status": status,
-      //   "location_id": location_id,
-      //   "customer_user_id": customeruserid,
-      //   "towing_request_id": item.towing_request_id,
-      //   "container_number": containernmber,
-      //   "key_note": keynote,
-      //   "vcr": item.vcr,
-      //   "value": item.value,
-      //   "auction_at": auctionat,
-      //   "towed_from": item.towed_from,
-      //   "note": note,
-      //   "loading_type": item.loading_type,
-      //   "location": location,
-      //   "customer_name": customername,
-      //   "title_number": titlenumber,
-      //   "title_received_date": null,
-      //   "towing_request_date": item.towing_request_date,
-      //   "deliver_date": deliverdate,
-      //   "pickup_date": pickupdate,
-      //   "condition": condition,
-      //   "damaged": damaged,
-      //   "license_number": licensenumber,
-      //    "photos": images2,
-      //   "auction_photos": item.auction_photos,
-      //   "pickup_photos":item.pickup_photos,
-      //   "arrived_photos": item.arrived_photos,    
-      //   "vehicle_features": f,
-      //   "vehicle_conditions": h,
-      //   "vehicle_documents": item.vehicle_documents,
-      //   "invoice_photos": item.invoice_photos,
-
-     
-      // alert(JSON.stringify(array))
-      
-      
+  // if(imagesurls.length > 0){
+  //   let photos = imagesurls
+  //   let img = {photos}
+  //   array.fileUrls=img
+  // }
         fetch(AppUrlCollection.VEHICLE_DETAIL + item.id, {
           method: 'PUT',
           headers: {
               'Content-Type': 'application/json',
               'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
               'source' : 'asl_phone_app',
-
-          },
-          
+              'asl-platform':  Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+          },       
           body: JSON.stringify(array)
-
-      // //     body: JSON.stringify({
-      // //       // "total_photos": null,
-      // //   "hat_number": hatnumber,
-      // //   "vehicle_type": vehicletype,
-      // //   "year": year,
-      // //   "color": color,
-      // //   "model": model,
-      // //   "make": make,
-      // //   "vin": vin,
-      // //   "weight": weight,
-      // //   "lot_number": lotnumber,
-      // //   "towed_amount": item.towed_amount,
-      // //   "status_name": statusname,
-      // //   "status": status,
-      // //   "location_id": location_id,
-      // //   "customer_user_id": customeruserid,
-      // //   "towing_request_id": item.towing_request_id,
-      // //   "container_number": containernmber,
-      // //   "key_note": keynote,
-      // //   "vcr": item.vcr,
-      // //   "value": item.value,
-      // //   "auction_at": auctionat,
-      // //   "towed_from": item.towed_from,
-      // //   "note": note,
-      // //   "loading_type": item.loading_type,
-      // //   "location": location,
-      // //   "customer_name": customername,
-      // //   "title_number": titlenumber,
-      // //   "title_received_date": null,
-      // //   "towing_request_date": item.towing_request_date,
-      // //   "deliver_date": deliverdate,
-      // //   "pickup_date": pickupdate,
-      // //   "condition": condition,
-      // //   "damaged": damaged,
-      // //   "license_number": licensenumber,
-      // //    "photos": images2,
-      // //   "auction_photos": item.auction_photos,
-      // //   "pickup_photos":item.pickup_photos,
-      // //   "arrived_photos": item.arrived_photos,    
-      // //   "vehicle_features": f,
-      // //   "vehicle_conditions": h,
-      // //   "vehicle_documents": item.vehicle_documents,
-      // //   "invoice_photos": item.invoice_photos,
-      // //   "fileUrls" : { "photos": ["https://asl-shipping-line.s3.us-west-2.amazonaws.com/uploads/vehicles/images/32626/rsuEFeqEjPECLr8g0nxcEq5jc1o4D8Euj7l2PCSN.jpg"]}, 
-
-      // //     })
-         
       })
           .then((response) =>  response.json())
           .then((responseJson) => {
@@ -1541,7 +1426,14 @@ style={{marginVertical:5,borderWidth:0.5,flexDirection:'row', borderColor:'grey'
               alert(JSON.stringify(responseJson.errors))
             }else{
               AppConstance.showSnackbarMessage(responseJson.message)
-              navigation.goBack();
+              // navigation.goBack();
+              if(imagesurls.length> 0){
+                callingimageAPI()
+
+              }else{
+                navigation.goBack();
+
+              }
 
             }
             ImageCropPicker.clean().then(() => {
@@ -1549,9 +1441,7 @@ style={{marginVertical:5,borderWidth:0.5,flexDirection:'row', borderColor:'grey'
             }).catch(e => {
               alert(e);
             });
-            
               console.log('export detail ', responseJson)
-             
           })
           .catch((error) => {
             alert(error)
@@ -1559,8 +1449,53 @@ style={{marginVertical:5,borderWidth:0.5,flexDirection:'row', borderColor:'grey'
               console.warn(error)
           });
       
-      
         }
+
+        const callingimageAPI = ()=>{
+        let   array2 = {}
+          if(imagesurls.length > 0){
+            let photos = imagesurls
+            // let img = {photos}
+            array2.fileUrls=photos
+          }
+
+          console.log(JSON.stringify(array2));
+          // alert(JSON.stringify(array2))
+          fetch(AppUrlCollection.VEHICLE_DETAIL + item.id +'/add-more-images', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + AppConstance.USER_INFO.USER_TOKEN,
+                'source' : 'asl_phone_app',
+                'asl-platform':  Platform.OS == 'ios' ? 'ASL_IOS_APP': 'ASL_ANDROID_APP'
+            },       
+            body: JSON.stringify(array2)
+        })
+            .then((response) =>  response.json())
+            .then((responseJson) => {
+
+        if(responseJson.responseCode == 1){
+          // alert(responseJson.data)
+          AppConstance.showSnackbarMessage(responseJson.data)
+          setspinner(false)
+          navigation.goBack();
+        }else{
+          AppConstance.showSnackbarMessage(responseJson.data)
+
+          
+        }
+        // alert(JSON.stringify(responseJson))
+        
+            console.log('export detail ', responseJson)
+               
+            })
+            .catch((error) => {
+              alert(error)
+              setspinner(false)
+                console.warn(error)
+            });
+        
+          }
 
 
 return (
