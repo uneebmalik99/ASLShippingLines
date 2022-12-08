@@ -10,7 +10,7 @@ import messaging from '@react-native-firebase/messaging';
 
 messaging().setBackgroundMessageHandler(async remoteMessage => {
     console.log('Message handled in the background!', remoteMessage);
-    Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    // Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
 
   });
 

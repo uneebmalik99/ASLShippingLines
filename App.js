@@ -558,6 +558,21 @@ const App = () => {
       }
     }
   }
+  async function requestUserPermission() {
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+  
+    if (enabled) {
+      console.log('Authorization status:', authStatus);
+    }
+    // messaging().getInstance().subscribeToTopic("TopicName");
+    messaging()
+    .subscribeToTopic('General')
+    .then(() => console.log('Subscribed to topic!'));
+  
+  }
 
 
   useEffect(() => {
@@ -565,6 +580,9 @@ const App = () => {
       requestUserPermission()
 
     }
+    messaging()
+    .subscribeToTopic('General')
+    .then(() => console.log('Subscribed to topic!'));
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       console.log('piushd');
       Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage.notification.body));

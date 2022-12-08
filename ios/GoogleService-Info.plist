@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>848292879463-fqqmeq76oi4b0jdhkc68embfe9gdh4g7.apps.googleusercontent.com</string>
+	<string>726409196941-59ufa6b87tu4ukq753cs7jual6irvbr2.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.848292879463-fqqmeq76oi4b0jdhkc68embfe9gdh4g7</string>
+	<string>com.googleusercontent.apps.726409196941-59ufa6b87tu4ukq753cs7jual6irvbr2</string>
 	<key>API_KEY</key>
-	<string>AIzaSyD5BWiCIECQVC2-ufb3WgZ7R9PkwRXt_Fk</string>
+	<string>AIzaSyDsOprNcFBEll7TCORgQltBtIroXqKIwlc</string>
 	<key>GCM_SENDER_ID</key>
-	<string>848292879463</string>
+	<string>726409196941</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.ASLShippinglines</string>
 	<key>PROJECT_ID</key>
-	<string>aslshippinglines</string>
+	<string>amaya-shipping-line</string>
 	<key>STORAGE_BUCKET</key>
-	<string>aslshippinglines.appspot.com</string>
+	<string>amaya-shipping-line.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:848292879463:ios:768dec0184bc62757788c2</string>
+	<string>1:726409196941:ios:a18df20c653d2a348579c4</string>
 </dict>
 </plist>

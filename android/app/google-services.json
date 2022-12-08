@@ -1,34 +1,41 @@
 {
   "project_info": {
-    "project_number": "848292879463",
-    "project_id": "aslshippinglines",
-    "storage_bucket": "aslshippinglines.appspot.com"
+    "project_number": "726409196941",
+    "project_id": "amaya-shipping-line",
+    "storage_bucket": "amaya-shipping-line.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:848292879463:android:f0ebb4aba34900c97788c2",
+        "mobilesdk_app_id": "1:726409196941:android:ba48a4a8b2d0741f8579c4",
         "android_client_info": {
           "package_name": "com.aslshippinglines"
         }
       },
       "oauth_client": [
         {
-          "client_id": "848292879463-v8a5bda63adl28qneu01hb5a4nopqeha.apps.googleusercontent.com",
+          "client_id": "726409196941-t65enp3ll6dds46u1fgv0utv7l15hu47.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDyrLrbTigPpkaehqqEn7HmeWThOEdAtsM"
+          "current_key": "AIzaSyDSMS0C8jrQCtv2gjMdpSx3CNrXveF0UY8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "848292879463-v8a5bda63adl28qneu01hb5a4nopqeha.apps.googleusercontent.com",
+              "client_id": "726409196941-t65enp3ll6dds46u1fgv0utv7l15hu47.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "726409196941-59ufa6b87tu4ukq753cs7jual6irvbr2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ASLShippinglines"
+              }
             }
           ]
         }
